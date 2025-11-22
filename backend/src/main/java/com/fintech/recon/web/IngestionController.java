@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/ingest")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*") // Allow any frontend
 public class IngestionController {
 
     private final TransactionIngestionService ingestionService;

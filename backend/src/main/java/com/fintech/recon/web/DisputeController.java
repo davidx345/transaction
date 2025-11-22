@@ -13,7 +13,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/disputes")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000") // Allow React frontend
+@CrossOrigin(origins = "*") // Allow any frontend (Vercel, localhost, etc.)
 public class DisputeController {
 
     private final DisputeService disputeService;
