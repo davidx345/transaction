@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api/client';
 import { Link } from 'react-router-dom';
 
 interface Dispute {
@@ -15,7 +15,7 @@ export const DisputeList = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/disputes')
+    api.get('/api/disputes')
       .then(res => {
         setDisputes(res.data);
         setLoading(false);

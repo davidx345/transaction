@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api/client';
 import { useParams, useNavigate } from 'react-router-dom';
+
+interface AuditEntry {
+  timestamp: string;
+  actor: string;
+  action: string;
+  reason?: string;
+}
 
 interface DisputeDetail {
   id: string;
@@ -8,6 +15,8 @@ interface DisputeDetail {
   state: string;
   confidenceScore: number;
   rulesFired: { rule: string; weight: number }[];
+  createdAt: string;
+  auditTrail?: AuditEntry[];
 }
 
 export const DisputeDetail = () => {
@@ -19,7 +28,7 @@ export const DisputeDetail = () => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/disputes/${id}`)
+    api.get(`/api/disputes/${id}`)
       .then(res => {
         setDispute(res.data);
         setLoading(false);
@@ -38,7 +47,7 @@ export const DisputeDetail = () => {
 
     setSubmitting(true);
     try {
-      await axios.post(`http://localhost:8080/api/disputes/${id}/${action}`, { reason });
+      await api.post(`/api/disputes/${id}/${action}`, { reason });
       navigate('/');
     } catch (err: any) {
       alert('Error: ' + (err.response?.data?.message || err.message));
@@ -134,36 +143,137 @@ export const DisputeDetail = () => {
 
       <div className="card mb-3">
         <h3 className="mb-3">Rules Analysis</h3>
+        <div style={{ 
+          marginBottom: '1.5rem', 
+          padding: '1rem', 
+          background: 'var(--bg-secondary)', 
+          borderRadius: 'var(--radius-md)' 
+        }}>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+            Total Confidence Score
+          </p>
+          <p style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+            {dispute.confidenceScore}%
+          </p>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
+            Calculated from {dispute.rulesFired.length} triggered rules
+          </p>
+        </div>
+
+        <h4 style={{ fontSize: '1rem', marginBottom: '1rem', color: 'var(--text-secondary)' }}>
+          Triggered Rules Breakdown
+        </h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {dispute.rulesFired.map((r, idx) => (
-            <div 
-              key={idx}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '1rem',
-                background: 'var(--bg-secondary)',
-                borderRadius: 'var(--radius-md)',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>
-                {r.rule}
-              </span>
-              <span 
-                className="badge"
-                style={{ 
-                  background: 'var(--bg-tertiary)',
-                  color: 'var(--text-primary)'
+          {dispute.rulesFired.map((r, idx) => {
+            const contribution = ((r.weight / dispute.confidenceScore) * 100).toFixed(1);
+            return (
+              <div 
+                key={idx}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '1rem',
+                  background: 'var(--bg-secondary)',
+                  borderRadius: 'var(--radius-md)',
+                  transition: 'all 0.2s ease',
+                  border: '1px solid var(--bg-tertiary)'
                 }}
               >
-                Weight: {r.weight}
-              </span>
-            </div>
-          ))}
+                <div style={{ flex: 1 }}>
+                  <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>
+                    {r.rule}
+                  </span>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                    Contributes {contribution}% to total confidence
+                  </p>
+                </div>
+                <span 
+                  className="badge"
+                  style={{ 
+                    background: 'var(--primary)',
+                    color: 'white',
+                    fontWeight: 600
+                  }}
+                >
+                  +{r.weight}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
+
+      {/* Audit Trail Timeline */}
+      {dispute.auditTrail && dispute.auditTrail.length > 0 && (
+        <div className="card mb-3">
+          <h3 className="mb-3">Activity Timeline</h3>
+          <div style={{ position: 'relative', paddingLeft: '2rem' }}>
+            {/* Timeline line */}
+            <div style={{
+              position: 'absolute',
+              left: '0.5rem',
+              top: '0.5rem',
+              bottom: '0.5rem',
+              width: '2px',
+              background: 'var(--bg-tertiary)'
+            }} />
+
+            {dispute.auditTrail.map((entry, idx) => (
+              <div 
+                key={idx}
+                style={{
+                  position: 'relative',
+                  marginBottom: '1.5rem'
+                }}
+              >
+                {/* Timeline dot */}
+                <div style={{
+                  position: 'absolute',
+                  left: '-1.5rem',
+                  top: '0.25rem',
+                  width: '0.75rem',
+                  height: '0.75rem',
+                  borderRadius: '50%',
+                  background: 'var(--primary)',
+                  border: '2px solid var(--bg-primary)'
+                }} />
+
+                <div style={{
+                  padding: '1rem',
+                  background: 'var(--bg-secondary)',
+                  borderRadius: 'var(--radius-md)'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+                      {entry.action}
+                    </span>
+                    <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                      {new Date(entry.timestamp).toLocaleString()}
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+                    By: {entry.actor}
+                  </p>
+                  {entry.reason && (
+                    <p style={{ 
+                      marginTop: '0.5rem', 
+                      fontSize: '0.875rem', 
+                      color: 'var(--text-primary)',
+                      fontStyle: 'italic',
+                      padding: '0.5rem',
+                      background: 'var(--bg-tertiary)',
+                      borderRadius: 'var(--radius-sm)'
+                    }}>
+                      "{entry.reason}"
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {dispute.state === 'PENDING' || dispute.state === 'AWAITING_REVIEW' ? (
         <div className="card">
