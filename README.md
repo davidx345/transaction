@@ -1,10 +1,10 @@
-# 💰 FinTech Transaction Reconciliation System
+# FinTech Transaction Reconciliation System
 
 A comprehensive three-way reconciliation engine for payment processing companies, featuring automated discrepancy detection, intelligent dispute management, webhook recovery, and operational analytics.
 
 ---
 
-## 🎯 What This System Does
+## What This System Does
 
 This system solves the critical problem of **reconciling transaction data** from three sources:
 1. **Payment Provider** (Paystack)
@@ -12,22 +12,22 @@ This system solves the critical problem of **reconciling transaction data** from
 3. **Internal Ledger**
 
 ### Key Capabilities
-- ✅ **Automated CSV Upload** - Ingest bank settlement files
-- ✅ **Three-Way Reconciliation** - Match transactions across all sources
-- ✅ **Intelligent Dispute Detection** - Confidence-based scoring with rules engine
-- ✅ **Manual Review Workflow** - Approve/reject disputes with audit trail
-- ✅ **Webhook Recovery** - Automatic retry with exponential backoff
-- ✅ **Operational Metrics** - Performance KPIs and business impact tracking
+- [x] **Automated CSV Upload** - Ingest bank settlement files
+- [x] **Three-Way Reconciliation** - Match transactions across all sources
+- [x] **Intelligent Dispute Detection** - Confidence-based scoring with rules engine
+- [x] **Manual Review Workflow** - Approve/reject disputes with audit trail
+- [x] **Webhook Recovery** - Automatic retry with exponential backoff
+- [x] **Operational Metrics** - Performance KPIs and business impact tracking
 
 ### Business Impact
-- 📉 **Reduces manual work by 70%+**
-- 🎯 **95%+ automated detection accuracy**
-- ⚡ **Sub-5-second reconciliation time**
-- 🔄 **80%+ webhook recovery rate**
+- **Reduces manual work by 70%+**
+- **95%+ automated detection accuracy**
+- **Sub-5-second reconciliation time**
+- **80%+ webhook recovery rate**
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────┐         ┌─────────────────┐
@@ -51,7 +51,7 @@ Full architecture details: [ARCHITECTURE.md](ARCHITECTURE.md)
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Run Locally (5 minutes)
 
@@ -72,29 +72,29 @@ Detailed guide: [QUICKSTART.md](QUICKSTART.md)
 
 ---
 
-## 📦 What's Included
+## What's Included
 
 ### Frontend Features
-- 📊 **Reconciliation Dashboard** - Main operations center
-- 📤 **CSV Upload** - Bank file ingestion with validation
-- ⚠️ **Dispute Management** - Triage with confidence scoring
-- 🔍 **Transaction Comparison** - Side-by-side source comparison
-- 🔗 **Webhook Monitor** - Delivery tracking and recovery
-- 📈 **Metrics Dashboard** - Operational KPIs
+- **Reconciliation Dashboard** - Main operations center
+- **CSV Upload** - Bank file ingestion with validation
+- **Dispute Management** - Triage with confidence scoring
+- **Transaction Comparison** - Side-by-side source comparison
+- **Webhook Monitor** - Delivery tracking and recovery
+- **Metrics Dashboard** - Operational KPIs
 
 ### Backend Features
-- 🔄 **Three-Way Reconciliation Engine**
-- 🎯 **Rules-Based Confidence Scoring**
-- 📝 **Dispute Workflow Management**
-- 🔁 **Webhook Recovery System**
-- 💸 **Automated Refund Processing**
-- 📊 **Comprehensive Audit Logging**
+- **Three-Way Reconciliation Engine**
+- **Rules-Based Confidence Scoring**
+- **Dispute Workflow Management**
+- **Webhook Recovery System**
+- **Automated Refund Processing**
+- **Comprehensive Audit Logging**
 
 Full feature list: [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 transaction/
@@ -127,7 +127,7 @@ transaction/
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Frontend
 - React 18 + Vite 5
@@ -151,7 +151,7 @@ transaction/
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 | Document | Description |
 |----------|-------------|
@@ -164,7 +164,7 @@ transaction/
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 ### Prerequisites
 - Heroku account (backend)
@@ -193,7 +193,7 @@ Full deployment guide: [DEPLOYMENT.md](DEPLOYMENT.md)
 
 ---
 
-## 🎨 Design
+## Design
 
 The frontend features a modern, **Apple-inspired design system**:
 - Minimalistic and clean interface
@@ -210,18 +210,18 @@ The frontend features a modern, **Apple-inspired design system**:
 
 ---
 
-## 🔐 Security
+## Security
 
-- ✅ HTTPS enforced on all endpoints
-- ✅ Environment variables for secrets
-- ✅ CORS properly configured
-- ✅ Input validation
-- ✅ SQL injection prevention (JPA)
-- ✅ Audit logging for all actions
+- [x] HTTPS enforced on all endpointsts
+- [x] Environment variables for secrets
+- [x] CORS properly configured
+- [x] Input validation
+- [x] SQL injection prevention (JPA)
+- [x] Audit logging for all actions
 
 ---
 
-## 📊 Metrics & Monitoring
+## Metrics & Monitoring
 
 The system tracks:
 - Reconciliation performance (p50/p95/p99)
@@ -233,7 +233,7 @@ The system tracks:
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Local Testing
 ```bash
@@ -251,7 +251,7 @@ See [QUICKSTART.md](QUICKSTART.md) for sample CSV format and SQL inserts.
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -273,7 +273,7 @@ Full troubleshooting: [DEPLOYMENT.md](DEPLOYMENT.md)
 
 ---
 
-## 📝 Environment Variables
+## Environment Variables
 
 ### Backend (Heroku)
 ```bash
@@ -290,7 +290,7 @@ VITE_API_URL=https://your-backend.herokuapp.com
 
 ---
 
-## 💰 Cost Estimate
+## Cost Estimate
 
 ### Free Tier (Development)
 - Heroku Mini PostgreSQL: Free
@@ -307,7 +307,7 @@ VITE_API_URL=https://your-backend.herokuapp.com
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 This is a complete implementation based on the PRD in `fintech_recon_prd.md`. 
 
@@ -320,27 +320,27 @@ When contributing:
 
 ---
 
-## 📄 License
+## License
 
 MIT License - See LICENSE file for details
 
 ---
 
-## 🎯 MVP Success Criteria
+## MVP Success Criteria
 
 Based on PRD requirements:
 
 | Metric | Target | Status |
 |--------|--------|--------|
-| Automated Detection | 95%+ | ✅ Implemented |
-| Confidence Accuracy | 85%+ | ✅ Implemented |
-| Reconciliation Time | <5s | ✅ Implemented |
-| Webhook Recovery | 80%+ | ✅ Implemented |
-| Time Reduction | 70%+ | ✅ Implemented |
+| Automated Detection | 95%+ | Implemented |
+| Confidence Accuracy | 85%+ | Implemented |
+| Reconciliation Time | <5s | Implemented |
+| Webhook Recovery | 80%+ | Implemented |
+| Time Reduction | 70%+ | Implemented |
 
 ---
 
-## 📞 Support
+## Support
 
 For issues or questions:
 1. Check documentation in this repo
@@ -350,17 +350,17 @@ For issues or questions:
 
 ---
 
-## ✅ Status
+## Status
 
-- ✅ Backend: 100% complete
-- ✅ Frontend: 100% complete
-- ✅ Integration: 100% complete
-- ✅ Documentation: 100% complete
-- ⚠️ Deployment: Ready (pending user action)
+- [x] Backend: 100% completete
+- [x] Frontend: 100% complete
+- [x] Integration: 100% complete
+- [x] Documentation: 100% complete
+- [ ] Deployment: Ready (pending user action)
 
 ---
 
-## 🚀 Next Steps
+## Next Steps
 
 1. **Run Locally** - Follow [QUICKSTART.md](QUICKSTART.md)
 2. **Review Features** - Check [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
@@ -369,6 +369,6 @@ For issues or questions:
 
 ---
 
-**Built with ❤️ for modern fintech operations**
+**Built for modern fintech operations**
 
-**🎉 Ready to reconcile millions of transactions! 🚀**
+**Ready to reconcile millions of transactions!**

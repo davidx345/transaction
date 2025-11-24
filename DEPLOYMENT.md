@@ -1,10 +1,10 @@
-# 🚀 Complete Deployment Guide
+#  Complete Deployment Guide
 
 This guide covers deploying the FinTech Reconciliation System with:
 - **Backend:** Java Spring Boot on Heroku
 - **Frontend:** React on Vercel
 
-## 📋 Prerequisites
+## Prerequisites
 
 - GitHub account
 - Heroku account (free tier works)
@@ -14,7 +14,7 @@ This guide covers deploying the FinTech Reconciliation System with:
 
 ---
 
-## 🗄️ Backend Deployment (Heroku)
+## [x] Backend Deployment (Heroku)
 
 ### 1. Prepare Backend
 
@@ -84,7 +84,7 @@ Look for "Web URL" - this will be something like:
 
 ---
 
-## 🎨 Frontend Deployment (Vercel)
+## Frontend Deployment (Vercel)
 
 ### 1. Update Production Environment
 
@@ -146,7 +146,7 @@ After deployment, Vercel provides a URL like:
 
 ---
 
-## 🔧 Post-Deployment Configuration
+## Post-Deployment Configuration
 
 ### 1. CORS Configuration
 
@@ -187,7 +187,7 @@ git push heroku main
 
 ---
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Backend Issues
 
@@ -205,7 +205,7 @@ Common causes:
 # Check database status
 heroku pg:info
 
-# Reset database (⚠️ destroys data)
+# Reset database (   destroys data)
 heroku pg:reset DATABASE
 heroku restart
 ```
@@ -235,7 +235,7 @@ heroku ps:scale web=1:standard-1x
 
 ---
 
-## 📊 Monitoring & Maintenance
+## Monitoring & Maintenance
 
 ### Backend Monitoring
 
@@ -275,7 +275,7 @@ heroku addons:info cloudamqp
 
 ---
 
-## 💰 Cost Breakdown
+## Cost Breakdown
 
 ### Free Tier (Getting Started)
 - **Heroku Mini PostgreSQL:** Free (1GB storage)
@@ -292,7 +292,7 @@ heroku addons:info cloudamqp
 
 ---
 
-## 🔐 Security Checklist
+## Security Checklist
 
 - [ ] Environment variables stored securely
 - [ ] CORS properly configured
@@ -304,7 +304,7 @@ heroku addons:info cloudamqp
 
 ---
 
-## 📝 Environment Variables Reference
+## Environment Variables Reference
 
 ### Backend (Heroku)
 ```
@@ -322,7 +322,7 @@ VITE_API_URL=<your-heroku-backend-url>
 
 ---
 
-## 🚀 Continuous Deployment
+## Continuous Deployment
 
 ### Automatic Deployments
 
@@ -347,7 +347,7 @@ vercel --prod
 
 ---
 
-## 📞 Support Resources
+## Support Resources
 
 - **Heroku Docs:** https://devcenter.heroku.com
 - **Vercel Docs:** https://vercel.com/docs
@@ -356,7 +356,7 @@ vercel --prod
 
 ---
 
-## ✅ Deployment Checklist
+## [x] Deployment Checklist
 
 - [ ] Backend deployed to Heroku
 - [ ] PostgreSQL provisioned
@@ -372,4 +372,4 @@ vercel --prod
 
 ---
 
-**🎉 Congratulations! Your reconciliation system is now live!**
+** Congratulations! Your reconciliation system is now live!**

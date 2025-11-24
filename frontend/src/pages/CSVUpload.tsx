@@ -138,7 +138,7 @@ export const CSVUpload = () => {
           
           {selectedFile ? (
             <div>
-              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📄</div>
+              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}></div>
               <p style={{ fontWeight: 600, fontSize: '1.125rem', marginBottom: '0.25rem' }}>
                 {selectedFile.name}
               </p>
@@ -148,7 +148,7 @@ export const CSVUpload = () => {
             </div>
           ) : (
             <div>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📊</div>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}></div>
               <p style={{ fontWeight: 600, fontSize: '1.125rem', marginBottom: '0.5rem' }}>
                 Drag & drop your CSV file here
               </p>

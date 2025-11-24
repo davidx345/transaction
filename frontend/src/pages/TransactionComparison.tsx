@@ -131,7 +131,7 @@ export const TransactionComparison = () => {
           {/* Payment Provider */}
           <div className="card">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <div style={{ fontSize: '1.5rem' }}>💳</div>
+              <div style={{ fontSize: '1.5rem' }}></div>
               <h3 style={{ margin: 0 }}>Payment Provider</h3>
             </div>
             {comparisonData.provider ? (
@@ -154,7 +154,7 @@ export const TransactionComparison = () => {
           {/* Bank Settlement */}
           <div className="card">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <div style={{ fontSize: '1.5rem' }}>🏦</div>
+              <div style={{ fontSize: '1.5rem' }}></div>
               <h3 style={{ margin: 0 }}>Bank Settlement</h3>
             </div>
             {comparisonData.bank ? (
@@ -177,7 +177,7 @@ export const TransactionComparison = () => {
           {/* Internal Ledger */}
           <div className="card">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <div style={{ fontSize: '1.5rem' }}>📒</div>
+              <div style={{ fontSize: '1.5rem' }}></div>
               <h3 style={{ margin: 0 }}>Internal Ledger</h3>
             </div>
             {comparisonData.ledger ? (

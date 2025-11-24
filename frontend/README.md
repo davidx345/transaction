@@ -2,15 +2,15 @@
 
 Modern, Apple-inspired UI for the comprehensive reconciliation engine built with React + Vite + TypeScript.
 
-## 🚀 Features
+## Features
 
 ### Complete PRD Implementation
-- ✅ **CSV Upload** - Bank settlement file ingestion with drag-and-drop
-- ✅ **Reconciliation Dashboard** - Main operations center with stats and quick actions
-- ✅ **Transaction Comparison** - Side-by-side Provider/Bank/Ledger comparison
-- ✅ **Dispute Management** - Triage dashboard with confidence-based scoring
-- ✅ **Webhook Monitor** - Delivery health tracking and recovery metrics
-- ✅ **Metrics & Analytics** - Operational KPIs and business impact metrics
+- [x] **CSV Upload** - Bank settlement file ingestion with drag-and-drop
+- [x] **Reconciliation Dashboard** - Main operations center with stats and quick actions
+- [x] **Transaction Comparison** - Side-by-side Provider/Bank/Ledger comparison
+- [x] **Dispute Management** - Triage dashboard with confidence-based scoring
+- [x] **Webhook Monitor** - Delivery health tracking and recovery metrics
+- [x] **Metrics & Analytics** - Operational KPIs and business impact metrics
 
 ### Design System
 - Apple-inspired minimalistic aesthetic
@@ -19,7 +19,7 @@ Modern, Apple-inspired UI for the comprehensive reconciliation engine built with
 - Smooth animations and transitions
 - Responsive layout
 
-## 🛠️ Tech Stack
+## [x] Tech Stack
 
 - **React 18** - UI library
 - **Vite** - Build tool
@@ -27,14 +27,14 @@ Modern, Apple-inspired UI for the comprehensive reconciliation engine built with
 - **React Router** - Client-side routing
 - **Axios** - HTTP client
 
-## 📦 Installation
+## Installation
 
 ```bash
 cd frontend
 npm install
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -48,7 +48,7 @@ For production (Vercel), update `.env.production`:
 VITE_API_URL=https://your-backend-app.herokuapp.com
 ```
 
-## 🏃 Running Locally
+## Running Locally
 
 ```bash
 npm run dev
@@ -58,7 +58,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 **Important:** Make sure the backend is running on port 8080.
 
-## 🏗️ Building for Production
+## [x] Building for Production
 
 ```bash
 npm run build
@@ -66,7 +66,7 @@ npm run build
 
 This generates optimized static files in the `dist/` directory.
 
-## 🚀 Deployment
+## Deployment
 
 ### Vercel Deployment
 
@@ -87,7 +87,7 @@ This generates optimized static files in the `dist/` directory.
 - **Output Directory:** `dist`
 - **Install Command:** `npm install`
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 src/
@@ -106,7 +106,7 @@ src/
 └── main.tsx               # Entry point
 ```
 
-## 🔌 API Integration
+## API Integration
 
 All API calls use the centralized client (`src/api/client.ts`) which:
 - Automatically uses correct base URL based on environment
@@ -125,7 +125,7 @@ All API calls use the centralized client (`src/api/client.ts`) which:
 - `GET /api/webhooks` - Get webhook logs
 - `GET /api/metrics?range=7d` - Get operational metrics
 
-## 🎨 Design System
+## Design System
 
 ### Colors
 ```css
@@ -144,7 +144,7 @@ All API calls use the centralized client (`src/api/client.ts`) which:
 - **Font:** SF Pro Display (system fallback)
 - **Weights:** 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### API Connection Issues
 - Verify backend is running
@@ -160,14 +160,14 @@ All API calls use the centralized client (`src/api/client.ts`) which:
 - Check Vercel logs for build errors
 - Verify environment variables are set in Vercel dashboard
 
-## 📝 Next Steps
+## Next Steps
 
 1. **Update Backend URL** - Replace placeholder in `.env.production` with actual Heroku URL
 2. **Test All Features** - Verify each page loads and interacts with backend
 3. **Customize Branding** - Update colors/logos to match your brand
 4. **Add Authentication** - Implement auth flow if required
 
-## 🤝 Contributing
+## Contributing
 
 This frontend implements the complete PRD specification. When adding features:
 - Maintain Apple-inspired design aesthetic
@@ -175,6 +175,6 @@ This frontend implements the complete PRD specification. When adding features:
 - Follow TypeScript best practices
 - Add loading states and error handling
 
-## 📄 License
+## License
 
 MIT

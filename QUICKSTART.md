@@ -1,4 +1,4 @@
-# 🚀 Quick Start Guide
+#  Quick Start Guide
 
 Get your reconciliation system running locally in 5 minutes!
 
@@ -6,10 +6,10 @@ Get your reconciliation system running locally in 5 minutes!
 
 ## Prerequisites
 
-- ✅ Java 17 installed
-- ✅ Node.js 16+ installed
-- ✅ PostgreSQL running locally
-- ✅ Git installed
+- [x] Java 17 installed
+- [x] Node.js 16+ installed
+- [x] PostgreSQL running locally
+- [x] Git installed
 
 ---
 
@@ -69,28 +69,28 @@ Navigate to: http://localhost:5173
 
 ### Test Features
 
-1. **📊 Dashboard** - Click "Dashboard" in sidebar
+1. ** Dashboard** - Click "Dashboard" in sidebar
    - View stats
    - Click "Run Reconciliation"
 
-2. **📤 CSV Upload** - Click "CSV Upload"
+2. ** CSV Upload** - Click "CSV Upload"
    - Drag and drop a CSV file (or create a sample)
    - Select bank
    - Upload
 
-3. **⚠️ Disputes** - Click "Disputes"
+3. **   Disputes** - Click "Disputes"
    - View any disputes
    - Click on a dispute
    - Approve or reject
 
-4. **🔍 Transactions** - Click "Transactions"
+4. ** Transactions** - Click "Transactions"
    - Search by reference
    - View comparison
 
-5. **🔗 Webhooks** - Click "Webhooks"
+5. ** Webhooks** - Click "Webhooks"
    - View webhook logs
 
-6. **📈 Metrics** - Click "Metrics"
+6. ** Metrics** - Click "Metrics"
    - View operational metrics
 
 ---
@@ -299,7 +299,7 @@ project/
 
 ---
 
-## 🎉 You're Ready!
+## You're Ready!
 
 Your local development environment is now set up. Start building and testing!
 
@@ -320,4 +320,4 @@ If you get stuck:
 4. Check PostgreSQL connection
 5. Verify environment variables
 
-**Happy coding! 🚀**
+**Happy coding! **

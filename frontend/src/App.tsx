@@ -21,12 +21,12 @@ function AppContent() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const navItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
-    { path: '/upload', label: 'CSV Upload', icon: '📤' },
-    { path: '/', label: 'Disputes', icon: '⚠️' },
-    { path: '/transactions', label: 'Transactions', icon: '🔍' },
-    { path: '/webhooks', label: 'Webhooks', icon: '🔗' },
-    { path: '/metrics', label: 'Metrics', icon: '📈' },
+    { path: '/dashboard', label: 'Dashboard', icon: '▣' },
+    { path: '/upload', label: 'CSV Upload', icon: '↑' },
+    { path: '/', label: 'Disputes', icon: '!' },
+    { path: '/transactions', label: 'Transactions', icon: '≡' },
+    { path: '/webhooks', label: 'Webhooks', icon: '⚡' },
+    { path: '/metrics', label: 'Metrics', icon: '▲' },
   ];
 
   return (

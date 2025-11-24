@@ -119,7 +119,7 @@ export const ReconciliationDashboard = () => {
           disabled={runningReconciliation}
           className="btn btn-primary"
         >
-          {runningReconciliation ? '⚙️ Running...' : '▶️ Run Reconciliation'}
+          {runningReconciliation ? '⚙ Running...' : '▶ Run Reconciliation'}
         </button>
       </div>
 
@@ -254,7 +254,7 @@ export const ReconciliationDashboard = () => {
         marginTop: '2rem'
       }}>
         <Link to="/upload" className="card" style={{ textDecoration: 'none', transition: 'transform 0.2s' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📊</div>
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}></div>
           <h3>Upload Bank CSV</h3>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
             Upload settlement files from GTBank, Access, Zenith, or other banks
@@ -262,7 +262,7 @@ export const ReconciliationDashboard = () => {
         </Link>
 
         <Link to="/transactions" className="card" style={{ textDecoration: 'none', transition: 'transform 0.2s' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔍</div>
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}></div>
           <h3>Compare Transactions</h3>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
             View side-by-side comparison of Provider, Bank, and Ledger data
@@ -270,7 +270,7 @@ export const ReconciliationDashboard = () => {
         </Link>
 
         <Link to="/webhooks" className="card" style={{ textDecoration: 'none', transition: 'transform 0.2s' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔔</div>
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}></div>
           <h3>Webhook Monitor</h3>
           <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
             Track webhook delivery status and recovery operations

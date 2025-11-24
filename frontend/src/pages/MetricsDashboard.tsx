@@ -280,8 +280,12 @@ const MetricCard = ({
         {value}
       </p>
       {trend && (
-        <span style={{ fontSize: '1.25rem' }}>
-          {trend === 'up' ? '📈' : '📉'}
+        <span style={{ 
+          fontSize: '0.875rem', 
+          color: trend === 'up' ? 'var(--success)' : 'var(--primary)',
+          fontWeight: 600 
+        }}>
+          {trend === 'up' ? '↑' : '↓'}
         </span>
       )}
     </div>
@@ -310,8 +314,12 @@ const TargetMetric = ({
       <p style={{ fontSize: '1.75rem', fontWeight: 700 }}>
         {current}
       </p>
-      <span style={{ fontSize: '1.25rem' }}>
-        {status === 'success' ? '✓' : '⚠'}
+      <span style={{ 
+        fontSize: '0.875rem',
+        fontWeight: 700,
+        color: status === 'success' ? 'inherit' : '#FFB800'
+      }}>
+        {status === 'success' ? '[OK]' : '[!]'}
       </span>
     </div>
     <p style={{ fontSize: '0.875rem', opacity: 0.8, marginTop: '0.25rem' }}>
