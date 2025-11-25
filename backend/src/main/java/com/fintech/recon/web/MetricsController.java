@@ -2,8 +2,8 @@ package com.fintech.recon.web;
 
 import com.fintech.recon.domain.Reconciliation;
 import com.fintech.recon.domain.WebhookLog;
-import com.fintech.recon.repository.ReconciliationRepository;
-import com.fintech.recon.repository.WebhookLogRepository;
+import com.fintech.recon.infrastructure.ReconciliationRepository;
+import com.fintech.recon.infrastructure.WebhookLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
