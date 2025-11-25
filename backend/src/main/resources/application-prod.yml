@@ -3,8 +3,6 @@ spring:
     name: recon-engine
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/recon_db}
-    username: ${DATABASE_USERNAME:postgres}
-    password: ${DATABASE_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -20,10 +18,7 @@ spring:
     baseline-version: 0
     locations: classpath:db/migration
   rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
+    addresses: ${CLOUDAMQP_URL:amqp://guest:guest@localhost:5672}
 
 server:
   port: ${PORT:8080}
