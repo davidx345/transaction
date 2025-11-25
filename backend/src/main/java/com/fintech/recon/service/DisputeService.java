@@ -39,7 +39,17 @@ public class DisputeService {
         validateTransition(dispute.getState(), "APPROVED");
         
         dispute.setState("APPROVED");
-        // Log audit event here (Phase 4)
+        dispute.setUpdatedAt(java.time.LocalDateTime.now());
+        
+        // Add audit trail entry
+        Reconciliation.AuditEntry auditEntry = Reconciliation.AuditEntry.builder()
+                .timestamp(java.time.LocalDateTime.now())
+                .action("APPROVED")
+                .actor("system") // TODO: Extract from security context
+                .reason(reason)
+                .build();
+        dispute.getAuditTrail().add(auditEntry);
+        
         log.info("Dispute {} approved. Reason: {}", id, reason);
         
         // Trigger Refund if applicable (Simplified logic: if it's a dispute, we assume refund needed for MVP)
@@ -63,6 +73,17 @@ public class DisputeService {
         validateTransition(dispute.getState(), "REJECTED");
         
         dispute.setState("REJECTED");
+        dispute.setUpdatedAt(java.time.LocalDateTime.now());
+        
+        // Add audit trail entry
+        Reconciliation.AuditEntry auditEntry = Reconciliation.AuditEntry.builder()
+                .timestamp(java.time.LocalDateTime.now())
+                .action("REJECTED")
+                .actor("system") // TODO: Extract from security context
+                .reason(reason)
+                .build();
+        dispute.getAuditTrail().add(auditEntry);
+        
         log.info("Dispute {} rejected. Reason: {}", id, reason);
         
         return reconciliationRepository.save(dispute);

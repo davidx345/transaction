@@ -67,7 +67,7 @@ export const ReconciliationDashboard = () => {
     try {
       await api.post('/api/reconciliations/run', {
         source: 'all',
-        date_range: {
+        dateRange: {
           start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
           end: new Date().toISOString()
         }

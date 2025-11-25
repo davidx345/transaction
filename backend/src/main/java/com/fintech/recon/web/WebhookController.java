@@ -8,15 +8,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/webhooks")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class WebhookController {
 
     private final WebhookLogRepository webhookLogRepository;
+
+    @GetMapping
+    public ResponseEntity<List<WebhookLog>> getWebhooks(@RequestParam(required = false) String status) {
+        List<WebhookLog> webhookLogs;
+        
+        if (status != null && !status.isEmpty()) {
+            webhookLogs = webhookLogRepository.findByStatus(status);
+        } else {
+            webhookLogs = webhookLogRepository.findAll();
+        }
+        
+        return ResponseEntity.ok(webhookLogs);
+    }
 
     @PostMapping("/{provider}")
     public ResponseEntity<String> receiveWebhook(@PathVariable String provider,

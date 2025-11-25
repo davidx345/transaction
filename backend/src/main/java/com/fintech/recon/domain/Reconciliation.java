@@ -41,6 +41,11 @@ public class Reconciliation {
     @JdbcTypeCode(SqlTypes.JSON)
     private List<Map<String, Object>> rulesFired;
 
+    @Column(name = "audit_trail", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Builder.Default
+    private List<AuditEntry> auditTrail = new java.util.ArrayList<>();
+
     @Column(name = "created_at")
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -48,4 +53,15 @@ public class Reconciliation {
     @Column(name = "updated_at")
     @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class AuditEntry {
+        private LocalDateTime timestamp;
+        private String action;
+        private String actor;
+        private String reason;
+    }
 }
