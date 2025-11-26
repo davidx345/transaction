@@ -9,6 +9,7 @@ import { WebhookMonitor } from './pages/WebhookMonitor';
 import { MetricsDashboard } from './pages/MetricsDashboard';
 import { LandingPage } from './pages/LandingPage';
 import { Login } from './pages/Login';
+import ReportsPage from './pages/ReportsPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route path="/transactions" element={<TransactionComparison />} />
             <Route path="/webhooks" element={<WebhookMonitor />} />
             <Route path="/metrics" element={<MetricsDashboard />} />
+            <Route path="/reports" element={<ReportsPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
@@ -55,6 +57,7 @@ function DashboardLayout() {
     { path: '/upload', label: 'CSV Upload', icon: '↑' },
     { path: '/disputes', label: 'Disputes', icon: '!' },
     { path: '/transactions', label: 'Transactions', icon: '≡' },
+    { path: '/reports', label: 'Reports', icon: '📊' },
     { path: '/webhooks', label: 'Webhooks', icon: '⚡' },
     { path: '/metrics', label: 'Metrics', icon: '▲' },
   ];

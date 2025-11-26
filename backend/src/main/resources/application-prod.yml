@@ -25,12 +25,48 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+  # HTTPS forwarding (Heroku terminates SSL at load balancer)
+  forward-headers-strategy: native
+
+# Security Configuration (Production)
+security:
+  jwt:
+    secret-key: ${JWT_SECRET}
+    access-token-expiry: 3600000          # 1 hour in production
+    refresh-token-expiry: 86400000        # 24 hours in production
+    issuer: fintech-recon-engine
+  rate-limiting:
+    enabled: true
+    requests-per-minute: 60               # Stricter in production
+    auth-requests-per-minute: 5           # Stricter for auth endpoints
+    burst-capacity: 100
+  cors:
+    allowed-origins:
+      - ${FRONTEND_URL:https://your-app.netlify.app}
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    allowed-headers:
+      - Authorization
+      - Content-Type
+      - X-Request-ID
+    allow-credentials: true
+    max-age: 7200
+
+# Webhook Secrets (from environment variables)
+webhook:
+  paystack-secret-key: ${PAYSTACK_SECRET_KEY}
+  flutterwave-secret-hash: ${FLUTTERWAVE_SECRET_HASH}
 
 logging:
   level:
     root: INFO
     com.fintech.recon: INFO
+    com.fintech.recon.security: DEBUG     # More verbose security logging
     org.springframework.web: INFO
+    org.springframework.security: INFO
     org.hibernate: WARN
 
 management:
