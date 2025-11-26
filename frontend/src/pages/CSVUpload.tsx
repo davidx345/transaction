@@ -1,6 +1,21 @@
 import React, { useState, useRef } from 'react';
 import api from '../api/client';
 
+// Sample CSV content for testing
+const SAMPLE_CSV_CONTENT = `PAYMENT_REF,AMOUNT,SETTLEMENT_DATE,STATUS
+PSK_TXN001,15000.00,2025-11-20,SETTLED
+PSK_TXN002,25500.50,2025-11-20,SETTLED
+PSK_TXN003,8750.00,2025-11-21,SETTLED
+PSK_TXN004,42000.00,2025-11-21,SETTLED
+PSK_TXN005,3200.00,2025-11-22,SETTLED
+PSK_TXN006,18900.75,2025-11-22,PENDING
+PSK_TXN007,55000.00,2025-11-23,SETTLED
+PSK_TXN008,12350.00,2025-11-23,SETTLED
+PSK_TXN009,7800.25,2025-11-24,FAILED
+PSK_TXN010,31500.00,2025-11-24,SETTLED
+PSK_TXN011,9450.00,2025-11-25,SETTLED
+PSK_TXN012,67200.00,2025-11-25,SETTLED`;
+
 export const CSVUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -10,6 +25,27 @@ export const CSVUpload = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const banks = ['GTBank', 'Access', 'Zenith', 'FCMB', 'UBA', 'First Bank'];
+
+  // Load sample file for testing
+  const loadSampleFile = () => {
+    const blob = new Blob([SAMPLE_CSV_CONTENT], { type: 'text/csv' });
+    const file = new File([blob], 'sample-bank-settlement.csv', { type: 'text/csv' });
+    setSelectedFile(file);
+    setUploadResult(null);
+  };
+
+  // Download sample file
+  const downloadSampleFile = () => {
+    const blob = new Blob([SAMPLE_CSV_CONTENT], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sample-bank-settlement.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -215,6 +251,39 @@ export const CSVUpload = () => {
             <li>Zenith: TXN_REF, AMOUNT, DATE (DD/MM/YYYY format)</li>
             <li>Other banks: Standard settlement format</li>
           </ul>
+        </div>
+      </div>
+
+      {/* Sample Test File Section */}
+      <div className="card" style={{ 
+        maxWidth: '800px', 
+        marginTop: '1.5rem',
+        background: 'var(--bg-secondary)',
+        border: '1px dashed var(--border)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>📁 Sample Test File</p>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+              Use this sample CSV file for testing the reconciliation flow
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <button
+              onClick={loadSampleFile}
+              className="btn btn-primary"
+              style={{ padding: '0.625rem 1rem', fontSize: '0.875rem' }}
+            >
+              Load Sample File
+            </button>
+            <button
+              onClick={downloadSampleFile}
+              className="btn btn-secondary"
+              style={{ padding: '0.625rem 1rem', fontSize: '0.875rem' }}
+            >
+              Download CSV
+            </button>
+          </div>
         </div>
       </div>
     </div>

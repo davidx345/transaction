@@ -268,7 +268,7 @@ const MetricCard = ({
   label: string; 
   value: string; 
   subtitle: string; 
-  color: string;
+  color?: string;
   trend?: 'up' | 'down';
 }) => (
   <div>
@@ -276,7 +276,7 @@ const MetricCard = ({
       {label}
     </p>
     <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-      <p style={{ fontSize: '2.5rem', fontWeight: 700, color }}>
+      <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
         {value}
       </p>
       {trend && (

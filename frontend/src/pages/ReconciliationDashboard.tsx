@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/client';
 
 interface ReconciliationStats {
@@ -20,6 +20,7 @@ interface RecentReconciliation {
 }
 
 export const ReconciliationDashboard = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState<ReconciliationStats>({
     total: 0,
     matched: 0,
@@ -30,6 +31,7 @@ export const ReconciliationDashboard = () => {
   const [recentReconciliations, setRecentReconciliations] = useState<RecentReconciliation[]>([]);
   const [loading, setLoading] = useState(true);
   const [runningReconciliation, setRunningReconciliation] = useState(false);
+  const [hasUploadedData, setHasUploadedData] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -51,6 +53,10 @@ export const ReconciliationDashboard = () => {
       });
 
       setRecentReconciliations(reconciliations.slice(0, 10));
+      
+      // Check if there's any data in the system
+      setHasUploadedData(total > 0);
+      
       setLoading(false);
     } catch (error) {
       console.error('Failed to fetch reconciliation data:', error);
@@ -63,6 +69,12 @@ export const ReconciliationDashboard = () => {
   }, []);
 
   const handleRunReconciliation = async () => {
+    if (!hasUploadedData) {
+      // Redirect to upload page if no data
+      navigate('/upload');
+      return;
+    }
+    
     setRunningReconciliation(true);
     try {
       await api.post('/api/reconciliations/run', {
@@ -118,12 +130,13 @@ export const ReconciliationDashboard = () => {
           onClick={handleRunReconciliation}
           disabled={runningReconciliation}
           className="btn btn-primary"
+          title={!hasUploadedData ? 'Upload a CSV file first to run reconciliation' : ''}
         >
-          {runningReconciliation ? '⚙ Running...' : '▶ Run Reconciliation'}
+          {runningReconciliation ? '⚙ Running...' : !hasUploadedData ? '↑ Upload CSV First' : '▶ Run Reconciliation'}
         </button>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards - Using black text for numbers */}
       <div style={{ 
         display: 'grid', 
         gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
@@ -143,7 +156,7 @@ export const ReconciliationDashboard = () => {
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
             Matched
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--success)' }}>
+          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             {stats.matched.toLocaleString()}
           </p>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
@@ -155,7 +168,7 @@ export const ReconciliationDashboard = () => {
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
             Disputed
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--danger)' }}>
+          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             {stats.disputed.toLocaleString()}
           </p>
         </div>
@@ -164,7 +177,7 @@ export const ReconciliationDashboard = () => {
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
             Pending
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--warning)' }}>
+          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             {stats.pending.toLocaleString()}
           </p>
         </div>
@@ -217,7 +230,7 @@ export const ReconciliationDashboard = () => {
                       </span>
                     </td>
                     <td style={{ padding: '1rem' }}>
-                      <span className="badge badge-medium">
+                      <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                         {recon.confidenceScore}%
                       </span>
                     </td>

@@ -134,7 +134,7 @@ export const WebhookMonitor = () => {
         Track webhook delivery status, failures, and automatic recovery operations
       </p>
 
-      {/* Stats Cards */}
+      {/* Stats Cards - Black text for numbers */}
       <div style={{ 
         display: 'grid', 
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
@@ -154,7 +154,7 @@ export const WebhookMonitor = () => {
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
             Received
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--success)' }}>
+          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             {stats.received}
           </p>
         </div>
@@ -163,7 +163,7 @@ export const WebhookMonitor = () => {
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
             Missing
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--danger)' }}>
+          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             {stats.missing}
           </p>
         </div>
@@ -172,7 +172,7 @@ export const WebhookMonitor = () => {
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
             Recovered
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--warning)' }}>
+          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             {stats.recovered}
           </p>
         </div>
@@ -181,7 +181,7 @@ export const WebhookMonitor = () => {
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
             Recovery Rate
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--primary)' }}>
+          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             {stats.recoveryRate.toFixed(1)}%
           </p>
         </div>

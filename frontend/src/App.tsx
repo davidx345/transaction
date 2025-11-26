@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation, Navigate, Outlet } from 'react-router-dom';
 import { DisputeList } from './pages/DisputeList';
 import { DisputeDetail } from './pages/DisputeDetail';
 import { CSVUpload } from './pages/CSVUpload';
@@ -7,23 +7,53 @@ import { ReconciliationDashboard } from './pages/ReconciliationDashboard';
 import { TransactionComparison } from './pages/TransactionComparison';
 import { WebhookMonitor } from './pages/WebhookMonitor';
 import { MetricsDashboard } from './pages/MetricsDashboard';
+import { LandingPage } from './pages/LandingPage';
+import { Login } from './pages/Login';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          
+          <Route element={<RequireAuth><DashboardLayout /></RequireAuth>}>
+            <Route path="/dashboard" element={<ReconciliationDashboard />} />
+            <Route path="/upload" element={<CSVUpload />} />
+            <Route path="/disputes" element={<DisputeList />} />
+            <Route path="/disputes/:id" element={<DisputeDetail />} />
+            <Route path="/transactions" element={<TransactionComparison />} />
+            <Route path="/webhooks" element={<WebhookMonitor />} />
+            <Route path="/metrics" element={<MetricsDashboard />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
-function AppContent() {
+function RequireAuth({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
+}
+
+function DashboardLayout() {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { logout, user } = useAuth();
 
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: '▣' },
     { path: '/upload', label: 'CSV Upload', icon: '↑' },
-    { path: '/', label: 'Disputes', icon: '!' },
+    { path: '/disputes', label: 'Disputes', icon: '!' },
     { path: '/transactions', label: 'Transactions', icon: '≡' },
     { path: '/webhooks', label: 'Webhooks', icon: '⚡' },
     { path: '/metrics', label: 'Metrics', icon: '▲' },
@@ -40,7 +70,9 @@ function AppContent() {
         position: 'sticky',
         top: 0,
         height: '100vh',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
       }}>
         <div style={{
           padding: '1.5rem',
@@ -74,7 +106,7 @@ function AppContent() {
           </button>
         </div>
 
-        <nav style={{ padding: '1rem' }}>
+        <nav style={{ padding: '1rem', flex: 1 }}>
           {navItems.map(item => {
             const isActive = location.pathname === item.path;
             return (
@@ -111,6 +143,35 @@ function AppContent() {
             );
           })}
         </nav>
+
+        <div style={{ padding: '1rem', borderTop: '1px solid var(--bg-tertiary)' }}>
+          {sidebarOpen && (
+            <div style={{ marginBottom: '1rem', padding: '0 1rem' }}>
+              <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>{user?.email}</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{user?.role}</div>
+            </div>
+          )}
+          <button
+            onClick={logout}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              padding: '0.875rem 1rem',
+              borderRadius: 'var(--radius-md)',
+              border: 'none',
+              background: 'transparent',
+              color: 'var(--danger)',
+              cursor: 'pointer',
+              fontWeight: 500,
+              fontSize: '1rem'
+            }}
+          >
+            <span>🚪</span>
+            {sidebarOpen && <span>Logout</span>}
+          </button>
+        </div>
       </aside>
 
       {/* Main Content */}
@@ -120,15 +181,7 @@ function AppContent() {
         minHeight: '100vh',
         overflow: 'auto'
       }}>
-        <Routes>
-          <Route path="/" element={<DisputeList />} />
-          <Route path="/disputes/:id" element={<DisputeDetail />} />
-          <Route path="/dashboard" element={<ReconciliationDashboard />} />
-          <Route path="/upload" element={<CSVUpload />} />
-          <Route path="/transactions" element={<TransactionComparison />} />
-          <Route path="/webhooks" element={<WebhookMonitor />} />
-          <Route path="/metrics" element={<MetricsDashboard />} />
-        </Routes>
+        <Outlet />
       </main>
     </div>
   );

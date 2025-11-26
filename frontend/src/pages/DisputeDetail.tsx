@@ -48,7 +48,7 @@ export const DisputeDetail = () => {
     setSubmitting(true);
     try {
       await api.post(`/api/disputes/${id}/${action}`, { reason });
-      navigate('/');
+      navigate('/disputes');
     } catch (err: any) {
       alert('Error: ' + (err.response?.data?.message || err.message));
       setSubmitting(false);
@@ -84,8 +84,8 @@ export const DisputeDetail = () => {
       <div className="container">
         <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
           <h3 style={{ color: 'var(--text-secondary)' }}>Dispute not found</h3>
-          <button onClick={() => navigate('/')} className="btn btn-primary mt-3">
-            Back to Dashboard
+          <button onClick={() => navigate('/disputes')} className="btn btn-primary mt-3">
+            Back to Disputes
           </button>
         </div>
       </div>
@@ -95,11 +95,11 @@ export const DisputeDetail = () => {
   return (
     <div className="container fade-in">
       <button 
-        onClick={() => navigate('/')} 
+        onClick={() => navigate('/disputes')} 
         className="btn btn-secondary mb-3"
         style={{ padding: '0.625rem 1.25rem' }}
       >
-        ← Back to Dashboard
+        ← Back to Disputes
       </button>
 
       <div className="card mb-3">
@@ -134,7 +134,7 @@ export const DisputeDetail = () => {
             <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
               Confidence Score
             </p>
-            <span className={`badge ${getScoreBadge(dispute.confidenceScore)}`} style={{ fontSize: '1.125rem' }}>
+            <span style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               {dispute.confidenceScore}%
             </span>
           </div>

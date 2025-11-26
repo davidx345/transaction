@@ -92,7 +92,7 @@ export const DisputeList = () => {
                     </span>
                   </td>
                   <td>
-                    <span className={`badge ${getScoreBadge(d.confidenceScore)}`}>
+                    <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                       {d.confidenceScore}%
                     </span>
                   </td>
