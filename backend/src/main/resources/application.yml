@@ -23,3 +23,51 @@ spring:
 
 server:
   port: 8080
+
+# Reconciliation Matching Configuration
+reconciliation:
+  amount:
+    default-percentage: 0.02       # 2% tolerance for amount matching
+    max-absolute: 100.00           # Maximum ₦100 tolerance
+    min-amount-for-percentage: 1000.00  # Use percentage for amounts >= ₦1000
+  date:
+    days-before: 1                 # Look 1 day before transaction
+    days-after: 3                  # Look 3 days after (T+1, T+2, T+3)
+    skip-weekends: true            # Extend range if weekend falls in window
+  confidence:
+    auto-match-threshold: 95       # Auto-approve matches >= 95%
+    high-confidence-threshold: 85  # Quick review for 85-94%
+    medium-confidence-threshold: 70 # Standard review for 70-84%
+    low-confidence-threshold: 40   # Detailed review for 40-69%
+  weights:
+    exact-reference-match: 40      # Points for exact reference
+    fuzzy-reference-match: 30      # Points for fuzzy reference
+    exact-amount-match: 30         # Points for exact amount
+    tolerance-amount-match: 20     # Points for amount within tolerance
+    same-day-match: 20             # Points for same-day transaction
+    date-range-match: 10           # Points for transaction in date window
+    status-match: 10               # Points for matching status
+    duplicate-penalty: -20         # Penalty for potential duplicates
+  bank-fees:
+    gtbank:
+      bank-name: GTBank
+      fee-percentage: 0.015        # 1.5% fee
+      flat-fee: 0
+      max-fee: 2000.00
+      vat-applied: true
+      vat-percentage: 0.075
+    access:
+      bank-name: Access Bank
+      fee-percentage: 0.015
+      flat-fee: 50.00
+      max-fee: 2500.00
+      vat-applied: true
+      vat-percentage: 0.075
+    zenith:
+      bank-name: Zenith Bank
+      fee-percentage: 0.01         # 1% fee
+      flat-fee: 25.00
+      max-fee: 1500.00
+      vat-applied: true
+      vat-percentage: 0.075
+

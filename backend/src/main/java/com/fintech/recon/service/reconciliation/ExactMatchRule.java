@@ -1,18 +1,27 @@
 package com.fintech.recon.service.reconciliation;
 
+import com.fintech.recon.config.ReconciliationConfig;
 import com.fintech.recon.domain.Transaction;
 import com.fintech.recon.infrastructure.TransactionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Exact Match Rule
+ * Matches transactions with exact reference AND exact amount.
+ * This is the highest confidence match.
+ */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ExactMatchRule implements ReconciliationRule {
 
     private final TransactionRepository transactionRepository;
+    private final ReconciliationConfig config;
 
     @Override
     public String getRuleName() {
@@ -21,29 +30,39 @@ public class ExactMatchRule implements ReconciliationRule {
 
     @Override
     public int getWeight() {
-        return 100; // High confidence if exact match found
+        // Exact match = reference points + amount points
+        return config.getWeights().getExactReferenceMatch() + 
+               config.getWeights().getExactAmountMatch();
     }
 
     @Override
     public boolean evaluate(Transaction transaction, Map<String, Object> context) {
-        // Look for a matching transaction in the 'ledger' source
-        // Criteria: Same Normalized Reference AND Same Amount
-        
-        // In a real scenario, we might want to optimize this query or use the context map
-        // to avoid hitting the DB for every rule if data is already fetched.
-        
-        // For MVP: Query DB directly
-        Optional<Transaction> match = transactionRepository.findAll().stream() // TODO: Replace with findByNormalizedReferenceAndSource
-                .filter(t -> "ledger".equalsIgnoreCase(t.getSource()))
-                .filter(t -> t.getNormalizedReference().equals(transaction.getNormalizedReference()))
-                .filter(t -> t.getAmount().compareTo(transaction.getAmount()) == 0)
-                .findFirst();
-
-        if (match.isPresent()) {
-            context.put("matchedTransaction", match.get());
-            return true;
+        String reference = transaction.getNormalizedReference();
+        if (reference == null || reference.isEmpty()) {
+            return false;
         }
-        
+
+        // Look for exact match in ledger
+        Optional<Transaction> exactMatch = transactionRepository
+                .findByNormalizedReferenceAndSource(reference, "ledger");
+
+        if (exactMatch.isPresent()) {
+            Transaction matched = exactMatch.get();
+            
+            // Verify amount also matches exactly
+            if (matched.getAmount() != null && 
+                transaction.getAmount() != null &&
+                matched.getAmount().compareTo(transaction.getAmount()) == 0) {
+                
+                log.info("Exact match found: {} -> {} (amount: {})", 
+                        reference, matched.getId(), matched.getAmount());
+                
+                context.put("matchedTransaction", matched);
+                context.put("exactMatchFound", true);
+                return true;
+            }
+        }
+
         return false;
     }
 }
