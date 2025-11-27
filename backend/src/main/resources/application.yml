@@ -55,6 +55,10 @@ security:
 webhook:
   paystack-secret-key: ${PAYSTACK_SECRET_KEY:sk_test_xxxxxxx}
   flutterwave-secret-hash: ${FLUTTERWAVE_SECRET_HASH:FLWSECK_TEST-xxxxxxx}
+  korapay-secret-key: ${KORAPAY_SECRET_KEY:kp_sk_test_xxxxxxx}
+  quidax-secret-key: ${QUIDAX_SECRET_KEY:qdx_sk_test_xxxxxxx}
+  fincra-encryption-key: ${FINCRA_ENCRYPTION_KEY:fnc_enc_test_xxxxxxx}
+  moniepoint-secret-key: ${MONIEPOINT_SECRET_KEY:mnfy_sk_test_xxxxxxx}
 
 # Reconciliation Matching Configuration
 reconciliation:
@@ -100,6 +104,34 @@ reconciliation:
       fee-percentage: 0.01         # 1% fee
       flat-fee: 25.00
       max-fee: 1500.00
+      vat-applied: true
+      vat-percentage: 0.075
+    korapay:
+      bank-name: Korapay
+      fee-percentage: 0.015        # 1.5% fee
+      flat-fee: 0
+      max-fee: 2000.00
+      vat-applied: true
+      vat-percentage: 0.075
+    quidax:
+      bank-name: Quidax
+      fee-percentage: 0.005        # 0.5% for crypto trading
+      flat-fee: 0
+      max-fee: 50000.00
+      vat-applied: false
+      vat-percentage: 0
+    fincra:
+      bank-name: Fincra
+      fee-percentage: 0.02         # 2% for cross-border
+      flat-fee: 100.00
+      max-fee: 5000.00
+      vat-applied: true
+      vat-percentage: 0.075
+    moniepoint:
+      bank-name: Moniepoint
+      fee-percentage: 0.015        # 1.5% fee
+      flat-fee: 0
+      max-fee: 2000.00
       vat-applied: true
       vat-percentage: 0.075
 

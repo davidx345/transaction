@@ -79,6 +79,10 @@ export const SUPPORTED_BANKS = [
   { id: 'UBA', name: 'UBA', description: 'United Bank for Africa' },
   { id: 'Paystack', name: 'Paystack', description: 'Paystack Payment Gateway' },
   { id: 'Flutterwave', name: 'Flutterwave', description: 'Flutterwave Payment Gateway' },
+  { id: 'Korapay', name: 'Korapay', description: 'Korapay Payment Infrastructure' },
+  { id: 'Quidax', name: 'Quidax', description: 'Quidax Cryptocurrency Exchange' },
+  { id: 'Fincra', name: 'Fincra', description: 'Fincra Cross-Border Payments' },
+  { id: 'Moniepoint', name: 'Moniepoint', description: 'Moniepoint/Monnify Payments' },
   { id: 'Generic', name: 'Generic', description: 'Generic CSV format' },
 ] as const;
 
@@ -136,5 +140,33 @@ GTB-INV_2024001,50000.00,24/11/2024,SUCCESS`
     content: `ID,TX_REF,FLUTTERWAVEREF,AMOUNT,CHARGED_AMOUNT,CURRENCY,STATUS,CREATED_AT,CUSTOMER_EMAIL,PAYMENT_TYPE
 9876543210,ORDER_1001,FLW-abc123,5000.00,5075.00,NGN,successful,2024-11-22 10:30:00,john@example.com,card
 9876543211,ORDER_1002,FLW-def456,15000.50,15225.75,NGN,successful,2024-11-22 14:45:00,jane@example.com,banktransfer`
+  },
+  Korapay: {
+    filename: 'korapay_transactions.csv',
+    content: `REFERENCE,AMOUNT,FEE,CURRENCY,STATUS,CREATED_AT,CUSTOMER_EMAIL,PAYMENT_TYPE,NARRATION
+KPY-abc123,5000.00,75.00,NGN,success,2024-11-22T10:30:00,john@example.com,card,Payment for Order 1001
+KPY-def456,15000.50,150.50,NGN,success,2024-11-22T14:45:00,jane@example.com,bank_transfer,Invoice Payment INV-2024-001
+KPY-ghi789,7500.00,100.00,NGN,success,2024-11-23T09:15:00,bob@example.com,mobile_money,Subscription Renewal`
+  },
+  Quidax: {
+    filename: 'quidax_transactions.csv',
+    content: `REFERENCE,TXID,AMOUNT,CURRENCY,TYPE,STATUS,CREATED_AT,CONFIRMATIONS,NETWORK,ADDRESS
+QDX-abc123,0x1a2b3c4d5e6f,0.05,BTC,deposit,confirmed,2024-11-22T10:30:00,6,bitcoin,bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
+QDX-def456,0x7g8h9i0j1k2l,1000.00,NGN,withdrawal,completed,2024-11-22T14:45:00,0,ngn,0012345678
+QDX-ghi789,0x3m4n5o6p7q8r,2.5,ETH,deposit,confirmed,2024-11-23T09:15:00,15,ethereum,0x742d35Cc6634C0532925a3b844Bc9e7595f12345`
+  },
+  Fincra: {
+    filename: 'fincra_transactions.csv',
+    content: `REFERENCE,SESSION_ID,SOURCE_AMOUNT,DESTINATION_AMOUNT,SOURCE_CURRENCY,DESTINATION_CURRENCY,STATUS,TYPE,CREATED_AT,CUSTOMER_EMAIL,BENEFICIARY_NAME
+FNC-abc123,SES_123456,5000.00,5000.00,NGN,NGN,successful,collection,2024-11-22T10:30:00,john@example.com,John Doe
+FNC-def456,SES_234567,100.00,75500.00,USD,NGN,successful,collection,2024-11-22T14:45:00,jane@example.com,Jane Smith
+FNC-ghi789,SES_345678,50000.00,65.50,NGN,USD,successful,payout,2024-11-23T09:15:00,bob@example.com,Bob Johnson Intl`
+  },
+  Moniepoint: {
+    filename: 'moniepoint_transactions.csv',
+    content: `REFERENCE,TRANSACTION_HASH,AMOUNT,SETTLED_AMOUNT,FEE,CURRENCY,STATUS,PRODUCT,PAID_ON,CUSTOMER_NAME,PAYMENT_METHOD,ACCOUNT_NUMBER
+MNFY-abc123,sha512hash123,5000.00,4925.00,75.00,NGN,PAID,RESERVED_ACCOUNT,2024-11-22T10:30:00,John Doe,ACCOUNT_TRANSFER,8012345678
+MNFY-def456,sha512hash456,15000.50,14775.25,225.25,NGN,PAID,CARD,2024-11-22T14:45:00,Jane Smith,CARD,**** **** **** 1234
+MNFY-ghi789,sha512hash789,7500.00,7387.50,112.50,NGN,PAID,RESERVED_ACCOUNT,2024-11-23T09:15:00,Bob Johnson,ACCOUNT_TRANSFER,9087654321`
   }
 };

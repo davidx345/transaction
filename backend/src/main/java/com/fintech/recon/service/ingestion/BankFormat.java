@@ -126,6 +126,46 @@ public enum BankFormat {
         List.of("FLUTTERWAVE", "FLW-", "RAVE")
     ),
     
+    KORAPAY(
+        "Korapay",
+        List.of("REFERENCE", "KORAPAY_REF", "PAYMENT_REFERENCE", "TRANSACTION_REFERENCE"),
+        List.of("AMOUNT", "NET_AMOUNT", "CHARGED_AMOUNT"),
+        List.of("CREATED_AT", "PAID_AT", "DATE", "TIMESTAMP"),
+        "yyyy-MM-dd'T'HH:mm:ss",
+        "KPY-",
+        List.of("KORAPAY", "KPY-", "KORA")
+    ),
+    
+    QUIDAX(
+        "Quidax",
+        List.of("REFERENCE", "TXID", "TRANSACTION_ID", "ID"),
+        List.of("AMOUNT", "QUANTITY", "VALUE"),
+        List.of("CREATED_AT", "TIMESTAMP", "DATE"),
+        "yyyy-MM-dd'T'HH:mm:ss",
+        "QDX-",
+        List.of("QUIDAX", "QDX-", "CRYPTO")
+    ),
+    
+    FINCRA(
+        "Fincra",
+        List.of("REFERENCE", "SESSION_ID", "FINCRA_REF", "TRANSACTION_REFERENCE"),
+        List.of("AMOUNT", "SOURCE_AMOUNT", "DESTINATION_AMOUNT"),
+        List.of("CREATED_AT", "COMPLETED_AT", "DATE"),
+        "yyyy-MM-dd'T'HH:mm:ss",
+        "FNC-",
+        List.of("FINCRA", "FNC-")
+    ),
+    
+    MONIEPOINT(
+        "Moniepoint",
+        List.of("REFERENCE", "TRANSACTION_REFERENCE", "PAYMENT_REFERENCE", "MONNIFY_REF"),
+        List.of("AMOUNT", "AMOUNT_PAID", "SETTLED_AMOUNT"),
+        List.of("PAID_ON", "TRANSACTION_DATE", "CREATED_ON", "DATE"),
+        "yyyy-MM-dd'T'HH:mm:ss",
+        "MNFY-",
+        List.of("MONIEPOINT", "MONNIFY", "MNFY-", "MNP-")
+    ),
+    
     GENERIC(
         "Generic",
         List.of("REFERENCE", "REF", "ID"),
