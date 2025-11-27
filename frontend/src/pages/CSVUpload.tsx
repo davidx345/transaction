@@ -125,8 +125,8 @@ export const CSVUpload = () => {
 
   return (
     <div className="container fade-in">
-      <h1 className="mb-2">Upload Bank Settlement CSV</h1>
-      <p style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}>
+      <h1 style={{ fontSize: '1.75rem', fontWeight: 600, color: '#FAFAFA', marginBottom: '0.5rem' }}>Upload Bank Settlement CSV</h1>
+      <p style={{ marginBottom: '2rem', color: '#71717A', fontSize: '0.875rem' }}>
         Upload bank settlement files from Nigerian banks or payment providers. 
         The system auto-detects the format or you can specify the bank.
       </p>
@@ -147,12 +147,12 @@ export const CSVUpload = () => {
           onDragOver={handleDrag}
           onDrop={handleDrop}
           style={{
-            border: `2px dashed ${dragActive ? 'var(--primary)' : 'var(--border)'}`,
-            borderRadius: 'var(--radius-lg)',
+            border: `2px dashed ${dragActive ? '#3B82F6' : '#27272A'}`,
+            borderRadius: '8px',
             padding: '3rem',
             textAlign: 'center',
-            background: dragActive ? 'rgba(0, 122, 255, 0.05)' : 'var(--bg-secondary)',
-            transition: 'all 0.3s ease',
+            background: dragActive ? 'rgba(59, 130, 246, 0.05)' : '#18181B',
+            transition: 'all 0.2s ease',
             marginBottom: '1.5rem',
           }}
         >
@@ -169,20 +169,20 @@ export const CSVUpload = () => {
           {selectedFile ? (
             <div>
               <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📄</div>
-              <p style={{ fontWeight: 600, fontSize: '1.125rem', marginBottom: '0.25rem' }}>
+              <p style={{ fontWeight: 500, fontSize: '1rem', marginBottom: '0.25rem', color: '#FAFAFA' }}>
                 {selectedFile.name}
               </p>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+              <p style={{ color: '#71717A', fontSize: '0.8125rem' }}>
                 {(selectedFile.size / 1024).toFixed(2)} KB
               </p>
             </div>
           ) : (
             <div>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📁</div>
-              <p style={{ fontWeight: 600, fontSize: '1.125rem', marginBottom: '0.5rem' }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📁</div>
+              <p style={{ fontWeight: 500, fontSize: '1rem', marginBottom: '0.5rem', color: '#FAFAFA' }}>
                 Drag & drop your CSV file here
               </p>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>or</p>
+              <p style={{ color: '#71717A', marginBottom: '1rem', fontSize: '0.875rem' }}>or</p>
               <label htmlFor="file-upload" className="btn btn-secondary" style={{ cursor: 'pointer' }}>
                 Browse Files
               </label>
@@ -234,13 +234,13 @@ export const CSVUpload = () => {
         {/* Supported Formats */}
         <div
           style={{
-            marginTop: '2rem',
+            marginTop: '1.5rem',
             padding: '1rem',
-            background: 'var(--bg-secondary)',
-            borderRadius: 'var(--radius-md)',
+            background: '#18181B',
+            borderRadius: '8px',
           }}
         >
-          <p style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem' }}>
+          <p style={{ fontSize: '0.8125rem', fontWeight: 500, marginBottom: '0.75rem', color: '#FAFAFA' }}>
             🏦 Supported Banks & Formats:
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.5rem' }}>
@@ -248,14 +248,14 @@ export const CSVUpload = () => {
               <div
                 key={bank.id}
                 style={{
-                  fontSize: '0.8125rem',
-                  color: 'var(--text-secondary)',
+                  fontSize: '0.75rem',
+                  color: '#A1A1AA',
                   padding: '0.5rem',
-                  background: 'var(--bg-primary)',
-                  borderRadius: 'var(--radius-sm)',
+                  background: '#111113',
+                  borderRadius: '6px',
                 }}
               >
-                <span style={{ fontWeight: 500 }}>{bank.name}</span>
+                <span style={{ fontWeight: 500, color: '#FAFAFA' }}>{bank.name}</span>
                 <span style={{ opacity: 0.7 }}> - {bank.description}</span>
               </div>
             ))}
@@ -269,21 +269,21 @@ export const CSVUpload = () => {
         style={{
           maxWidth: '800px',
           marginTop: '1.5rem',
-          background: 'var(--bg-secondary)',
-          border: '1px dashed var(--border)',
+          background: '#111113',
+          border: '1px dashed #27272A',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
           <div>
-            <p style={{ fontWeight: 600, marginBottom: '0.25rem' }}>📁 Sample Test Files</p>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+            <p style={{ fontWeight: 500, marginBottom: '0.25rem', color: '#FAFAFA', fontSize: '0.875rem' }}>📁 Sample Test Files</p>
+            <p style={{ fontSize: '0.8125rem', color: '#71717A' }}>
               Load sample CSV files for testing different bank formats
             </p>
           </div>
           <button
             onClick={() => setShowSampleSelector(!showSampleSelector)}
             className="btn btn-secondary"
-            style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}
+            style={{ padding: '0.5rem 1rem', fontSize: '0.8125rem' }}
           >
             {showSampleSelector ? 'Hide Samples' : 'Show Samples'}
           </button>
@@ -294,7 +294,7 @@ export const CSVUpload = () => {
             className="fade-in"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
               gap: '0.75rem',
               marginTop: '1rem',
             }}
@@ -304,29 +304,29 @@ export const CSVUpload = () => {
                 key={bankId}
                 style={{
                   padding: '1rem',
-                  background: 'var(--bg-primary)',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border)',
+                  background: '#18181B',
+                  borderRadius: '8px',
+                  border: '1px solid #27272A',
                 }}
               >
-                <p style={{ fontWeight: 600, marginBottom: '0.5rem' }}>
+                <p style={{ fontWeight: 500, marginBottom: '0.5rem', color: '#FAFAFA', fontSize: '0.875rem' }}>
                   🏦 {bankId}
                 </p>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+                <p style={{ fontSize: '0.6875rem', color: '#71717A', marginBottom: '0.75rem' }}>
                   {sample.filename}
                 </p>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <button
                     onClick={() => loadSampleFile(bankId)}
                     className="btn btn-primary"
-                    style={{ flex: 1, padding: '0.5rem', fontSize: '0.75rem' }}
+                    style={{ flex: 1, padding: '0.375rem', fontSize: '0.75rem' }}
                   >
                     Load
                   </button>
                   <button
                     onClick={() => downloadSampleFile(bankId)}
                     className="btn btn-secondary"
-                    style={{ padding: '0.5rem', fontSize: '0.75rem' }}
+                    style={{ padding: '0.375rem', fontSize: '0.75rem' }}
                   >
                     ⬇️
                   </button>

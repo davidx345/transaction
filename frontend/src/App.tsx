@@ -63,13 +63,13 @@ function DashboardLayout() {
   ];
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#0A0A0B' }}>
       {/* Sidebar */}
       <aside style={{
-        width: sidebarOpen ? '250px' : '70px',
-        background: 'var(--bg-secondary)',
-        borderRight: '1px solid var(--bg-tertiary)',
-        transition: 'width 0.3s ease',
+        width: sidebarOpen ? '240px' : '64px',
+        background: '#111113',
+        borderRight: '1px solid #27272A',
+        transition: 'width 0.2s ease',
         position: 'sticky',
         top: 0,
         height: '100vh',
@@ -78,18 +78,19 @@ function DashboardLayout() {
         flexDirection: 'column'
       }}>
         <div style={{
-          padding: '1.5rem',
+          padding: '1.25rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderBottom: '1px solid var(--bg-tertiary)'
+          borderBottom: '1px solid #27272A'
         }}>
           {sidebarOpen && (
             <h2 style={{ 
               margin: 0, 
-              fontSize: '1.25rem', 
-              fontWeight: 700,
-              color: 'var(--text-primary)'
+              fontSize: '1rem', 
+              fontWeight: 600,
+              color: '#FAFAFA',
+              letterSpacing: '-0.01em'
             }}>
               Reconciliation
             </h2>
@@ -100,16 +101,16 @@ function DashboardLayout() {
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              fontSize: '1.5rem',
+              fontSize: '1rem',
               padding: '0.25rem',
-              color: 'var(--text-secondary)'
+              color: '#71717A'
             }}
           >
             {sidebarOpen ? '◀' : '▶'}
           </button>
         </div>
 
-        <nav style={{ padding: '1rem', flex: 1 }}>
+        <nav style={{ padding: '0.75rem', flex: 1 }}>
           {navItems.map(item => {
             const isActive = location.pathname === item.path;
             return (
@@ -119,39 +120,42 @@ function DashboardLayout() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1rem',
-                  padding: '0.875rem 1rem',
-                  marginBottom: '0.5rem',
-                  borderRadius: 'var(--radius-md)',
+                  gap: '0.75rem',
+                  padding: '0.625rem 0.875rem',
+                  marginBottom: '0.25rem',
+                  borderRadius: '6px',
                   textDecoration: 'none',
-                  color: isActive ? 'var(--primary)' : 'var(--text-primary)',
-                  background: isActive ? 'var(--bg-tertiary)' : 'transparent',
-                  fontWeight: isActive ? 600 : 500,
-                  transition: 'all 0.2s ease'
+                  color: isActive ? '#FAFAFA' : '#A1A1AA',
+                  background: isActive ? '#27272A' : 'transparent',
+                  fontWeight: isActive ? 500 : 400,
+                  fontSize: '0.875rem',
+                  transition: 'all 0.15s ease'
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.background = 'var(--bg-tertiary)';
+                    e.currentTarget.style.background = '#18181B';
+                    e.currentTarget.style.color = '#FAFAFA';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) {
                     e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = '#A1A1AA';
                   }
                 }}
               >
-                <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
+                <span style={{ fontSize: '1rem', opacity: 0.8 }}>{item.icon}</span>
                 {sidebarOpen && <span>{item.label}</span>}
               </Link>
             );
           })}
         </nav>
 
-        <div style={{ padding: '1rem', borderTop: '1px solid var(--bg-tertiary)' }}>
+        <div style={{ padding: '0.75rem', borderTop: '1px solid #27272A' }}>
           {sidebarOpen && (
-            <div style={{ marginBottom: '1rem', padding: '0 1rem' }}>
-              <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>{user?.email}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{user?.role}</div>
+            <div style={{ marginBottom: '0.75rem', padding: '0 0.875rem' }}>
+              <div style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#FAFAFA' }}>{user?.email}</div>
+              <div style={{ fontSize: '0.6875rem', color: '#71717A', marginTop: '0.125rem' }}>{user?.role}</div>
             </div>
           )}
           <button
@@ -160,15 +164,15 @@ function DashboardLayout() {
               width: '100%',
               display: 'flex',
               alignItems: 'center',
-              gap: '1rem',
-              padding: '0.875rem 1rem',
-              borderRadius: 'var(--radius-md)',
+              gap: '0.75rem',
+              padding: '0.625rem 0.875rem',
+              borderRadius: '6px',
               border: 'none',
               background: 'transparent',
-              color: 'var(--danger)',
+              color: '#EF4444',
               cursor: 'pointer',
-              fontWeight: 500,
-              fontSize: '1rem'
+              fontWeight: 400,
+              fontSize: '0.875rem'
             }}
           >
             <span>🚪</span>
@@ -180,7 +184,7 @@ function DashboardLayout() {
       {/* Main Content */}
       <main style={{ 
         flex: 1, 
-        background: 'var(--bg-primary)',
+        background: '#0A0A0B',
         minHeight: '100vh',
         overflow: 'auto'
       }}>

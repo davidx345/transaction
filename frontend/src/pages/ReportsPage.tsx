@@ -19,7 +19,6 @@ import {
   DiscrepancyReport,
   SettlementReport,
   AuditTrailReport,
-  DiscrepancyItem,
 } from '../types/reports';
 
 type ReportTab = 'daily' | 'discrepancy' | 'settlement' | 'audit';
@@ -31,7 +30,6 @@ const ReportsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [banks, setBanks] = useState<string[]>([]);
 
-  // Form state
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [startDate, setStartDate] = useState<string>(
     new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
@@ -39,7 +37,6 @@ const ReportsPage: React.FC = () => {
   const [endDate, setEndDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [selectedBank, setSelectedBank] = useState<string>('GTBANK');
 
-  // Report data
   const [dailyReport, setDailyReport] = useState<DailySummaryReport | null>(null);
   const [discrepancyReport, setDiscrepancyReport] = useState<DiscrepancyReport | null>(null);
   const [settlementReport, setSettlementReport] = useState<SettlementReport | null>(null);
@@ -114,11 +111,11 @@ const ReportsPage: React.FC = () => {
     }
   };
 
-  const getPriorityColor = (priority: number): string => {
+  const getPriorityColor = (priority: number): React.CSSProperties => {
     switch (priority) {
-      case 1: return 'bg-red-100 text-red-800';
-      case 2: return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-green-100 text-green-800';
+      case 1: return { background: 'rgba(239, 68, 68, 0.15)', color: '#F87171' };
+      case 2: return { background: 'rgba(245, 158, 11, 0.15)', color: '#FBBF24' };
+      default: return { background: 'rgba(34, 197, 94, 0.15)', color: '#4ADE80' };
     }
   };
 
@@ -131,289 +128,238 @@ const ReportsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
-          <p className="mt-2 text-gray-600">
-            Generate and export reconciliation reports
-          </p>
-        </div>
+    <div className="container fade-in">
+      {/* Header */}
+      <div style={{ marginBottom: '2rem' }}>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: 600, color: '#FAFAFA', marginBottom: '0.5rem' }}>Reports</h1>
+        <p style={{ color: '#71717A', fontSize: '0.875rem' }}>
+          Generate and export reconciliation reports
+        </p>
+      </div>
 
-        {/* Tabs */}
-        <div className="border-b border-gray-200 mb-6">
-          <nav className="-mb-px flex space-x-8">
-            {[
-              { id: 'daily', name: 'Daily Summary' },
-              { id: 'discrepancy', name: 'Discrepancies' },
-              { id: 'settlement', name: 'Settlement' },
-              { id: 'audit', name: 'Audit Trail' },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as ReportTab)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                {tab.name}
-              </button>
-            ))}
-          </nav>
-        </div>
+      {/* Tabs */}
+      <div style={{ borderBottom: '1px solid #27272A', marginBottom: '1.5rem' }}>
+        <nav style={{ display: 'flex', gap: '2rem' }}>
+          {[
+            { id: 'daily', name: 'Daily Summary' },
+            { id: 'discrepancy', name: 'Discrepancies' },
+            { id: 'settlement', name: 'Settlement' },
+            { id: 'audit', name: 'Audit Trail' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as ReportTab)}
+              style={{
+                padding: '1rem 0',
+                borderBottom: activeTab === tab.id ? '2px solid #3B82F6' : '2px solid transparent',
+                background: 'none',
+                border: 'none',
+                color: activeTab === tab.id ? '#FAFAFA' : '#71717A',
+                fontWeight: activeTab === tab.id ? 500 : 400,
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              {tab.name}
+            </button>
+          ))}
+        </nav>
+      </div>
 
-        {/* Form Controls */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {(activeTab === 'daily' || activeTab === 'settlement') && (
+      {/* Form Controls */}
+      <div className="card" style={{ marginBottom: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', alignItems: 'end' }}>
+          {(activeTab === 'daily' || activeTab === 'settlement') && (
+            <div>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#A1A1AA', marginBottom: '0.5rem' }}>
+                Date
+              </label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+          )}
+
+          {(activeTab === 'discrepancy' || activeTab === 'audit') && (
+            <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Date
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#A1A1AA', marginBottom: '0.5rem' }}>
+                  Start Date
                 </label>
                 <input
                   type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
                 />
               </div>
-            )}
-
-            {(activeTab === 'discrepancy' || activeTab === 'audit') && (
-              <>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Start Date
-                  </label>
-                  <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    End Date
-                  </label>
-                  <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-              </>
-            )}
-
-            {activeTab === 'settlement' && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Bank
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#A1A1AA', marginBottom: '0.5rem' }}>
+                  End Date
                 </label>
-                <select
-                  value={selectedBank}
-                  onChange={(e) => setSelectedBank(e.target.value)}
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                >
-                  {banks.map((bank) => (
-                    <option key={bank} value={bank}>
-                      {bank}
-                    </option>
-                  ))}
-                </select>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
               </div>
-            )}
+            </>
+          )}
 
-            <div className="flex items-end gap-2">
-              <button
-                onClick={generateReport}
-                disabled={loading}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          {activeTab === 'settlement' && (
+            <div>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 500, color: '#A1A1AA', marginBottom: '0.5rem' }}>
+                Bank
+              </label>
+              <select
+                value={selectedBank}
+                onChange={(e) => setSelectedBank(e.target.value)}
               >
-                {loading ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Generating...
-                  </>
-                ) : (
-                  'Generate Report'
-                )}
-              </button>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleExport('excel')}
-                  disabled={exporting}
-                  className="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                >
-                  📊 Excel
-                </button>
-                <button
-                  onClick={() => handleExport('csv')}
-                  disabled={exporting}
-                  className="px-3 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                >
-                  📄 CSV
-                </button>
-              </div>
+                {banks.map((bank) => (
+                  <option key={bank} value={bank}>
+                    {bank}
+                  </option>
+                ))}
+              </select>
             </div>
+          )}
+
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button
+              onClick={generateReport}
+              disabled={loading}
+              className="btn btn-primary"
+            >
+              {loading ? 'Generating...' : 'Generate Report'}
+            </button>
+
+            <button
+              onClick={() => handleExport('excel')}
+              disabled={exporting}
+              className="btn btn-secondary"
+              style={{ padding: '0.625rem 0.875rem' }}
+            >
+              📊 Excel
+            </button>
+            <button
+              onClick={() => handleExport('csv')}
+              disabled={exporting}
+              className="btn btn-secondary"
+              style={{ padding: '0.625rem 0.875rem' }}
+            >
+              📄 CSV
+            </button>
           </div>
         </div>
-
-        {/* Error */}
-        {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
-            <p className="text-red-700">{error}</p>
-          </div>
-        )}
-
-        {/* Daily Summary Report */}
-        {activeTab === 'daily' && dailyReport && (
-          <DailySummaryView report={dailyReport} />
-        )}
-
-        {/* Discrepancy Report */}
-        {activeTab === 'discrepancy' && discrepancyReport && (
-          <DiscrepancyView 
-            report={discrepancyReport} 
-            getPriorityColor={getPriorityColor}
-            getPriorityLabel={getPriorityLabel}
-          />
-        )}
-
-        {/* Settlement Report */}
-        {activeTab === 'settlement' && settlementReport && (
-          <SettlementView report={settlementReport} />
-        )}
-
-        {/* Audit Trail Report */}
-        {activeTab === 'audit' && auditReport && (
-          <AuditTrailView report={auditReport} />
-        )}
       </div>
+
+      {/* Error */}
+      {error && (
+        <div style={{ 
+          background: 'rgba(239, 68, 68, 0.1)', 
+          borderLeft: '3px solid #EF4444',
+          padding: '1rem',
+          marginBottom: '1.5rem',
+          borderRadius: '6px'
+        }}>
+          <p style={{ color: '#F87171', fontSize: '0.875rem' }}>{error}</p>
+        </div>
+      )}
+
+      {/* Daily Summary Report */}
+      {activeTab === 'daily' && dailyReport && (
+        <DailySummaryView report={dailyReport} />
+      )}
+
+      {/* Discrepancy Report */}
+      {activeTab === 'discrepancy' && discrepancyReport && (
+        <DiscrepancyView 
+          report={discrepancyReport} 
+          getPriorityColor={getPriorityColor}
+          getPriorityLabel={getPriorityLabel}
+        />
+      )}
+
+      {/* Settlement Report */}
+      {activeTab === 'settlement' && settlementReport && (
+        <SettlementView report={settlementReport} />
+      )}
+
+      {/* Audit Trail Report */}
+      {activeTab === 'audit' && auditReport && (
+        <AuditTrailView report={auditReport} />
+      )}
     </div>
   );
 };
 
 // Daily Summary View Component
 const DailySummaryView: React.FC<{ report: DailySummaryReport }> = ({ report }) => (
-  <div className="space-y-6">
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
     {/* Summary Cards */}
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <StatCard
-        title="Total Transactions"
-        value={report.totalTransactions.toLocaleString()}
-        subtitle={formatCurrency(report.totalAmount)}
-        color="blue"
-      />
-      <StatCard
-        title="Matched"
-        value={report.matchedTransactions.toLocaleString()}
-        subtitle={formatPercent(report.matchRate) + ' match rate'}
-        color="green"
-      />
-      <StatCard
-        title="Unmatched"
-        value={report.unmatchedTransactions.toLocaleString()}
-        subtitle={formatCurrency(report.unmatchedAmount)}
-        color="yellow"
-      />
-      <StatCard
-        title="Disputed"
-        value={report.disputedTransactions.toLocaleString()}
-        subtitle={formatCurrency(report.discrepancyAmount)}
-        color="red"
-      />
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+      <StatCard title="Total Transactions" value={report.totalTransactions.toLocaleString()} subtitle={formatCurrency(report.totalAmount)} color="blue" />
+      <StatCard title="Matched" value={report.matchedTransactions.toLocaleString()} subtitle={formatPercent(report.matchRate) + ' match rate'} color="green" />
+      <StatCard title="Unmatched" value={report.unmatchedTransactions.toLocaleString()} subtitle={formatCurrency(report.unmatchedAmount)} color="yellow" />
+      <StatCard title="Disputed" value={report.disputedTransactions.toLocaleString()} subtitle={formatCurrency(report.discrepancyAmount)} color="red" />
     </div>
 
     {/* Match Rate Breakdown */}
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-medium text-gray-900 mb-4">Match Rate Breakdown</h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <p className="text-sm text-gray-500">Overall Match Rate</p>
-          <p className="text-2xl font-bold text-gray-900">{formatPercent(report.matchRate)}</p>
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-            <div 
-              className="bg-blue-600 h-2 rounded-full" 
-              style={{ width: `${Math.min(report.matchRate, 100)}%` }}
-            />
-          </div>
-        </div>
-        <div>
-          <p className="text-sm text-gray-500">Auto Match Rate</p>
-          <p className="text-2xl font-bold text-green-600">{formatPercent(report.autoMatchRate)}</p>
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-            <div 
-              className="bg-green-600 h-2 rounded-full" 
-              style={{ width: `${Math.min(report.autoMatchRate, 100)}%` }}
-            />
-          </div>
-        </div>
-        <div>
-          <p className="text-sm text-gray-500">Manual Match Rate</p>
-          <p className="text-2xl font-bold text-yellow-600">{formatPercent(report.manualMatchRate)}</p>
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-            <div 
-              className="bg-yellow-600 h-2 rounded-full" 
-              style={{ width: `${Math.min(report.manualMatchRate, 100)}%` }}
-            />
-          </div>
-        </div>
+    <div className="card">
+      <h3 style={{ fontSize: '1rem', fontWeight: 500, color: '#FAFAFA', marginBottom: '1rem' }}>Match Rate Breakdown</h3>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+        <RateBar label="Overall Match Rate" value={report.matchRate} color="#3B82F6" />
+        <RateBar label="Auto Match Rate" value={report.autoMatchRate} color="#22C55E" />
+        <RateBar label="Manual Match Rate" value={report.manualMatchRate} color="#F59E0B" />
       </div>
     </div>
 
     {/* Source Breakdown */}
     {report.sourceBreakdowns && report.sourceBreakdowns.length > 0 && (
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">Source Breakdown</h3>
+      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+        <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #27272A' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 500, color: '#FAFAFA', margin: 0 }}>Source Breakdown</h3>
         </div>
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Source</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Count</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amount</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Matched</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Match Rate</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {report.sourceBreakdowns.map((source, idx) => (
-              <tr key={idx}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {source.source}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                  {source.transactionCount.toLocaleString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                  {formatCurrency(source.totalAmount)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                  {source.matchedCount.toLocaleString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    source.matchRate >= 90 ? 'bg-green-100 text-green-800' :
-                    source.matchRate >= 70 ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {formatPercent(source.matchRate)}
-                  </span>
-                </td>
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%' }}>
+            <thead>
+              <tr>
+                <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Source</th>
+                <th style={{ padding: '0.875rem 1.25rem', textAlign: 'right', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Count</th>
+                <th style={{ padding: '0.875rem 1.25rem', textAlign: 'right', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Amount</th>
+                <th style={{ padding: '0.875rem 1.25rem', textAlign: 'right', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Matched</th>
+                <th style={{ padding: '0.875rem 1.25rem', textAlign: 'right', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Match Rate</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {report.sourceBreakdowns.map((source, idx) => (
+                <tr key={idx} style={{ borderTop: '1px solid #27272A' }}>
+                  <td style={{ padding: '1rem 1.25rem', color: '#FAFAFA', fontWeight: 500 }}>{source.source}</td>
+                  <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', textAlign: 'right' }}>{source.transactionCount.toLocaleString()}</td>
+                  <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', textAlign: 'right' }}>{formatCurrency(source.totalAmount)}</td>
+                  <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', textAlign: 'right' }}>{source.matchedCount.toLocaleString()}</td>
+                  <td style={{ padding: '1rem 1.25rem', textAlign: 'right' }}>
+                    <span style={{
+                      padding: '0.25rem 0.625rem',
+                      borderRadius: '100px',
+                      fontSize: '0.75rem',
+                      fontWeight: 500,
+                      ...(source.matchRate >= 90 
+                        ? { background: 'rgba(34, 197, 94, 0.15)', color: '#4ADE80' }
+                        : source.matchRate >= 70 
+                        ? { background: 'rgba(245, 158, 11, 0.15)', color: '#FBBF24' }
+                        : { background: 'rgba(239, 68, 68, 0.15)', color: '#F87171' })
+                    }}>
+                      {formatPercent(source.matchRate)}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     )}
   </div>
@@ -422,78 +368,51 @@ const DailySummaryView: React.FC<{ report: DailySummaryReport }> = ({ report }) 
 // Discrepancy View Component
 const DiscrepancyView: React.FC<{
   report: DiscrepancyReport;
-  getPriorityColor: (p: number) => string;
+  getPriorityColor: (p: number) => React.CSSProperties;
   getPriorityLabel: (p: number) => string;
 }> = ({ report, getPriorityColor, getPriorityLabel }) => (
-  <div className="space-y-6">
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
     {/* Summary Cards */}
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <StatCard
-        title="Total Discrepancies"
-        value={report.totalDiscrepancies.toLocaleString()}
-        subtitle={formatCurrency(report.totalDiscrepancyAmount)}
-        color="red"
-      />
-      <StatCard
-        title="Pending"
-        value={report.pendingDiscrepancies.toLocaleString()}
-        color="yellow"
-      />
-      <StatCard
-        title="High Priority"
-        value={report.highPriority.toLocaleString()}
-        color="red"
-      />
-      <StatCard
-        title="Missing Transactions"
-        value={report.missingTransactions.toLocaleString()}
-        color="blue"
-      />
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+      <StatCard title="Total Discrepancies" value={report.totalDiscrepancies.toLocaleString()} subtitle={formatCurrency(report.totalDiscrepancyAmount)} color="red" />
+      <StatCard title="Pending" value={report.pendingDiscrepancies.toLocaleString()} color="yellow" />
+      <StatCard title="High Priority" value={report.highPriority.toLocaleString()} color="red" />
+      <StatCard title="Missing Transactions" value={report.missingTransactions.toLocaleString()} color="blue" />
     </div>
 
     {/* Discrepancy Table */}
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-medium text-gray-900">Discrepancy Details</h3>
+    <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #27272A' }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: 500, color: '#FAFAFA', margin: 0 }}>Discrepancy Details</h3>
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', minWidth: '800px' }}>
+          <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reference</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Source</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Expected</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actual</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Difference</th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Type</th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Priority</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Reference</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Source</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'right', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Expected</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'right', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Actual</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'right', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Difference</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'center', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Type</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'center', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Priority</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody>
             {report.discrepancies.slice(0, 50).map((item, idx) => (
-              <tr key={idx}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
-                  {item.reference}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {item.source}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                  {formatCurrency(item.expectedAmount)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                  {formatCurrency(item.actualAmount)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600 text-right font-medium">
-                  {formatCurrency(item.difference)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+              <tr key={idx} style={{ borderTop: '1px solid #27272A' }}>
+                <td style={{ padding: '1rem 1.25rem', fontFamily: 'monospace', color: '#FAFAFA', fontSize: '0.8125rem' }}>{item.reference}</td>
+                <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA' }}>{item.source}</td>
+                <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', textAlign: 'right' }}>{formatCurrency(item.expectedAmount)}</td>
+                <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', textAlign: 'right' }}>{formatCurrency(item.actualAmount)}</td>
+                <td style={{ padding: '1rem 1.25rem', color: '#F87171', textAlign: 'right', fontWeight: 500 }}>{formatCurrency(item.difference)}</td>
+                <td style={{ padding: '1rem 1.25rem', textAlign: 'center' }}>
+                  <span style={{ padding: '0.25rem 0.625rem', borderRadius: '100px', fontSize: '0.75rem', background: '#27272A', color: '#A1A1AA' }}>
                     {item.discrepancyType}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(item.priority)}`}>
+                <td style={{ padding: '1rem 1.25rem', textAlign: 'center' }}>
+                  <span style={{ padding: '0.25rem 0.625rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 500, ...getPriorityColor(item.priority) }}>
                     {getPriorityLabel(item.priority)}
                   </span>
                 </td>
@@ -503,7 +422,7 @@ const DiscrepancyView: React.FC<{
         </table>
       </div>
       {report.discrepancies.length > 50 && (
-        <div className="px-6 py-4 bg-gray-50 text-center text-sm text-gray-500">
+        <div style={{ padding: '1rem', background: '#18181B', textAlign: 'center', fontSize: '0.8125rem', color: '#71717A' }}>
           Showing 50 of {report.discrepancies.length} discrepancies. Export to see all.
         </div>
       )}
@@ -513,95 +432,62 @@ const DiscrepancyView: React.FC<{
 
 // Settlement View Component
 const SettlementView: React.FC<{ report: SettlementReport }> = ({ report }) => (
-  <div className="space-y-6">
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
     {/* Summary Cards */}
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <StatCard
-        title="Expected Settlement"
-        value={formatCurrency(report.expectedSettlement)}
-        color="blue"
-      />
-      <StatCard
-        title="Actual Settlement"
-        value={formatCurrency(report.actualSettlement)}
-        color="green"
-      />
-      <StatCard
-        title="Variance"
-        value={formatCurrency(report.variance)}
-        color={report.variance === 0 ? 'green' : 'red'}
-      />
-      <StatCard
-        title="Total Fees"
-        value={formatCurrency(report.totalFees)}
-        color="yellow"
-      />
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+      <StatCard title="Expected Settlement" value={formatCurrency(report.expectedSettlement)} color="blue" />
+      <StatCard title="Actual Settlement" value={formatCurrency(report.actualSettlement)} color="green" />
+      <StatCard title="Variance" value={formatCurrency(report.variance)} color={report.variance === 0 ? 'green' : 'red'} />
+      <StatCard title="Total Fees" value={formatCurrency(report.totalFees)} color="yellow" />
     </div>
 
     {/* Transaction Comparison */}
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-medium text-gray-900 mb-4">Transaction Comparison</h3>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="text-center">
-          <p className="text-sm text-gray-500">Expected</p>
-          <p className="text-2xl font-bold text-gray-900">{report.expectedTransactionCount}</p>
-        </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-500">Actual</p>
-          <p className="text-2xl font-bold text-gray-900">{report.actualTransactionCount}</p>
-        </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-500">Matched</p>
-          <p className="text-2xl font-bold text-green-600">{report.matchedCount}</p>
-        </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-500">Missing from Bank</p>
-          <p className="text-2xl font-bold text-red-600">{report.missingFromBank}</p>
-        </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-500">Missing from System</p>
-          <p className="text-2xl font-bold text-yellow-600">{report.missingFromSystem}</p>
-        </div>
+    <div className="card">
+      <h3 style={{ fontSize: '1rem', fontWeight: 500, color: '#FAFAFA', marginBottom: '1rem' }}>Transaction Comparison</h3>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '1rem' }}>
+        <ComparisonStat label="Expected" value={report.expectedTransactionCount} />
+        <ComparisonStat label="Actual" value={report.actualTransactionCount} />
+        <ComparisonStat label="Matched" value={report.matchedCount} color="#4ADE80" />
+        <ComparisonStat label="Missing from Bank" value={report.missingFromBank} color="#F87171" />
+        <ComparisonStat label="Missing from System" value={report.missingFromSystem} color="#FBBF24" />
       </div>
     </div>
 
     {/* Line Items Table */}
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-medium text-gray-900">Settlement Line Items</h3>
+    <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #27272A' }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: 500, color: '#FAFAFA', margin: 0 }}>Settlement Line Items</h3>
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', minWidth: '600px' }}>
+          <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reference</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">System</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Bank</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Fee</th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Reference</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'right', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>System</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'right', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Bank</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'right', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Fee</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'center', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Status</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody>
             {report.lineItems.slice(0, 50).map((item, idx) => (
-              <tr key={idx}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
-                  {item.reference}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                  {formatCurrency(item.systemAmount)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                  {formatCurrency(item.bankAmount)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                  {formatCurrency(item.fee)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    item.status === 'MATCHED' ? 'bg-green-100 text-green-800' :
-                    item.status === 'AMOUNT_VARIANCE' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
+              <tr key={idx} style={{ borderTop: '1px solid #27272A' }}>
+                <td style={{ padding: '1rem 1.25rem', fontFamily: 'monospace', color: '#FAFAFA', fontSize: '0.8125rem' }}>{item.reference}</td>
+                <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', textAlign: 'right' }}>{formatCurrency(item.systemAmount)}</td>
+                <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', textAlign: 'right' }}>{formatCurrency(item.bankAmount)}</td>
+                <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', textAlign: 'right' }}>{formatCurrency(item.fee)}</td>
+                <td style={{ padding: '1rem 1.25rem', textAlign: 'center' }}>
+                  <span style={{
+                    padding: '0.25rem 0.625rem',
+                    borderRadius: '100px',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    ...(item.status === 'MATCHED' 
+                      ? { background: 'rgba(34, 197, 94, 0.15)', color: '#4ADE80' }
+                      : item.status === 'AMOUNT_VARIANCE' 
+                      ? { background: 'rgba(245, 158, 11, 0.15)', color: '#FBBF24' }
+                      : { background: 'rgba(239, 68, 68, 0.15)', color: '#F87171' })
+                  }}>
                     {item.status.replace(/_/g, ' ')}
                   </span>
                 </td>
@@ -616,60 +502,61 @@ const SettlementView: React.FC<{ report: SettlementReport }> = ({ report }) => (
 
 // Audit Trail View Component
 const AuditTrailView: React.FC<{ report: AuditTrailReport }> = ({ report }) => (
-  <div className="space-y-6">
-    <div className="bg-white rounded-lg shadow p-6">
-      <h3 className="text-lg font-medium text-gray-900 mb-4">
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div className="card">
+      <h3 style={{ fontSize: '1rem', fontWeight: 500, color: '#FAFAFA', marginBottom: '0.5rem' }}>
         Audit Trail ({report.entries.length} entries)
       </h3>
-      <p className="text-sm text-gray-500">
+      <p style={{ fontSize: '0.8125rem', color: '#71717A' }}>
         {formatDate(report.startDate)} to {formatDate(report.endDate)}
       </p>
     </div>
 
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+    <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', minWidth: '700px' }}>
+          <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Timestamp</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reference</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Details</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Timestamp</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Action</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Reference</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>User</th>
+              <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', color: '#71717A', textTransform: 'uppercase' }}>Details</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody>
             {report.entries.slice(0, 100).map((entry, idx) => (
-              <tr key={idx}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <tr key={idx} style={{ borderTop: '1px solid #27272A' }}>
+                <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', fontSize: '0.8125rem' }}>
                   {entry.timestamp ? formatDateTime(entry.timestamp) : '-'}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    entry.action === 'MATCHED' ? 'bg-green-100 text-green-800' :
-                    entry.action === 'DISPUTED' ? 'bg-red-100 text-red-800' :
-                    entry.action === 'RESOLVED' ? 'bg-blue-100 text-blue-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
+                <td style={{ padding: '1rem 1.25rem' }}>
+                  <span style={{
+                    padding: '0.25rem 0.625rem',
+                    borderRadius: '100px',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    ...(entry.action === 'MATCHED' 
+                      ? { background: 'rgba(34, 197, 94, 0.15)', color: '#4ADE80' }
+                      : entry.action === 'DISPUTED' 
+                      ? { background: 'rgba(239, 68, 68, 0.15)', color: '#F87171' }
+                      : entry.action === 'RESOLVED' 
+                      ? { background: 'rgba(59, 130, 246, 0.15)', color: '#60A5FA' }
+                      : { background: '#27272A', color: '#A1A1AA' })
+                  }}>
                     {entry.action}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
-                  {entry.reference}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {entry.user || 'System'}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-                  {entry.details}
-                </td>
+                <td style={{ padding: '1rem 1.25rem', fontFamily: 'monospace', color: '#FAFAFA', fontSize: '0.8125rem' }}>{entry.reference}</td>
+                <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', fontSize: '0.8125rem' }}>{entry.user || 'System'}</td>
+                <td style={{ padding: '1rem 1.25rem', color: '#71717A', fontSize: '0.8125rem', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{entry.details}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       {report.entries.length > 100 && (
-        <div className="px-6 py-4 bg-gray-50 text-center text-sm text-gray-500">
+        <div style={{ padding: '1rem', background: '#18181B', textAlign: 'center', fontSize: '0.8125rem', color: '#71717A' }}>
           Showing 100 of {report.entries.length} entries. Export to see all.
         </div>
       )}
@@ -684,20 +571,39 @@ const StatCard: React.FC<{
   subtitle?: string;
   color: 'blue' | 'green' | 'yellow' | 'red';
 }> = ({ title, value, subtitle, color }) => {
-  const colors = {
-    blue: 'bg-blue-50 border-blue-200',
-    green: 'bg-green-50 border-green-200',
-    yellow: 'bg-yellow-50 border-yellow-200',
-    red: 'bg-red-50 border-red-200',
+  const borderColors = {
+    blue: '#3B82F6',
+    green: '#22C55E',
+    yellow: '#F59E0B',
+    red: '#EF4444',
   };
 
   return (
-    <div className={`${colors[color]} border rounded-lg p-4`}>
-      <p className="text-sm text-gray-600">{title}</p>
-      <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
-      {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+    <div className="card" style={{ borderLeft: `3px solid ${borderColors[color]}` }}>
+      <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{title}</p>
+      <p style={{ fontSize: '1.5rem', fontWeight: 600, color: '#FAFAFA' }}>{value}</p>
+      {subtitle && <p style={{ fontSize: '0.75rem', color: '#A1A1AA', marginTop: '0.25rem' }}>{subtitle}</p>}
     </div>
   );
 };
+
+// Rate Bar Component
+const RateBar: React.FC<{ label: string; value: number; color: string }> = ({ label, value, color }) => (
+  <div>
+    <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem' }}>{label}</p>
+    <p style={{ fontSize: '1.5rem', fontWeight: 600, color: '#FAFAFA', marginBottom: '0.5rem' }}>{formatPercent(value)}</p>
+    <div style={{ width: '100%', background: '#27272A', borderRadius: '4px', height: '6px' }}>
+      <div style={{ width: `${Math.min(value, 100)}%`, background: color, height: '6px', borderRadius: '4px', transition: 'width 0.3s ease' }} />
+    </div>
+  </div>
+);
+
+// Comparison Stat Component
+const ComparisonStat: React.FC<{ label: string; value: number; color?: string }> = ({ label, value, color = '#FAFAFA' }) => (
+  <div style={{ textAlign: 'center' }}>
+    <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem' }}>{label}</p>
+    <p style={{ fontSize: '1.5rem', fontWeight: 600, color }}>{value}</p>
+  </div>
+);
 
 export default ReportsPage;

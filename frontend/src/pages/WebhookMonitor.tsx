@@ -129,73 +129,73 @@ export const WebhookMonitor = () => {
 
   return (
     <div className="container fade-in">
-      <h1 className="mb-2">Webhook Health Monitor</h1>
-      <p style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}>
+      <h1 style={{ fontSize: '1.75rem', fontWeight: 600, color: '#FAFAFA', marginBottom: '0.5rem' }}>Webhook Health Monitor</h1>
+      <p style={{ marginBottom: '2rem', color: '#71717A', fontSize: '0.875rem' }}>
         Track webhook delivery status, failures, and automatic recovery operations
       </p>
 
-      {/* Stats Cards - Black text for numbers */}
+      {/* Stats Cards */}
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-        gap: '1.5rem',
-        marginBottom: '2rem'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
+        gap: '1rem',
+        marginBottom: '1.5rem'
       }}>
-        <div className="card">
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+        <div className="card" style={{ borderLeft: '3px solid #3B82F6' }}>
+          <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Total Webhooks
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <p style={{ fontSize: '2rem', fontWeight: 600, color: '#FAFAFA' }}>
             {stats.total}
           </p>
         </div>
 
-        <div className="card">
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+        <div className="card" style={{ borderLeft: '3px solid #22C55E' }}>
+          <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Received
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <p style={{ fontSize: '2rem', fontWeight: 600, color: '#FAFAFA' }}>
             {stats.received}
           </p>
         </div>
 
-        <div className="card">
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+        <div className="card" style={{ borderLeft: '3px solid #EF4444' }}>
+          <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Missing
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <p style={{ fontSize: '2rem', fontWeight: 600, color: '#FAFAFA' }}>
             {stats.missing}
           </p>
         </div>
 
-        <div className="card">
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+        <div className="card" style={{ borderLeft: '3px solid #F59E0B' }}>
+          <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Recovered
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <p style={{ fontSize: '2rem', fontWeight: 600, color: '#FAFAFA' }}>
             {stats.recovered}
           </p>
         </div>
 
-        <div className="card">
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+        <div className="card" style={{ borderLeft: '3px solid #8B5CF6' }}>
+          <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Recovery Rate
           </p>
-          <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <p style={{ fontSize: '2rem', fontWeight: 600, color: '#FAFAFA' }}>
             {stats.recoveryRate.toFixed(1)}%
           </p>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="card mb-3">
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <div className="card" style={{ marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           {['all', 'received', 'missing', 'recovered', 'delayed'].map((status) => (
             <button
               key={status}
               onClick={() => setFilter(status)}
               className={filter === status ? 'btn btn-primary' : 'btn btn-secondary'}
-              style={{ padding: '0.625rem 1.25rem' }}
+              style={{ padding: '0.5rem 1rem', fontSize: '0.8125rem' }}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </button>
@@ -204,65 +204,67 @@ export const WebhookMonitor = () => {
       </div>
 
       {/* Webhook List */}
-      <div className="card">
-        <h3 className="mb-3">Webhook Log</h3>
+      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+        <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #27272A' }}>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 500, color: '#FAFAFA' }}>Webhook Log</h3>
+        </div>
 
         {webhooks.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#71717A' }}>
             No webhooks found for this filter
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', minWidth: '800px' }}>
-              <thead style={{ background: 'var(--bg-secondary)' }}>
-                <tr>
-                  <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: 600 }}>
+              <thead>
+                <tr style={{ background: '#18181B' }}>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 500, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Transaction Ref
                   </th>
-                  <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: 600 }}>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 500, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Provider
                   </th>
-                  <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: 600 }}>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 500, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Event Type
                   </th>
-                  <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: 600 }}>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 500, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Status
                   </th>
-                  <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: 600 }}>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 500, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Retry Count
                   </th>
-                  <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: 600 }}>
+                  <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 500, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Expected At
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {webhooks.map((webhook) => (
-                  <tr key={webhook.id} style={{ borderTop: '1px solid var(--bg-secondary)' }}>
-                    <td style={{ padding: '1rem', fontFamily: 'monospace', fontWeight: 600 }}>
+                  <tr key={webhook.id} style={{ borderTop: '1px solid #27272A' }}>
+                    <td style={{ padding: '1rem 1.25rem', fontFamily: 'monospace', fontWeight: 500, color: '#FAFAFA', fontSize: '0.8125rem' }}>
                       {webhook.transactionRef}
                     </td>
-                    <td style={{ padding: '1rem' }}>
-                      <span className="badge" style={{ background: 'var(--bg-tertiary)', color: 'var(--text-primary)' }}>
+                    <td style={{ padding: '1rem 1.25rem' }}>
+                      <span style={{ padding: '0.25rem 0.625rem', borderRadius: '100px', fontSize: '0.75rem', background: '#27272A', color: '#A1A1AA' }}>
                         {webhook.provider}
                       </span>
                     </td>
-                    <td style={{ padding: '1rem', fontSize: '0.875rem' }}>
+                    <td style={{ padding: '1rem 1.25rem', fontSize: '0.8125rem', color: '#A1A1AA' }}>
                       {webhook.eventType}
                     </td>
-                    <td style={{ padding: '1rem' }}>
+                    <td style={{ padding: '1rem 1.25rem' }}>
                       <span className={`badge ${getStatusBadge(webhook.status)}`}>
                         {webhook.status}
                       </span>
                     </td>
-                    <td style={{ padding: '1rem', textAlign: 'center' }}>
+                    <td style={{ padding: '1rem 1.25rem', textAlign: 'center' }}>
                       {webhook.retryCount > 0 ? (
                         <span className="badge badge-warning">{webhook.retryCount} retries</span>
                       ) : (
-                        <span style={{ color: 'var(--text-secondary)' }}>-</span>
+                        <span style={{ color: '#71717A' }}>-</span>
                       )}
                     </td>
-                    <td style={{ padding: '1rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+                    <td style={{ padding: '1rem 1.25rem', color: '#A1A1AA', fontSize: '0.8125rem' }}>
                       {new Date(webhook.expectedAt).toLocaleString('en-US', {
                         month: 'short',
                         day: 'numeric',
@@ -279,24 +281,24 @@ export const WebhookMonitor = () => {
       </div>
 
       {/* Info Panel */}
-      <div className="card mt-3" style={{ background: 'var(--bg-secondary)' }}>
-        <h3 className="mb-2">Webhook Recovery Process</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+      <div className="card" style={{ marginTop: '1.5rem', background: '#18181B' }}>
+        <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: 500, color: '#FAFAFA' }}>Webhook Recovery Process</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
           <div>
-            <p style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}>Attempt 1</p>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Immediate API verification</p>
+            <p style={{ fontSize: '0.8125rem', fontWeight: 500, marginBottom: '0.25rem', color: '#FAFAFA' }}>Attempt 1</p>
+            <p style={{ fontSize: '0.75rem', color: '#71717A' }}>Immediate API verification</p>
           </div>
           <div>
-            <p style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}>Attempt 2-3</p>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Retry after 5 & 15 minutes</p>
+            <p style={{ fontSize: '0.8125rem', fontWeight: 500, marginBottom: '0.25rem', color: '#FAFAFA' }}>Attempt 2-3</p>
+            <p style={{ fontSize: '0.75rem', color: '#71717A' }}>Retry after 5 & 15 minutes</p>
           </div>
           <div>
-            <p style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}>Attempt 4-5</p>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Retry after 30min & 1 hour</p>
+            <p style={{ fontSize: '0.8125rem', fontWeight: 500, marginBottom: '0.25rem', color: '#FAFAFA' }}>Attempt 4-5</p>
+            <p style={{ fontSize: '0.75rem', color: '#71717A' }}>Retry after 30min & 1 hour</p>
           </div>
           <div>
-            <p style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}>Final</p>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Move to Dead Letter Queue</p>
+            <p style={{ fontSize: '0.8125rem', fontWeight: 500, marginBottom: '0.25rem', color: '#FAFAFA' }}>Final</p>
+            <p style={{ fontSize: '0.75rem', color: '#71717A' }}>Move to Dead Letter Queue</p>
           </div>
         </div>
       </div>

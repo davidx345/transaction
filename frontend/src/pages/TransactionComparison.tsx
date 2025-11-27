@@ -89,28 +89,37 @@ export const TransactionComparison = () => {
 
   return (
     <div className="container fade-in">
-      <h1 className="mb-2">Transaction Source Comparison</h1>
-      <p style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}>
+      <h1 style={{ fontSize: '1.75rem', fontWeight: 600, color: '#FAFAFA', marginBottom: '0.5rem' }}>Transaction Source Comparison</h1>
+      <p style={{ marginBottom: '2rem', color: '#71717A', fontSize: '0.875rem' }}>
         Compare transaction data across Payment Provider, Bank Settlement, and Internal Ledger
       </p>
 
-      <div className="card mb-3">
+      <div className="card" style={{ marginBottom: '1.5rem' }}>
         <label style={{ 
           display: 'block', 
           marginBottom: '0.5rem', 
-          fontSize: '0.875rem',
-          fontWeight: 600,
-          color: 'var(--text-secondary)'
+          fontSize: '0.75rem',
+          fontWeight: 500,
+          color: '#71717A',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em'
         }}>
           Enter Transaction Reference
         </label>
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
           <input
             type="text"
             placeholder="e.g., PSK_abc123"
             value={selectedRef}
             onChange={(e) => setSelectedRef(e.target.value)}
-            style={{ flex: 1 }}
+            style={{ 
+              flex: 1,
+              background: '#18181B',
+              border: '1px solid #27272A',
+              color: '#FAFAFA',
+              padding: '0.75rem 1rem',
+              borderRadius: '6px'
+            }}
           />
           <button
             onClick={() => handleCompare(selectedRef)}
@@ -125,14 +134,13 @@ export const TransactionComparison = () => {
       {Object.keys(comparisonData).length > 0 && (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '1.5rem'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '1rem'
         }}>
           {/* Payment Provider */}
-          <div className="card">
+          <div className="card" style={{ borderTop: '3px solid #3B82F6' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <div style={{ fontSize: '1.5rem' }}></div>
-              <h3 style={{ margin: 0 }}>Payment Provider</h3>
+              <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 500, color: '#FAFAFA' }}>Payment Provider</h3>
             </div>
             {comparisonData.provider ? (
               <div>
@@ -145,17 +153,16 @@ export const TransactionComparison = () => {
                 />
               </div>
             ) : (
-              <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+              <div style={{ padding: '2rem', textAlign: 'center', color: '#71717A' }}>
                 No provider record found
               </div>
             )}
           </div>
 
           {/* Bank Settlement */}
-          <div className="card">
+          <div className="card" style={{ borderTop: '3px solid #22C55E' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <div style={{ fontSize: '1.5rem' }}></div>
-              <h3 style={{ margin: 0 }}>Bank Settlement</h3>
+              <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 500, color: '#FAFAFA' }}>Bank Settlement</h3>
             </div>
             {comparisonData.bank ? (
               <div>
@@ -168,17 +175,16 @@ export const TransactionComparison = () => {
                 />
               </div>
             ) : (
-              <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+              <div style={{ padding: '2rem', textAlign: 'center', color: '#71717A' }}>
                 No bank record found
               </div>
             )}
           </div>
 
           {/* Internal Ledger */}
-          <div className="card">
+          <div className="card" style={{ borderTop: '3px solid #8B5CF6' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <div style={{ fontSize: '1.5rem' }}></div>
-              <h3 style={{ margin: 0 }}>Internal Ledger</h3>
+              <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 500, color: '#FAFAFA' }}>Internal Ledger</h3>
             </div>
             {comparisonData.ledger ? (
               <div>
@@ -191,7 +197,7 @@ export const TransactionComparison = () => {
                 />
               </div>
             ) : (
-              <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+              <div style={{ padding: '2rem', textAlign: 'center', color: '#71717A' }}>
                 No ledger record found
               </div>
             )}
@@ -201,20 +207,21 @@ export const TransactionComparison = () => {
 
       {/* Analysis Section */}
       {Object.keys(comparisonData).length > 0 && (
-        <div className="card mt-3">
-          <h3 className="mb-2">Reconciliation Analysis</h3>
+        <div className="card" style={{ marginTop: '1.5rem' }}>
+          <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: 500, color: '#FAFAFA' }}>Reconciliation Analysis</h3>
           <div style={{ 
             padding: '1rem', 
-            background: 'var(--bg-secondary)', 
-            borderRadius: 'var(--radius-md)' 
+            background: '#18181B', 
+            borderRadius: '6px',
+            border: '1px solid #27272A'
           }}>
             {comparisonData.provider && comparisonData.bank && comparisonData.ledger ? (
-              <div style={{ color: 'var(--success)', fontWeight: 600 }}>
-                ✓ All sources present - Transaction fully reconciled
+              <div style={{ color: '#22C55E', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>✓</span> All sources present - Transaction fully reconciled
               </div>
             ) : (
-              <div style={{ color: 'var(--danger)', fontWeight: 600 }}>
-                ⚠ Missing data from: {!comparisonData.provider && 'Provider '} 
+              <div style={{ color: '#EF4444', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>⚠</span> Missing data from: {!comparisonData.provider && 'Provider '} 
                 {!comparisonData.bank && 'Bank '} 
                 {!comparisonData.ledger && 'Ledger'}
               </div>
@@ -228,10 +235,10 @@ export const TransactionComparison = () => {
 
 const DataField = ({ label, value }: { label: string; value: string }) => (
   <div style={{ marginBottom: '1rem' }}>
-    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+    <p style={{ fontSize: '0.6875rem', color: '#71717A', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
       {label}
     </p>
-    <p style={{ fontWeight: 600, color: 'var(--text-primary)', fontFamily: label === 'Amount' ? 'inherit' : 'monospace' }}>
+    <p style={{ fontWeight: 500, color: '#FAFAFA', fontFamily: label === 'Amount' ? 'inherit' : 'monospace', fontSize: '0.875rem' }}>
       {value}
     </p>
   </div>

@@ -31,24 +31,32 @@ export const Login: React.FC = () => {
       display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'center', 
-      background: 'var(--bg-secondary)',
+      background: '#0A0A0B',
       padding: '1rem'
     }}>
-      <div className="card" style={{ width: '100%', maxWidth: '400px', padding: '2.5rem' }}>
+      <div style={{ 
+        width: '100%', 
+        maxWidth: '380px', 
+        padding: '2rem',
+        background: '#111113',
+        borderRadius: '12px',
+        border: '1px solid #27272A'
+      }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Welcome Back</h1>
-          <p>Sign in to your account</p>
+          <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: '#FAFAFA', fontWeight: 600 }}>Welcome Back</h1>
+          <p style={{ color: '#71717A', fontSize: '0.875rem' }}>Sign in to your account</p>
         </div>
 
         {error && (
           <div style={{ 
-            background: 'rgba(255, 59, 48, 0.1)', 
-            color: 'var(--danger)', 
+            background: 'rgba(239, 68, 68, 0.1)', 
+            color: '#F87171', 
             padding: '0.75rem', 
-            borderRadius: 'var(--radius-sm)',
+            borderRadius: '6px',
             marginBottom: '1.5rem',
-            fontSize: '0.875rem',
-            textAlign: 'center'
+            fontSize: '0.8125rem',
+            textAlign: 'center',
+            border: '1px solid rgba(239, 68, 68, 0.2)'
           }}>
             {error}
           </div>
@@ -56,7 +64,7 @@ export const Login: React.FC = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Email</label>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, color: '#A1A1AA', fontSize: '0.8125rem' }}>Email</label>
             <input 
               type="email" 
               value={email}
@@ -67,7 +75,7 @@ export const Login: React.FC = () => {
           </div>
           
           <div className="mb-4">
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Password</label>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, color: '#A1A1AA', fontSize: '0.8125rem' }}>Password</label>
             <input 
               type="password" 
               value={password}
@@ -87,9 +95,9 @@ export const Login: React.FC = () => {
           </button>
         </form>
 
-        <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.875rem' }}>
-          <p>
-            Don't have an account? <a href="#" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>Contact Admin</a>
+        <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.8125rem' }}>
+          <p style={{ color: '#71717A' }}>
+            Don't have an account? <a href="#" style={{ color: '#3B82F6', textDecoration: 'none', fontWeight: 500 }}>Contact Admin</a>
           </p>
         </div>
       </div>

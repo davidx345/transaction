@@ -75,17 +75,27 @@ export const MetricsDashboard = () => {
 
   return (
     <div className="container fade-in">
-      <div className="flex items-center justify-between mb-4">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
         <div>
-          <h1>Operational Metrics & Analytics</h1>
-          <p style={{ marginTop: '0.5rem' }}>
-            Monitor performance, efficiency, and business impact of the reconciliation system
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 600, color: '#FAFAFA', marginBottom: '0.5rem' }}>
+            Operational Metrics
+          </h1>
+          <p style={{ color: '#71717A', fontSize: '0.875rem' }}>
+            Monitor performance and efficiency of the reconciliation system
           </p>
         </div>
         <select
           value={timeRange}
           onChange={(e) => setTimeRange(e.target.value)}
-          className="btn btn-secondary"
+          style={{
+            padding: '0.625rem 1rem',
+            background: '#18181B',
+            border: '1px solid #27272A',
+            borderRadius: '6px',
+            color: '#FAFAFA',
+            fontSize: '0.875rem',
+            cursor: 'pointer'
+          }}
         >
           <option value="24h">Last 24 Hours</option>
           <option value="7d">Last 7 Days</option>
@@ -95,162 +105,134 @@ export const MetricsDashboard = () => {
       </div>
 
       {/* Performance Metrics */}
-      <div className="card mb-3">
-        <h3 className="mb-3">Reconciliation Performance</h3>
+      <div className="card" style={{ marginBottom: '1.5rem' }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: 500, color: '#FAFAFA', marginBottom: '1.25rem' }}>
+          Reconciliation Performance
+        </h3>
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
           gap: '1.5rem'
         }}>
           <MetricCard
             label="p50 Duration"
             value={`${metrics.reconciliationTime.p50}s`}
             subtitle="Median reconciliation time"
-            color="var(--primary)"
+            accentColor="#3B82F6"
           />
           <MetricCard
             label="p95 Duration"
             value={`${metrics.reconciliationTime.p95}s`}
             subtitle="95th percentile"
-            color="var(--warning)"
+            accentColor="#F59E0B"
           />
           <MetricCard
             label="p99 Duration"
             value={`${metrics.reconciliationTime.p99}s`}
             subtitle="99th percentile"
-            color="var(--danger)"
+            accentColor="#EF4444"
           />
         </div>
       </div>
 
       {/* Business Impact */}
-      <div className="card mb-3">
-        <h3 className="mb-3">Business Impact</h3>
+      <div className="card" style={{ marginBottom: '1.5rem' }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: 500, color: '#FAFAFA', marginBottom: '1.25rem' }}>
+          Business Impact
+        </h3>
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
           gap: '1.5rem'
         }}>
           <MetricCard
             label="Discrepancy Rate"
             value={`${metrics.discrepancyRate}%`}
             subtitle="Transactions with issues"
-            color="var(--warning)"
+            accentColor="#F59E0B"
             trend="down"
           />
           <MetricCard
             label="Webhook Recovery"
             value={`${metrics.webhookRecoveryRate}%`}
             subtitle="Failed webhooks recovered"
-            color="var(--success)"
+            accentColor="#22C55E"
             trend="up"
           />
           <MetricCard
             label="Resolution Time"
             value={`${metrics.disputeResolutionTime}h`}
             subtitle="Avg dispute resolution"
-            color="var(--primary)"
+            accentColor="#3B82F6"
             trend="down"
           />
           <MetricCard
             label="Time Saved"
             value={`${metrics.operationalTimeSaved}%`}
             subtitle="vs manual reconciliation"
-            color="var(--success)"
+            accentColor="#22C55E"
             trend="up"
           />
         </div>
       </div>
 
       {/* Transaction Volume */}
-      <div className="card mb-3">
-        <h3 className="mb-3">Transaction Volume</h3>
+      <div className="card">
+        <h3 style={{ fontSize: '1rem', fontWeight: 500, color: '#FAFAFA', marginBottom: '1.25rem' }}>
+          Transaction Volume
+        </h3>
         <div style={{ marginBottom: '1.5rem' }}>
-          <p style={{ fontSize: '3rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <p style={{ fontSize: '2.5rem', fontWeight: 600, color: '#FAFAFA' }}>
             {metrics.transactionVolume.total.toLocaleString()}
           </p>
-          <p style={{ color: 'var(--text-secondary)' }}>Total transactions processed</p>
+          <p style={{ color: '#71717A', fontSize: '0.8125rem' }}>Total transactions processed</p>
         </div>
 
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', 
           gap: '1rem'
         }}>
           <div style={{ 
             padding: '1rem', 
-            background: 'var(--bg-secondary)', 
-            borderRadius: 'var(--radius-md)' 
+            background: '#18181B', 
+            borderRadius: '8px',
+            borderLeft: '3px solid #3B82F6'
           }}>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+            <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Payment Provider
             </p>
-            <p style={{ fontSize: '1.5rem', fontWeight: 700 }}>
+            <p style={{ fontSize: '1.25rem', fontWeight: 600, color: '#FAFAFA' }}>
               {metrics.transactionVolume.bySource.paystack.toLocaleString()}
             </p>
           </div>
 
           <div style={{ 
             padding: '1rem', 
-            background: 'var(--bg-secondary)', 
-            borderRadius: 'var(--radius-md)' 
+            background: '#18181B', 
+            borderRadius: '8px',
+            borderLeft: '3px solid #22C55E'
           }}>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+            <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Bank Settlement
             </p>
-            <p style={{ fontSize: '1.5rem', fontWeight: 700 }}>
+            <p style={{ fontSize: '1.25rem', fontWeight: 600, color: '#FAFAFA' }}>
               {metrics.transactionVolume.bySource.bank.toLocaleString()}
             </p>
           </div>
 
           <div style={{ 
             padding: '1rem', 
-            background: 'var(--bg-secondary)', 
-            borderRadius: 'var(--radius-md)' 
+            background: '#18181B', 
+            borderRadius: '8px',
+            borderLeft: '3px solid #F59E0B'
           }}>
-            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+            <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Internal Ledger
             </p>
-            <p style={{ fontSize: '1.5rem', fontWeight: 700 }}>
+            <p style={{ fontSize: '1.25rem', fontWeight: 600, color: '#FAFAFA' }}>
               {metrics.transactionVolume.bySource.ledger.toLocaleString()}
             </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Success Targets */}
-      <div className="card" style={{ background: 'linear-gradient(135deg, var(--primary), var(--primary-hover))' }}>
-        <div style={{ color: 'white' }}>
-          <h3 className="mb-3">MVP Success Targets</h3>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-            gap: '1.5rem'
-          }}>
-            <TargetMetric
-              label="Automated Detection"
-              target="95%"
-              current="97.2%"
-              status="success"
-            />
-            <TargetMetric
-              label="Confidence Accuracy"
-              target="85%"
-              current="89.1%"
-              status="success"
-            />
-            <TargetMetric
-              label="Webhook Recovery"
-              target="80%"
-              current={`${metrics.webhookRecoveryRate}%`}
-              status={metrics.webhookRecoveryRate >= 80 ? 'success' : 'warning'}
-            />
-            <TargetMetric
-              label="Time Reduction"
-              target="70%"
-              current={`${metrics.operationalTimeSaved}%`}
-              status={metrics.operationalTimeSaved >= 70 ? 'success' : 'warning'}
-            />
           </div>
         </div>
       </div>
@@ -262,68 +244,35 @@ const MetricCard = ({
   label, 
   value, 
   subtitle, 
-  color, 
+  accentColor, 
   trend 
 }: { 
   label: string; 
   value: string; 
   subtitle: string; 
-  color?: string;
+  accentColor: string;
   trend?: 'up' | 'down';
 }) => (
   <div>
-    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+    <p style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
       {label}
     </p>
     <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-      <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+      <p style={{ fontSize: '2rem', fontWeight: 600, color: '#FAFAFA' }}>
         {value}
       </p>
       {trend && (
         <span style={{ 
-          fontSize: '0.875rem', 
-          color: trend === 'up' ? 'var(--success)' : 'var(--primary)',
-          fontWeight: 600 
+          fontSize: '0.75rem', 
+          color: trend === 'up' ? '#4ADE80' : '#60A5FA',
+          fontWeight: 500 
         }}>
           {trend === 'up' ? '↑' : '↓'}
         </span>
       )}
     </div>
-    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+    <p style={{ fontSize: '0.75rem', color: '#71717A', marginTop: '0.25rem' }}>
       {subtitle}
-    </p>
-  </div>
-);
-
-const TargetMetric = ({ 
-  label, 
-  target, 
-  current, 
-  status 
-}: { 
-  label: string; 
-  target: string; 
-  current: string;
-  status: 'success' | 'warning';
-}) => (
-  <div>
-    <p style={{ fontSize: '0.875rem', opacity: 0.9, marginBottom: '0.5rem' }}>
-      {label}
-    </p>
-    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-      <p style={{ fontSize: '1.75rem', fontWeight: 700 }}>
-        {current}
-      </p>
-      <span style={{ 
-        fontSize: '0.875rem',
-        fontWeight: 700,
-        color: status === 'success' ? 'inherit' : '#FFB800'
-      }}>
-        {status === 'success' ? '[OK]' : '[!]'}
-      </span>
-    </div>
-    <p style={{ fontSize: '0.875rem', opacity: 0.8, marginTop: '0.25rem' }}>
-      Target: {target}
     </p>
   </div>
 );
