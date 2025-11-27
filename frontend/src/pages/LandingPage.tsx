@@ -13,10 +13,480 @@ import {
   PlayCircle
 } from 'lucide-react';
 
+// Inline styles to ensure they work regardless of Tailwind config
+const styles = {
+  page: {
+    minHeight: '100vh',
+    backgroundColor: '#0A0A0B',
+    color: 'white',
+    overflowX: 'hidden' as const,
+    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+  },
+  nav: {
+    position: 'fixed' as const,
+    top: 0,
+    width: '100%',
+    zIndex: 50,
+    transition: 'all 0.3s',
+    padding: '0 1.5rem',
+  },
+  navScrolled: {
+    backgroundColor: 'rgba(10, 10, 11, 0.8)',
+    backdropFilter: 'blur(20px)',
+    borderBottom: '1px solid rgba(255,255,255,0.05)',
+  },
+  navInner: {
+    maxWidth: '80rem',
+    margin: '0 auto',
+    height: '5rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  logo: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+  },
+  logoIcon: {
+    width: '2rem',
+    height: '2rem',
+    background: 'linear-gradient(135deg, #3B82F6, #9333EA)',
+    borderRadius: '0.5rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  logoText: {
+    fontSize: '1.25rem',
+    fontWeight: 'bold',
+    letterSpacing: '-0.02em',
+  },
+  navLinks: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '2rem',
+  },
+  navLink: {
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    color: '#9CA3AF',
+    textDecoration: 'none',
+    transition: 'color 0.2s',
+  },
+  ctaButton: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: '0.625rem 1.25rem',
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '9999px',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    textDecoration: 'none',
+    transition: 'all 0.2s',
+  },
+  hero: {
+    position: 'relative' as const,
+    paddingTop: '10rem',
+    paddingBottom: '5rem',
+    paddingLeft: '1.5rem',
+    paddingRight: '1.5rem',
+  },
+  heroGlow1: {
+    position: 'absolute' as const,
+    top: 0,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '1000px',
+    height: '600px',
+    background: 'radial-gradient(ellipse, rgba(59, 130, 246, 0.2), transparent 70%)',
+    pointerEvents: 'none' as const,
+  },
+  heroGlow2: {
+    position: 'absolute' as const,
+    bottom: 0,
+    right: 0,
+    width: '800px',
+    height: '600px',
+    background: 'radial-gradient(ellipse, rgba(147, 51, 234, 0.15), transparent 70%)',
+    pointerEvents: 'none' as const,
+  },
+  heroContent: {
+    maxWidth: '80rem',
+    margin: '0 auto',
+    position: 'relative' as const,
+    zIndex: 10,
+    textAlign: 'center' as const,
+  },
+  badge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: '0.25rem 0.75rem',
+    borderRadius: '9999px',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(255,255,255,0.1)',
+    marginBottom: '2rem',
+  },
+  badgeDot: {
+    width: '0.5rem',
+    height: '0.5rem',
+    borderRadius: '50%',
+    backgroundColor: '#3B82F6',
+    animation: 'pulse 2s infinite',
+  },
+  badgeText: {
+    fontSize: '0.75rem',
+    fontWeight: 500,
+    color: '#93C5FD',
+  },
+  heroTitle: {
+    fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
+    fontWeight: 'bold',
+    letterSpacing: '-0.02em',
+    marginBottom: '1.5rem',
+    lineHeight: 1.1,
+    color: 'white',
+  },
+  heroSubtitle: {
+    fontSize: '1.25rem',
+    color: '#9CA3AF',
+    marginBottom: '2.5rem',
+    maxWidth: '42rem',
+    margin: '0 auto 2.5rem',
+    lineHeight: 1.6,
+  },
+  heroButtons: {
+    display: 'flex',
+    flexWrap: 'wrap' as const,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '1rem',
+  },
+  primaryButton: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: '1rem 2rem',
+    backgroundColor: '#2563EB',
+    color: 'white',
+    borderRadius: '9999px',
+    fontWeight: 600,
+    textDecoration: 'none',
+    boxShadow: '0 10px 40px rgba(37, 99, 235, 0.3)',
+    transition: 'all 0.2s',
+    border: 'none',
+    cursor: 'pointer',
+  },
+  secondaryButton: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: '1rem 2rem',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    color: 'white',
+    borderRadius: '9999px',
+    fontWeight: 600,
+    textDecoration: 'none',
+    border: '1px solid rgba(255,255,255,0.1)',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  },
+  dashboardPreview: {
+    marginTop: '4rem',
+    maxWidth: '72rem',
+    margin: '4rem auto 0',
+  },
+  dashboardFrame: {
+    backgroundColor: '#1A1A1C',
+    borderRadius: '0.75rem',
+    border: '1px solid rgba(255,255,255,0.1)',
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+    overflow: 'hidden',
+    aspectRatio: '16/9',
+  },
+  dashboardHeader: {
+    padding: '1rem 1.5rem',
+    borderBottom: '1px solid rgba(255,255,255,0.05)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  windowDots: {
+    display: 'flex',
+    gap: '0.5rem',
+  },
+  windowDot: {
+    width: '0.75rem',
+    height: '0.75rem',
+    borderRadius: '50%',
+  },
+  dashboardBody: {
+    padding: '2rem',
+    display: 'grid',
+    gridTemplateColumns: '2fr 1fr',
+    gap: '2rem',
+  },
+  socialProof: {
+    padding: '2.5rem 1.5rem',
+    borderTop: '1px solid rgba(255,255,255,0.05)',
+    borderBottom: '1px solid rgba(255,255,255,0.05)',
+    backgroundColor: 'rgba(255,255,255,0.02)',
+  },
+  socialProofInner: {
+    maxWidth: '80rem',
+    margin: '0 auto',
+    textAlign: 'center' as const,
+  },
+  socialProofLabel: {
+    fontSize: '0.75rem',
+    fontWeight: 500,
+    color: '#6B7280',
+    letterSpacing: '0.1em',
+    marginBottom: '1.5rem',
+  },
+  socialProofLogos: {
+    display: 'flex',
+    flexWrap: 'wrap' as const,
+    justifyContent: 'center',
+    gap: '3rem',
+    opacity: 0.5,
+  },
+  socialProofLogo: {
+    fontSize: '1.25rem',
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  features: {
+    padding: '8rem 1.5rem',
+  },
+  featuresInner: {
+    maxWidth: '80rem',
+    margin: '0 auto',
+  },
+  sectionHeader: {
+    textAlign: 'center' as const,
+    marginBottom: '5rem',
+  },
+  sectionTitle: {
+    fontSize: 'clamp(1.875rem, 5vw, 3rem)',
+    fontWeight: 'bold',
+    marginBottom: '1rem',
+    color: 'white',
+  },
+  sectionSubtitle: {
+    fontSize: '1.25rem',
+    color: '#9CA3AF',
+    maxWidth: '42rem',
+    margin: '0 auto',
+  },
+  featureGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+    gap: '1.5rem',
+  },
+  featureCard: {
+    backgroundColor: '#151516',
+    borderRadius: '1.5rem',
+    border: '1px solid rgba(255,255,255,0.1)',
+    padding: '2rem',
+    position: 'relative' as const,
+    overflow: 'hidden',
+    transition: 'transform 0.3s',
+  },
+  featureCardLarge: {
+    gridColumn: 'span 2',
+    padding: '3rem',
+  },
+  featureCardTall: {
+    gridRow: 'span 2',
+  },
+  featureIcon: {
+    width: '3rem',
+    height: '3rem',
+    borderRadius: '0.75rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '1.5rem',
+  },
+  featureTitle: {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    marginBottom: '0.5rem',
+    color: 'white',
+  },
+  featureDesc: {
+    color: '#9CA3AF',
+    lineHeight: 1.6,
+  },
+  howItWorks: {
+    padding: '8rem 1.5rem',
+    backgroundColor: '#0F0F10',
+  },
+  howItWorksInner: {
+    maxWidth: '80rem',
+    margin: '0 auto',
+  },
+  timeline: {
+    position: 'relative' as const,
+  },
+  timelineLine: {
+    position: 'absolute' as const,
+    left: '2rem',
+    top: 0,
+    bottom: 0,
+    width: '1px',
+    background: 'linear-gradient(to bottom, #3B82F6, #9333EA, transparent)',
+    opacity: 0.3,
+  },
+  timelineItem: {
+    position: 'relative' as const,
+    paddingLeft: '6rem',
+    paddingBottom: '4rem',
+  },
+  timelineIcon: {
+    position: 'absolute' as const,
+    left: 0,
+    width: '4rem',
+    height: '4rem',
+    borderRadius: '1rem',
+    backgroundColor: '#1A1A1C',
+    border: '1px solid rgba(255,255,255,0.1)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  timelineTitle: {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    marginBottom: '0.5rem',
+    color: 'white',
+  },
+  timelineDesc: {
+    color: '#9CA3AF',
+    maxWidth: '36rem',
+  },
+  cta: {
+    padding: '8rem 1.5rem',
+  },
+  ctaCard: {
+    maxWidth: '64rem',
+    margin: '0 auto',
+    borderRadius: '2.5rem',
+    background: 'linear-gradient(135deg, #2563EB, #7C3AED)',
+    padding: '4rem',
+    textAlign: 'center' as const,
+    position: 'relative' as const,
+    overflow: 'hidden',
+  },
+  ctaTitle: {
+    fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+    fontWeight: 'bold',
+    marginBottom: '1.5rem',
+    color: 'white',
+  },
+  ctaSubtitle: {
+    fontSize: '1.25rem',
+    color: 'rgba(219, 234, 254, 0.9)',
+    marginBottom: '2.5rem',
+    maxWidth: '42rem',
+    margin: '0 auto 2.5rem',
+  },
+  ctaButtons: {
+    display: 'flex',
+    flexWrap: 'wrap' as const,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '1rem',
+  },
+  ctaPrimaryButton: {
+    padding: '1rem 2rem',
+    backgroundColor: 'white',
+    color: '#2563EB',
+    borderRadius: '9999px',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+    transition: 'all 0.2s',
+  },
+  ctaSecondaryButton: {
+    padding: '1rem 2rem',
+    backgroundColor: 'transparent',
+    color: 'white',
+    borderRadius: '9999px',
+    fontWeight: 'bold',
+    border: '1px solid rgba(255,255,255,0.3)',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  },
+  footer: {
+    padding: '3rem 1.5rem',
+    borderTop: '1px solid rgba(255,255,255,0.05)',
+    backgroundColor: '#050505',
+  },
+  footerInner: {
+    maxWidth: '80rem',
+    margin: '0 auto',
+    display: 'flex',
+    flexWrap: 'wrap' as const,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: '2rem',
+  },
+  footerLogo: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+  },
+  footerLogoIcon: {
+    width: '1.5rem',
+    height: '1.5rem',
+    background: 'linear-gradient(135deg, #3B82F6, #9333EA)',
+    borderRadius: '0.375rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '0.625rem',
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  footerLogoText: {
+    fontWeight: 'bold',
+    color: '#D1D5DB',
+  },
+  footerLinks: {
+    display: 'flex',
+    gap: '2rem',
+  },
+  footerLink: {
+    fontSize: '0.875rem',
+    color: '#6B7280',
+    textDecoration: 'none',
+    transition: 'color 0.2s',
+  },
+  footerCopy: {
+    fontSize: '0.875rem',
+    color: '#4B5563',
+  },
+  checkItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.75rem',
+    marginBottom: '1rem',
+  },
+  checkText: {
+    fontSize: '0.875rem',
+    color: '#D1D5DB',
+  },
+};
+
 export const LandingPage: React.FC = () => {
   const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-  const y2 = useTransform(scrollY, [0, 500], [0, -150]);
+  const y1 = useTransform(scrollY, [0, 500], [0, 100]);
   
   const [scrolled, setScrolled] = useState(false);
 
@@ -27,145 +497,108 @@ export const LandingPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-white overflow-x-hidden selection:bg-blue-500/30">
+    <div style={styles.page}>
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[#0A0A0B]/80 backdrop-blur-xl border-b border-white/5' : 'bg-transparent'
-      }`}>
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="font-bold text-white">R</span>
-            </div>
-            <span className="text-xl font-bold tracking-tight">ReconPlatform</span>
+      <nav style={{...styles.nav, ...(scrolled ? styles.navScrolled : {})}}>
+        <div style={styles.navInner}>
+          <div style={styles.logo}>
+            <div style={styles.logoIcon}>R</div>
+            <span style={styles.logoText}>ReconPlatform</span>
           </div>
           
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Features</a>
-            <a href="#how-it-works" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">How it Works</a>
-            <a href="#pricing" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Pricing</a>
+          <div style={{...styles.navLinks, display: 'none'}}>
+            <a href="#features" style={styles.navLink}>Features</a>
+            <a href="#how-it-works" style={styles.navLink}>How it Works</a>
+            <a href="#pricing" style={styles.navLink}>Pricing</a>
           </div>
 
-          <div className="flex items-center gap-4">
-            <Link to="/login" className="text-sm font-medium text-white hover:text-gray-300 transition-colors">
+          <div style={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+            <Link to="/login" style={{...styles.navLink, color: 'white'}}>
               Log in
             </Link>
-            <Link 
-              to="/register" 
-              className="group relative px-5 py-2.5 bg-white text-black rounded-full text-sm font-semibold hover:bg-gray-100 transition-all overflow-hidden"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                Get Started <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </span>
+            <Link to="/login" style={styles.ctaButton}>
+              Get Started <ArrowRight size={16} />
             </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-500/20 rounded-full blur-[120px] opacity-50" />
-          <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-purple-500/10 rounded-full blur-[100px] opacity-30" />
-        </div>
+      <section style={styles.hero}>
+        <div style={styles.heroGlow1} />
+        <div style={styles.heroGlow2} />
+        
+        <div style={styles.heroContent}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div style={styles.badge}>
+              <span style={styles.badgeDot} />
+              <span style={styles.badgeText}>New: AI-Powered Dispute Resolution</span>
+            </div>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center max-w-4xl mx-auto mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8"
-            >
-              <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-              <span className="text-xs font-medium text-blue-200">New: AI-Powered Dispute Resolution</span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl lg:text-7xl font-bold tracking-tight mb-8 text-white"
-            >
-              Financial reconciliation <br />
+            <h1 style={styles.heroTitle}>
+              Financial reconciliation<br />
               reimagined for scale.
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed"
-            >
+            <p style={styles.heroSubtitle}>
               Automate 99% of your transaction matching. Detect anomalies in real-time. 
               Close your books faster with the world's most advanced reconciliation engine.
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
-              <Link 
-                to="/register"
-                className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-semibold transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25"
-              >
-                Start Free Trial <ChevronRight className="w-4 h-4" />
+            <div style={styles.heroButtons}>
+              <Link to="/login" style={styles.primaryButton}>
+                Start Free Trial <ChevronRight size={18} />
               </Link>
-              <button className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-full font-semibold transition-all flex items-center justify-center gap-2 border border-white/10 backdrop-blur-sm">
-                <PlayCircle className="w-4 h-4" /> Watch Demo
+              <button style={styles.secondaryButton}>
+                <PlayCircle size={18} /> Watch Demo
               </button>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
 
-          {/* Hero Dashboard Preview */}
-          <motion.div
-            style={{ y: y1 }}
-            className="relative mx-auto max-w-6xl"
-          >
-            <div className="relative rounded-xl bg-[#1A1A1C] border border-white/10 shadow-2xl overflow-hidden aspect-video">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
-              {/* Mock UI Elements */}
-              <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
+          {/* Dashboard Preview */}
+          <motion.div style={styles.dashboardPreview}>
+            <div style={styles.dashboardFrame}>
+              <div style={styles.dashboardHeader}>
+                <div style={styles.windowDots}>
+                  <div style={{...styles.windowDot, backgroundColor: 'rgba(239, 68, 68, 0.5)', border: '1px solid rgba(239, 68, 68, 0.8)'}} />
+                  <div style={{...styles.windowDot, backgroundColor: 'rgba(234, 179, 8, 0.5)', border: '1px solid rgba(234, 179, 8, 0.8)'}} />
+                  <div style={{...styles.windowDot, backgroundColor: 'rgba(34, 197, 94, 0.5)', border: '1px solid rgba(34, 197, 94, 0.8)'}} />
                 </div>
-                <div className="h-2 w-32 bg-white/10 rounded-full" />
+                <div style={{height: '0.5rem', width: '8rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '9999px'}} />
               </div>
-              <div className="p-8 grid grid-cols-3 gap-8">
-                <div className="col-span-2 space-y-4">
-                  <div className="h-32 rounded-lg bg-white/5 border border-white/5 p-4">
-                    <div className="flex justify-between mb-4">
-                      <div className="h-4 w-24 bg-white/10 rounded" />
-                      <div className="h-4 w-16 bg-green-500/20 rounded text-green-400 text-xs flex items-center justify-center">Live</div>
+              <div style={styles.dashboardBody}>
+                <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+                  <div style={{height: '8rem', borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)', padding: '1rem'}}>
+                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '1rem'}}>
+                      <div style={{height: '1rem', width: '6rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem'}} />
+                      <div style={{padding: '0.25rem 0.75rem', backgroundColor: 'rgba(34, 197, 94, 0.2)', borderRadius: '0.25rem', color: '#4ADE80', fontSize: '0.75rem'}}>Live</div>
                     </div>
-                    <div className="space-y-2">
-                      <div className="h-2 w-full bg-white/5 rounded" />
-                      <div className="h-2 w-3/4 bg-white/5 rounded" />
-                      <div className="h-2 w-1/2 bg-white/5 rounded" />
+                    <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
+                      <div style={{height: '0.5rem', width: '100%', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.25rem'}} />
+                      <div style={{height: '0.5rem', width: '75%', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.25rem'}} />
+                      <div style={{height: '0.5rem', width: '50%', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.25rem'}} />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="h-24 rounded-lg bg-white/5 border border-white/5" />
-                    <div className="h-24 rounded-lg bg-white/5 border border-white/5" />
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem'}}>
+                    <div style={{height: '6rem', borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)'}} />
+                    <div style={{height: '6rem', borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)'}} />
                   </div>
                 </div>
-                <div className="space-y-4">
-                  <div className="h-full rounded-lg bg-white/5 border border-white/5 p-4">
-                    <div className="h-4 w-20 bg-white/10 rounded mb-4" />
-                    {[1,2,3,4].map(i => (
-                      <div key={i} className="flex items-center gap-3 mb-3">
-                        <div className="w-8 h-8 rounded-full bg-white/5" />
-                        <div className="flex-1">
-                          <div className="h-2 w-16 bg-white/10 rounded mb-1" />
-                          <div className="h-2 w-10 bg-white/5 rounded" />
-                        </div>
+                <div style={{borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)', padding: '1rem'}}>
+                  <div style={{height: '1rem', width: '5rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem', marginBottom: '1rem'}} />
+                  {[1,2,3,4].map(i => (
+                    <div key={i} style={{display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem'}}>
+                      <div style={{width: '2rem', height: '2rem', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.05)'}} />
+                      <div style={{flex: 1}}>
+                        <div style={{height: '0.5rem', width: '4rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem', marginBottom: '0.25rem'}} />
+                        <div style={{height: '0.5rem', width: '2.5rem', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.25rem'}} />
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -174,133 +607,116 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Social Proof */}
-      <section className="py-10 border-y border-white/5 bg-white/[0.02]">
-        <div className="max-w-7xl mx-auto px-6">
-          <p className="text-center text-sm font-medium text-gray-500 mb-8">TRUSTED BY FINANCE TEAMS AT</p>
-          <div className="flex flex-wrap justify-center gap-12 opacity-50 grayscale">
+      <section style={styles.socialProof}>
+        <div style={styles.socialProofInner}>
+          <p style={styles.socialProofLabel}>TRUSTED BY FINANCE TEAMS AT</p>
+          <div style={styles.socialProofLogos}>
             {['Acme Corp', 'GlobalBank', 'FinTech Inc', 'SecurePay', 'CloudScale'].map((brand) => (
-              <span key={brand} className="text-xl font-bold text-white">{brand}</span>
+              <span key={brand} style={styles.socialProofLogo}>{brand}</span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Bento Grid Features */}
-      <section id="features" className="py-32 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">Everything you need to <br />stay balanced.</h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+      {/* Features */}
+      <section id="features" style={styles.features}>
+        <div style={styles.featuresInner}>
+          <div style={styles.sectionHeader}>
+            <h2 style={styles.sectionTitle}>Everything you need to stay balanced.</h2>
+            <p style={styles.sectionSubtitle}>
               Powerful tools designed to handle the complexity of modern financial stacks.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div style={styles.featureGrid}>
             {/* Large Card */}
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="md:col-span-2 rounded-3xl bg-[#151516] border border-white/10 p-8 md:p-12 relative overflow-hidden group"
-            >
-              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] group-hover:bg-blue-500/20 transition-colors" />
-              <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-6">
-                  <Zap className="w-6 h-6 text-blue-400" />
+            <div style={{...styles.featureCard, ...styles.featureCardLarge}}>
+              <div style={{position: 'absolute', top: 0, right: 0, width: '16rem', height: '16rem', background: 'radial-gradient(ellipse, rgba(59, 130, 246, 0.15), transparent 70%)'}} />
+              <div style={{position: 'relative', zIndex: 10}}>
+                <div style={{...styles.featureIcon, backgroundColor: 'rgba(59, 130, 246, 0.2)'}}>
+                  <Zap size={24} color="#60A5FA" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Real-time Reconciliation</h3>
-                <p className="text-gray-400 max-w-md mb-8">
+                <h3 style={styles.featureTitle}>Real-time Reconciliation</h3>
+                <p style={{...styles.featureDesc, maxWidth: '28rem', marginBottom: '2rem'}}>
                   Process millions of transactions in seconds. Our engine automatically matches entries across multiple sources with 99.9% accuracy.
                 </p>
-                <div className="h-48 rounded-xl bg-black/40 border border-white/5 p-4">
-                  {/* Abstract Visualization */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-500" />
-                      <span className="text-xs text-green-500">Matched</span>
+                <div style={{height: '12rem', borderRadius: '0.75rem', backgroundColor: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)', padding: '1rem'}}>
+                  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem'}}>
+                    <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+                      <div style={{width: '0.5rem', height: '0.5rem', borderRadius: '50%', backgroundColor: '#22C55E'}} />
+                      <span style={{fontSize: '0.75rem', color: '#22C55E'}}>Matched</span>
                     </div>
-                    <span className="text-xs text-gray-500">Just now</span>
+                    <span style={{fontSize: '0.75rem', color: '#6B7280'}}>Just now</span>
                   </div>
-                  <div className="space-y-2">
-                    {[1,2,3].map(i => (
-                      <div key={i} className="flex items-center justify-between p-2 rounded bg-white/5">
-                        <div className="h-2 w-24 bg-white/10 rounded" />
-                        <div className="h-2 w-12 bg-white/10 rounded" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Tall Card */}
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="md:row-span-2 rounded-3xl bg-[#151516] border border-white/10 p-8 relative overflow-hidden group"
-            >
-              <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-purple-900/20 to-transparent" />
-              <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mb-6">
-                  <Shield className="w-6 h-6 text-purple-400" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4">Bank-Grade Security</h3>
-                <p className="text-gray-400 mb-8">
-                  SOC2 Type II certified. End-to-end encryption for all data in transit and at rest.
-                </p>
-                <div className="space-y-4">
-                  {['Encryption', 'Audit Logs', 'SSO Support', 'Role Access'].map((item) => (
-                    <div key={item} className="flex items-center gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-green-500" />
-                      <span className="text-sm text-gray-300">{item}</span>
+                  {[1,2,3].map(i => (
+                    <div key={i} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem', borderRadius: '0.25rem', backgroundColor: 'rgba(255,255,255,0.05)', marginBottom: '0.5rem'}}>
+                      <div style={{height: '0.5rem', width: '6rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem'}} />
+                      <div style={{height: '0.5rem', width: '3rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem'}} />
                     </div>
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
+
+            {/* Tall Card */}
+            <div style={{...styles.featureCard, ...styles.featureCardTall}}>
+              <div style={{position: 'absolute', bottom: 0, left: 0, width: '100%', height: '50%', background: 'linear-gradient(to top, rgba(88, 28, 135, 0.2), transparent)'}} />
+              <div style={{position: 'relative', zIndex: 10}}>
+                <div style={{...styles.featureIcon, backgroundColor: 'rgba(147, 51, 234, 0.2)'}}>
+                  <Shield size={24} color="#A78BFA" />
+                </div>
+                <h3 style={styles.featureTitle}>Bank-Grade Security</h3>
+                <p style={{...styles.featureDesc, marginBottom: '2rem'}}>
+                  SOC2 Type II certified. End-to-end encryption for all data in transit and at rest.
+                </p>
+                <div>
+                  {['Encryption', 'Audit Logs', 'SSO Support', 'Role Access'].map((item) => (
+                    <div key={item} style={styles.checkItem}>
+                      <CheckCircle2 size={20} color="#22C55E" />
+                      <span style={styles.checkText}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
 
             {/* Small Card 1 */}
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="rounded-3xl bg-[#151516] border border-white/10 p-8 group"
-            >
-              <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center mb-6">
-                <BarChart3 className="w-6 h-6 text-orange-400" />
+            <div style={styles.featureCard}>
+              <div style={{...styles.featureIcon, backgroundColor: 'rgba(249, 115, 22, 0.2)'}}>
+                <BarChart3 size={24} color="#FB923C" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Deep Analytics</h3>
-              <p className="text-sm text-gray-400">
+              <h3 style={{...styles.featureTitle, fontSize: '1.25rem'}}>Deep Analytics</h3>
+              <p style={{...styles.featureDesc, fontSize: '0.875rem'}}>
                 Visualize cash flow and spot trends instantly.
               </p>
-            </motion.div>
+            </div>
 
             {/* Small Card 2 */}
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="rounded-3xl bg-[#151516] border border-white/10 p-8 group"
-            >
-              <div className="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center mb-6">
-                <Globe className="w-6 h-6 text-pink-400" />
+            <div style={styles.featureCard}>
+              <div style={{...styles.featureIcon, backgroundColor: 'rgba(236, 72, 153, 0.2)'}}>
+                <Globe size={24} color="#F472B6" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Global Coverage</h3>
-              <p className="text-sm text-gray-400">
+              <h3 style={{...styles.featureTitle, fontSize: '1.25rem'}}>Global Coverage</h3>
+              <p style={{...styles.featureDesc, fontSize: '0.875rem'}}>
                 Support for 150+ currencies and 50+ gateways.
               </p>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Interactive Timeline */}
-      <section id="how-it-works" className="py-32 bg-[#0F0F10] relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">How it works</h2>
-          </div>
+      {/* How it Works */}
+      <section id="how-it-works" style={styles.howItWorks}>
+        <div style={styles.howItWorksInner}>
+          <h2 style={{...styles.sectionTitle, marginBottom: '4rem'}}>How it works</h2>
           
-          <div className="relative">
-            <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500 via-purple-500 to-transparent opacity-30" />
+          <div style={styles.timeline}>
+            <div style={styles.timelineLine} />
             
             {[
-              { title: 'Connect Sources', desc: 'Link your bank accounts, payment gateways, and ERP in one click.', icon: Lock },
-              { title: 'Auto-Match', desc: 'Our AI engine matches 99% of transactions automatically.', icon: Zap },
-              { title: 'Resolve Exceptions', desc: 'Handle the remaining 1% with guided workflows and team collaboration.', icon: CheckCircle2 }
+              { title: 'Connect Sources', desc: 'Link your bank accounts, payment gateways, and ERP in one click.', Icon: Lock },
+              { title: 'Auto-Match', desc: 'Our AI engine matches 99% of transactions automatically.', Icon: Zap },
+              { title: 'Resolve Exceptions', desc: 'Handle the remaining 1% with guided workflows and team collaboration.', Icon: CheckCircle2 }
             ].map((step, idx) => (
               <motion.div 
                 key={idx}
@@ -308,13 +724,13 @@ export const LandingPage: React.FC = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.2 }}
-                className="relative pl-24 pb-16 last:pb-0"
+                style={styles.timelineItem}
               >
-                <div className="absolute left-0 w-16 h-16 rounded-2xl bg-[#1A1A1C] border border-white/10 flex items-center justify-center z-10">
-                  <step.icon className="w-6 h-6 text-blue-400" />
+                <div style={styles.timelineIcon}>
+                  <step.Icon size={24} color="#60A5FA" />
                 </div>
-                <h3 className="text-2xl font-bold mb-2">{step.title}</h3>
-                <p className="text-gray-400 max-w-xl">{step.desc}</p>
+                <h3 style={styles.timelineTitle}>{step.title}</h3>
+                <p style={styles.timelineDesc}>{step.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -322,45 +738,37 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 px-6">
-        <div className="max-w-5xl mx-auto rounded-[2.5rem] bg-gradient-to-br from-blue-600 to-purple-700 p-12 md:p-24 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
-          <div className="relative z-10">
-            <h2 className="text-4xl md:text-6xl font-bold mb-8">Ready to automate your <br /> financial operations?</h2>
-            <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
-              Join forward-thinking finance teams who have switched to ReconPlatform.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link 
-                to="/register"
-                className="px-8 py-4 bg-white text-blue-600 rounded-full font-bold hover:bg-gray-100 transition-colors"
-              >
-                Get Started Now
-              </Link>
-              <button className="px-8 py-4 bg-transparent border border-white/30 text-white rounded-full font-bold hover:bg-white/10 transition-colors">
-                Contact Sales
-              </button>
-            </div>
+      <section style={styles.cta}>
+        <div style={styles.ctaCard}>
+          <h2 style={styles.ctaTitle}>Ready to automate your<br />financial operations?</h2>
+          <p style={styles.ctaSubtitle}>
+            Join forward-thinking finance teams who have switched to ReconPlatform.
+          </p>
+          <div style={styles.ctaButtons}>
+            <Link to="/login" style={styles.ctaPrimaryButton}>
+              Get Started Now
+            </Link>
+            <button style={styles.ctaSecondaryButton}>
+              Contact Sales
+            </button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-white/5 bg-[#050505]">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-md flex items-center justify-center">
-              <span className="font-bold text-white text-xs">R</span>
-            </div>
-            <span className="font-bold text-gray-300">ReconPlatform</span>
+      <footer style={styles.footer}>
+        <div style={styles.footerInner}>
+          <div style={styles.footerLogo}>
+            <div style={styles.footerLogoIcon}>R</div>
+            <span style={styles.footerLogoText}>ReconPlatform</span>
           </div>
-          <div className="flex gap-8 text-sm text-gray-500">
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms</a>
-            <a href="#" className="hover:text-white transition-colors">Security</a>
-            <a href="#" className="hover:text-white transition-colors">Status</a>
+          <div style={styles.footerLinks}>
+            <a href="#" style={styles.footerLink}>Privacy</a>
+            <a href="#" style={styles.footerLink}>Terms</a>
+            <a href="#" style={styles.footerLink}>Security</a>
+            <a href="#" style={styles.footerLink}>Status</a>
           </div>
-          <div className="text-sm text-gray-600">
+          <div style={styles.footerCopy}>
             © 2025 ReconPlatform Inc.
           </div>
         </div>
