@@ -34,7 +34,7 @@ export const LandingPage: React.FC = () => {
       }`}>
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="font-bold text-white">R</span>
             </div>
             <span className="text-xl font-bold tracking-tight">ReconPlatform</span>
@@ -85,7 +85,7 @@ export const LandingPage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl lg:text-7xl font-bold tracking-tight mb-8 bg-clip-text text-transparent bg-linear-to-b from-white via-white to-white/50"
+              className="text-5xl lg:text-7xl font-bold tracking-tight mb-8 text-white"
             >
               Financial reconciliation <br />
               reimagined for scale.
@@ -125,7 +125,7 @@ export const LandingPage: React.FC = () => {
             className="relative mx-auto max-w-6xl"
           >
             <div className="relative rounded-xl bg-[#1A1A1C] border border-white/10 shadow-2xl overflow-hidden aspect-video">
-              <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 to-purple-500/5" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
               {/* Mock UI Elements */}
               <div className="p-6 border-b border-white/5 flex items-center justify-between">
                 <div className="flex gap-2">
@@ -174,7 +174,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Social Proof */}
-      <section className="py-10 border-y border-white/5 bg-white/2">
+      <section className="py-10 border-y border-white/5 bg-white/[0.02]">
         <div className="max-w-7xl mx-auto px-6">
           <p className="text-center text-sm font-medium text-gray-500 mb-8">TRUSTED BY FINANCE TEAMS AT</p>
           <div className="flex flex-wrap justify-center gap-12 opacity-50 grayscale">
@@ -236,7 +236,7 @@ export const LandingPage: React.FC = () => {
               whileHover={{ y: -5 }}
               className="md:row-span-2 rounded-3xl bg-[#151516] border border-white/10 p-8 relative overflow-hidden group"
             >
-              <div className="absolute bottom-0 left-0 w-full h-1/2 bg-linear-to-t from-purple-900/20 to-transparent" />
+              <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-purple-900/20 to-transparent" />
               <div className="relative z-10">
                 <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mb-6">
                   <Shield className="w-6 h-6 text-purple-400" />
@@ -295,7 +295,7 @@ export const LandingPage: React.FC = () => {
           </div>
           
           <div className="relative">
-            <div className="absolute left-8 top-0 bottom-0 w-px bg-linear-to-b from-blue-500 via-purple-500 to-transparent opacity-30" />
+            <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500 via-purple-500 to-transparent opacity-30" />
             
             {[
               { title: 'Connect Sources', desc: 'Link your bank accounts, payment gateways, and ERP in one click.', icon: Lock },
@@ -323,7 +323,7 @@ export const LandingPage: React.FC = () => {
 
       {/* CTA Section */}
       <section className="py-32 px-6">
-        <div className="max-w-5xl mx-auto rounded-[2.5rem] bg-linear-to-br from-blue-600 to-purple-700 p-12 md:p-24 text-center relative overflow-hidden">
+        <div className="max-w-5xl mx-auto rounded-[2.5rem] bg-gradient-to-br from-blue-600 to-purple-700 p-12 md:p-24 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
           <div className="relative z-10">
             <h2 className="text-4xl md:text-6xl font-bold mb-8">Ready to automate your <br /> financial operations?</h2>
@@ -349,7 +349,7 @@ export const LandingPage: React.FC = () => {
       <footer className="py-12 border-t border-white/5 bg-[#050505]">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-linear-to-br from-blue-500 to-purple-600 rounded-md flex items-center justify-center">
+            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-md flex items-center justify-center">
               <span className="font-bold text-white text-xs">R</span>
             </div>
             <span className="font-bold text-gray-300">ReconPlatform</span>
