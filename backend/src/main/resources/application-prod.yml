@@ -2,11 +2,11 @@ spring:
   application:
     name: recon-engine
   datasource:
-    url: jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require&prepareThreshold=0
-    username: postgres.vckpmvwuzblmempwdlnv
-    password: ayodele3579
-    driver-class-name: org.postgresql.Driver
     hikari:
+      jdbc-url: jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require&prepareThreshold=0
+      username: "postgres.vckpmvwuzblmempwdlnv"
+      password: "ayodele3579"
+      driver-class-name: org.postgresql.Driver
       maximum-pool-size: 3
       minimum-idle: 1
       connection-timeout: 30000
@@ -18,8 +18,8 @@ spring:
     baseline-version: 0
     locations: classpath:db/migration
     url: jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require&prepareThreshold=0
-    user: postgres.vckpmvwuzblmempwdlnv
-    password: ayodele3579
+    user: "postgres.vckpmvwuzblmempwdlnv"
+    password: "ayodele3579"
   jpa:
     hibernate:
       ddl-auto: none
