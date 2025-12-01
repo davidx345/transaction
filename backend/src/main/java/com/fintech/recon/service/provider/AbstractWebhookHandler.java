@@ -117,12 +117,12 @@ public abstract class AbstractWebhookHandler implements WebhookHandler {
         }
     }
     
-    protected Transaction.TransactionStatus mapStatus(String status, boolean isSuccess) {
+    protected String mapStatus(String status, boolean isSuccess) {
         if (isSuccess) {
-            return Transaction.TransactionStatus.SUCCESS;
+            return "SUCCESS";
         }
         if (status == null) {
-            return Transaction.TransactionStatus.PENDING;
+            return "PENDING";
         }
         switch (status.toLowerCase()) {
             case "success":
@@ -132,17 +132,17 @@ public abstract class AbstractWebhookHandler implements WebhookHandler {
             case "done":
             case "confirmed":
             case "completed":
-                return Transaction.TransactionStatus.SUCCESS;
+                return "SUCCESS";
             case "failed":
             case "rejected":
             case "declined":
-                return Transaction.TransactionStatus.FAILED;
+                return "FAILED";
             case "pending":
             case "processing":
             case "submitted":
-                return Transaction.TransactionStatus.PENDING;
+                return "PENDING";
             default:
-                return Transaction.TransactionStatus.PENDING;
+                return "PENDING";
         }
     }
 }
