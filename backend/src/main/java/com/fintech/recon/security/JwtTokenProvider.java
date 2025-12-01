@@ -34,6 +34,13 @@ public class JwtTokenProvider {
     }
 
     /**
+     * Generate JWT token for UserDetails (User entity)
+     */
+    public String generateToken(UserDetails userDetails) {
+        return generateToken(userDetails.getUsername(), new HashMap<>());
+    }
+
+    /**
      * Generate JWT token with custom claims
      */
     public String generateToken(String username, Map<String, Object> claims) {
@@ -66,6 +73,13 @@ public class JwtTokenProvider {
                 .expiration(expiryDate)
                 .signWith(getSigningKey())
                 .compact();
+    }
+
+    /**
+     * Generate refresh token for UserDetails (User entity)
+     */
+    public String generateRefreshToken(UserDetails userDetails) {
+        return generateRefreshToken(userDetails.getUsername());
     }
 
     /**

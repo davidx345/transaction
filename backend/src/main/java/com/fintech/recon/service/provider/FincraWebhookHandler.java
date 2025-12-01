@@ -8,12 +8,14 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * Webhook handler for Fincra cross-border payments
+ * Webhook handler for Fincra (Cross-Border Payments)
  * Signature: Encryption key verification
+ * Header: x-fincra-signature
  */
 @Component
 @Slf4j
@@ -24,15 +26,10 @@ public class FincraWebhookHandler extends AbstractWebhookHandler {
     private static final String SIGNATURE_HEADER = "x-fincra-signature";
     
     private static final Set<String> SUCCESS_EVENTS = Set.of(
-            "collection.successful", "payout.successful", "conversion.completed",
-            "virtualaccount.created"
+            "collection.successful", "payout.successful", "conversion.successful"
     );
     
-    private static final Set<String> FAILURE_EVENTS = Set.of(
-            "collection.failed", "payout.failed", "conversion.failed"
-    );
-    
-    @Value("${webhook.fincra.encryption-key:fincra_encryption_key}")
+    @Value("${webhook.fincra-encryption-key:enc_test_fincra_key}")
     private String encryptionKey;
     
     private final ObjectMapper objectMapper;
@@ -60,8 +57,7 @@ public class FincraWebhookHandler extends AbstractWebhookHandler {
     public boolean verifySignature(String payload, String signature, Map<String, String> headers) {
         if (signature == null || signature.isEmpty()) {
             log.warn("Missing Fincra webhook signature");
-            // For development, allow without signature
-            return true;
+            return false;
         }
         
         try {
@@ -84,47 +80,33 @@ public class FincraWebhookHandler extends AbstractWebhookHandler {
         String eventType = extractEventType(payload);
         boolean isSuccess = isSuccessEvent(eventType, payload);
         
+        Map<String, Object> rawData = new HashMap<>(data);
+        rawData.put("event_type", eventType);
+        rawData.put("sessionId", getString(data, "sessionId"));
+        rawData.put("sourceCurrency", getString(data, "sourceCurrency"));
+        rawData.put("destinationCurrency", getString(data, "destinationCurrency"));
+        rawData.put("sourceAmount", getBigDecimal(data, "sourceAmount"));
+        rawData.put("fee", getBigDecimal(data, "fee"));
+        
+        BigDecimal sourceAmount = getBigDecimal(data, "sourceAmount");
+        BigDecimal amountReceived = getBigDecimal(data, "amountReceived");
+        
         Transaction transaction = new Transaction();
         transaction.setSource(PROVIDER_NAME);
         transaction.setExternalReference(extractReference(payload));
         transaction.setNormalizedReference(normalizeReference(extractReference(payload)));
-        
-        // Fincra has source and destination amounts for FX
-        BigDecimal sourceAmount = getBigDecimal(data, "sourceAmount");
-        BigDecimal amountReceived = getBigDecimal(data, "amountReceived");
         transaction.setAmount(amountReceived.compareTo(BigDecimal.ZERO) > 0 ? amountReceived : sourceAmount);
         
-        transaction.setFee(getBigDecimal(data, "fee"));
-        
-        // Use destination currency if available, otherwise source
         String currency = getString(data, "destinationCurrency");
         if (currency == null) {
             currency = getString(data, "sourceCurrency");
         }
-        transaction.setCurrency(currency);
+        transaction.setCurrency(currency != null ? currency : "NGN");
         
         transaction.setStatus(mapStatus(getString(data, "status"), isSuccess));
-        transaction.setDescription(getString(data, "description"));
         transaction.setTimestamp(parseDateTime(getString(data, "createdAt")));
-        transaction.setCreatedAt(LocalDateTime.now());
-        
-        // Store session ID
-        String sessionId = getString(data, "sessionId");
-        if (sessionId != null) {
-            transaction.setProviderTransactionId(sessionId);
-        }
-        
-        // Set transaction type based on event
-        if (eventType != null) {
-            String lowerEvent = eventType.toLowerCase();
-            if (lowerEvent.contains("collection")) {
-                transaction.setType(Transaction.TransactionType.CREDIT);
-            } else if (lowerEvent.contains("payout")) {
-                transaction.setType(Transaction.TransactionType.DEBIT);
-            } else if (lowerEvent.contains("conversion")) {
-                transaction.setType(Transaction.TransactionType.TRANSFER);
-            }
-        }
+        transaction.setIngestedAt(LocalDateTime.now());
+        transaction.setRawData(rawData);
         
         return transaction;
     }

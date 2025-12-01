@@ -87,11 +87,11 @@ public class AuthController {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         try {
             String email = inputSanitizer.sanitizeEmail(request.getEmail());
-            String username = inputSanitizer.sanitizeString(request.getUsername());
+            String username = inputSanitizer.sanitizeText(request.getUsername(), 50);
             String fullName = request.getFullName() != null ? 
-                    inputSanitizer.sanitizeString(request.getFullName()) : null;
+                    inputSanitizer.sanitizeText(request.getFullName(), 100) : null;
             String companyName = request.getCompanyName() != null ? 
-                    inputSanitizer.sanitizeString(request.getCompanyName()) : null;
+                    inputSanitizer.sanitizeText(request.getCompanyName(), 100) : null;
 
             UserService.RegisterRequest registerRequest = new UserService.RegisterRequest(
                     username,
@@ -236,7 +236,7 @@ public class AuthController {
 
         if (valid) {
             try {
-                userId = jwtTokenProvider.getUserIdFromToken(request.getToken());
+                userId = jwtTokenProvider.getUsernameFromToken(request.getToken());
             } catch (Exception ignored) {}
         }
 

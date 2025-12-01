@@ -79,7 +79,7 @@ public class UserService implements UserDetailsService {
 
         // Store refresh token
         LocalDateTime refreshExpiry = LocalDateTime.now()
-                .plusSeconds(securityProperties.getJwt().getRefreshTokenExpiry() / 1000);
+                .plusSeconds(securityProperties.getJwt().getRefreshExpirationMs() / 1000);
         user.setRefreshToken(refreshToken);
         user.setRefreshTokenExpiry(refreshExpiry);
 
@@ -95,7 +95,7 @@ public class UserService implements UserDetailsService {
                 user.getRoles(),
                 accessToken,
                 refreshToken,
-                securityProperties.getJwt().getAccessTokenExpiry()
+                securityProperties.getJwt().getExpirationMs()
         );
     }
 
@@ -139,7 +139,7 @@ public class UserService implements UserDetailsService {
 
         // Store refresh token
         LocalDateTime refreshExpiry = LocalDateTime.now()
-                .plusSeconds(securityProperties.getJwt().getRefreshTokenExpiry() / 1000);
+                .plusSeconds(securityProperties.getJwt().getRefreshExpirationMs() / 1000);
         user.setRefreshToken(refreshToken);
         user.setRefreshTokenExpiry(refreshExpiry);
         userRepository.save(user);
@@ -152,7 +152,7 @@ public class UserService implements UserDetailsService {
                 user.getRoles(),
                 accessToken,
                 refreshToken,
-                securityProperties.getJwt().getAccessTokenExpiry()
+                securityProperties.getJwt().getExpirationMs()
         );
     }
 
@@ -189,7 +189,7 @@ public class UserService implements UserDetailsService {
                 user.getRoles(),
                 newAccessToken,
                 refreshToken,  // Return same refresh token
-                securityProperties.getJwt().getAccessTokenExpiry()
+                securityProperties.getJwt().getExpirationMs()
         );
     }
 

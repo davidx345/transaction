@@ -107,17 +107,21 @@ public class WebhookController {
             if (reference != null && isTransactionEvent(eventType)) {
                 try {
                     Transaction transaction = handler.parsePayload(payload);
-                    transaction.setWebhookId(webhookLog.getId());
+                    // Store webhook log ID in rawData
+                    if (transaction.getRawData() != null) {
+                        transaction.getRawData().put("webhookLogId", webhookLog.getId().toString());
+                    }
                     
-                    // Check if transaction already exists
+                    // Check if transaction already exists using normalized reference
+                    String normalizedRef = reference.toUpperCase().replaceAll("[^A-Z0-9]", "_");
                     Optional<Transaction> existing = transactionRepository
-                            .findBySourceAndExternalReference(provider, reference);
+                            .findByNormalizedReferenceAndSource(normalizedRef, provider);
                     
                     if (existing.isPresent()) {
                         // Update existing transaction
                         Transaction existingTx = existing.get();
                         existingTx.setStatus(transaction.getStatus());
-                        existingTx.setUpdatedAt(LocalDateTime.now());
+                        existingTx.setIngestedAt(LocalDateTime.now());
                         transactionRepository.save(existingTx);
                         log.info("Updated existing transaction: {}", reference);
                     } else {

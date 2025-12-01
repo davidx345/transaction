@@ -71,14 +71,15 @@ public class DuplicateDetectionRule implements ReconciliationRule {
 
             // Add details for each duplicate
             List<Map<String, Object>> duplicateDetails = potentialDuplicates.stream()
-                    .map(dup -> Map.of(
-                            "id", dup.getId().toString(),
-                            "reference", dup.getNormalizedReference() != null ? dup.getNormalizedReference() : "N/A",
-                            "amount", dup.getAmount(),
-                            "timestamp", dup.getTimestamp().toString(),
-                            "timeDifferenceMinutes", java.time.Duration.between(transaction.getTimestamp(), dup.getTimestamp()).toMinutes()
-                    ))
-                    .map(m -> (Map<String, Object>) m)
+                    .map(dup -> {
+                        Map<String, Object> detail = new java.util.HashMap<>();
+                        detail.put("id", dup.getId().toString());
+                        detail.put("reference", dup.getNormalizedReference() != null ? dup.getNormalizedReference() : "N/A");
+                        detail.put("amount", dup.getAmount());
+                        detail.put("timestamp", dup.getTimestamp().toString());
+                        detail.put("timeDifferenceMinutes", java.time.Duration.between(transaction.getTimestamp(), dup.getTimestamp()).toMinutes());
+                        return detail;
+                    })
                     .toList();
             
             context.put("duplicateDetails", duplicateDetails);

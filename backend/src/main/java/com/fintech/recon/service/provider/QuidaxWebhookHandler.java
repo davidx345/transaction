@@ -8,13 +8,14 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * Webhook handler for Quidax cryptocurrency exchange
+ * Webhook handler for Quidax (Cryptocurrency Exchange)
  * Signature: HMAC-SHA256 with timestamp.payload format
- * Header: quidax-signature (format: t=timestamp,v1=signature)
+ * Header: quidax-signature
  */
 @Component
 @Slf4j
@@ -25,18 +26,11 @@ public class QuidaxWebhookHandler extends AbstractWebhookHandler {
     private static final String SIGNATURE_HEADER = "quidax-signature";
     
     private static final Set<String> SUCCESS_EVENTS = Set.of(
-            "deposit.successful", "withdraw.successful", "order.done", 
-            "swap.completed", "buy.transaction.successful", "sell.transaction.successful"
+            "deposit.successful", "withdraw.successful", "trade.completed"
     );
     
-    private static final Set<String> FAILURE_EVENTS = Set.of(
-            "deposit.failed", "deposit.rejected", "withdraw.rejected", 
-            "order.cancelled", "swap.failed", "swap.reversed",
-            "buy.transaction.failed", "sell.transaction.failed"
-    );
-    
-    @Value("${webhook.quidax.webhook-key:quidax_webhook_secret}")
-    private String webhookKey;
+    @Value("${webhook.quidax-secret-key:sk_test_quidax_secret}")
+    private String secretKey;
     
     private final ObjectMapper objectMapper;
     
@@ -67,29 +61,12 @@ public class QuidaxWebhookHandler extends AbstractWebhookHandler {
         }
         
         try {
-            // Parse signature format: t=timestamp,v1=signature
-            String[] parts = signature.split(",");
-            String timestamp = null;
-            String sig = null;
+            String timestamp = headers.get("quidax-timestamp");
+            String signedPayload = timestamp + "." + payload;
             
-            for (String part : parts) {
-                if (part.startsWith("t=")) {
-                    timestamp = part.substring(2);
-                } else if (part.startsWith("v1=")) {
-                    sig = part.substring(3);
-                }
-            }
+            String expectedSignature = computeHmacSha256(signedPayload, secretKey);
+            boolean valid = secureCompare(signature, expectedSignature);
             
-            if (timestamp == null || sig == null) {
-                log.warn("Invalid Quidax signature format");
-                return false;
-            }
-            
-            // Compute expected signature: HMAC-SHA256(timestamp.payload)
-            String signPayload = timestamp + "." + payload;
-            String expectedSignature = computeHmacSha256(signPayload, webhookKey);
-            
-            boolean valid = secureCompare(sig, expectedSignature);
             if (!valid) {
                 log.warn("Invalid Quidax webhook signature");
             }
@@ -106,41 +83,30 @@ public class QuidaxWebhookHandler extends AbstractWebhookHandler {
         String eventType = extractEventType(payload);
         boolean isSuccess = isSuccessEvent(eventType, payload);
         
+        Map<String, Object> rawData = new HashMap<>(data);
+        rawData.put("event_type", eventType);
+        rawData.put("txid", getString(data, "txid"));
+        rawData.put("confirmations", getString(data, "confirmations"));
+        rawData.put("network", getString(data, "network"));
+        
+        String feeStr = getString(data, "fee");
+        if (feeStr != null) {
+            rawData.put("fee", new BigDecimal(feeStr));
+        }
+        
         Transaction transaction = new Transaction();
         transaction.setSource(PROVIDER_NAME);
         transaction.setExternalReference(extractReference(payload));
         transaction.setNormalizedReference(normalizeReference(extractReference(payload)));
         
-        // Quidax amounts are strings
         String amountStr = getString(data, "amount");
         transaction.setAmount(amountStr != null ? new BigDecimal(amountStr) : BigDecimal.ZERO);
         
-        String feeStr = getString(data, "fee");
-        transaction.setFee(feeStr != null ? new BigDecimal(feeStr) : BigDecimal.ZERO);
-        
-        transaction.setCurrency(getString(data, "currency"));
+        transaction.setCurrency(getString(data, "currency") != null ? getString(data, "currency") : "NGN");
         transaction.setStatus(mapStatus(getString(data, "status"), isSuccess));
-        transaction.setDescription(getString(data, "transaction_note"));
         transaction.setTimestamp(parseDateTime(getString(data, "created_at")));
-        transaction.setCreatedAt(LocalDateTime.now());
-        
-        // Set transaction type based on event
-        if (eventType != null) {
-            String lowerEvent = eventType.toLowerCase();
-            if (lowerEvent.contains("deposit") || lowerEvent.contains("buy")) {
-                transaction.setType(Transaction.TransactionType.CREDIT);
-            } else if (lowerEvent.contains("withdraw") || lowerEvent.contains("sell")) {
-                transaction.setType(Transaction.TransactionType.DEBIT);
-            } else if (lowerEvent.contains("swap")) {
-                transaction.setType(Transaction.TransactionType.TRANSFER);
-            }
-        }
-        
-        // Store blockchain txid if available
-        String txid = getString(data, "txid");
-        if (txid != null) {
-            transaction.setProviderTransactionId(txid);
-        }
+        transaction.setIngestedAt(LocalDateTime.now());
+        transaction.setRawData(rawData);
         
         return transaction;
     }

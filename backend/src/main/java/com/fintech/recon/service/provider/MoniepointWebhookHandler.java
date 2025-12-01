@@ -8,21 +8,28 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * Webhook handler for Moniepoint (Monnify)
- * Signature: SHA512 hash of entire request body (transactionHash field)
+ * Webhook handler for Moniepoint/Monnify
+ * Signature: SHA512 hash of transactionHash field
+ * Header: monnify-signature
  */
 @Component
 @Slf4j
 public class MoniepointWebhookHandler extends AbstractWebhookHandler {
     
     private static final String PROVIDER_NAME = "moniepoint";
-    private static final String DISPLAY_NAME = "Moniepoint";
+    private static final String DISPLAY_NAME = "Moniepoint/Monnify";
     private static final String SIGNATURE_HEADER = "monnify-signature";
     
-    @Value("${webhook.moniepoint.secret-key:moniepoint_secret_key}")
+    private static final Set<String> SUCCESS_STATUSES = Set.of(
+            "PAID", "SUCCESSFUL", "COMPLETED"
+    );
+    
+    @Value("${webhook.moniepoint-secret-key:sk_test_moniepoint_secret}")
     private String secretKey;
     
     private final ObjectMapper objectMapper;
@@ -48,26 +55,17 @@ public class MoniepointWebhookHandler extends AbstractWebhookHandler {
     
     @Override
     public boolean verifySignature(String payload, String signature, Map<String, String> headers) {
+        if (signature == null || signature.isEmpty()) {
+            log.warn("Missing Moniepoint webhook signature");
+            return false;
+        }
+        
         try {
-            // Moniepoint includes transactionHash in the payload itself
-            Map<String, Object> payloadMap = objectMapper.readValue(payload, Map.class);
-            String transactionHash = getString(payloadMap, "transactionHash");
-            
-            if (transactionHash == null || transactionHash.isEmpty()) {
-                log.warn("Missing Moniepoint transactionHash");
-                return false;
-            }
-            
-            // Compute hash of payload (excluding transactionHash field)
-            // For simplicity, we verify that hash exists and matches format
-            // In production, implement full hash calculation per Monnify docs
-            String expectedHash = computeHmacSha512(payload, secretKey);
-            
-            // For now, just verify hash exists and is not empty
-            boolean valid = transactionHash.length() >= 64;
+            String expectedSignature = computeHmacSha512(payload, secretKey);
+            boolean valid = secureCompare(signature, expectedSignature);
             
             if (!valid) {
-                log.warn("Invalid Moniepoint transactionHash format");
+                log.warn("Invalid Moniepoint webhook signature");
             }
             return valid;
         } catch (Exception e) {
@@ -78,19 +76,24 @@ public class MoniepointWebhookHandler extends AbstractWebhookHandler {
     
     @Override
     public Transaction parsePayload(Map<String, Object> payload) {
-        // Moniepoint payload is flat (not nested in data object)
         String paymentStatus = getString(payload, "paymentStatus");
-        boolean isSuccess = "PAID".equalsIgnoreCase(paymentStatus);
+        boolean isSuccess = paymentStatus != null && SUCCESS_STATUSES.contains(paymentStatus.toUpperCase());
+        
+        Map<String, Object> rawData = new HashMap<>(payload);
+        rawData.put("transactionHash", getString(payload, "transactionHash"));
+        rawData.put("paymentMethod", getString(payload, "paymentMethod"));
+        rawData.put("paymentDescription", getString(payload, "paymentDescription"));
         
         Transaction transaction = new Transaction();
         transaction.setSource(PROVIDER_NAME);
         transaction.setExternalReference(extractReference(payload));
         transaction.setNormalizedReference(normalizeReference(extractReference(payload)));
         
-        // Parse amount - Moniepoint uses string format
         String amountStr = getString(payload, "amountPaid");
         if (amountStr != null) {
             transaction.setAmount(new BigDecimal(amountStr.replace(",", "")));
+        } else {
+            transaction.setAmount(BigDecimal.ZERO);
         }
         
         // Calculate fee from totalPayable - settlementAmount
@@ -99,36 +102,25 @@ public class MoniepointWebhookHandler extends AbstractWebhookHandler {
         if (totalStr != null && settlementStr != null) {
             BigDecimal total = new BigDecimal(totalStr.replace(",", ""));
             BigDecimal settlement = new BigDecimal(settlementStr.replace(",", ""));
-            transaction.setFee(total.subtract(settlement));
+            rawData.put("fee", total.subtract(settlement));
         }
         
-        transaction.setCurrency(getString(payload, "currency"));
+        transaction.setCurrency(getString(payload, "currency") != null ? getString(payload, "currency") : "NGN");
         transaction.setStatus(mapStatus(paymentStatus, isSuccess));
-        transaction.setDescription(getString(payload, "paymentDescription"));
         transaction.setTimestamp(parseDateTime(getString(payload, "paidOn")));
-        transaction.setCreatedAt(LocalDateTime.now());
-        
-        // Determine type from payment method
-        String paymentMethod = getString(payload, "paymentMethod");
-        transaction.setType(Transaction.TransactionType.CREDIT); // Collections are credits
-        
-        // Store transaction reference
-        String transactionRef = getString(payload, "transactionReference");
-        if (transactionRef != null) {
-            transaction.setProviderTransactionId(transactionRef);
-        }
+        transaction.setIngestedAt(LocalDateTime.now());
+        transaction.setRawData(rawData);
         
         return transaction;
     }
     
     @Override
+    @SuppressWarnings("unchecked")
     public String extractReference(Map<String, Object> payload) {
-        // Try paymentReference first, then transactionReference
         String reference = getString(payload, "paymentReference");
         if (reference == null) {
             reference = getString(payload, "transactionReference");
         }
-        // Also check product.reference
         if (reference == null) {
             Object product = payload.get("product");
             if (product instanceof Map) {
@@ -140,25 +132,17 @@ public class MoniepointWebhookHandler extends AbstractWebhookHandler {
     
     @Override
     public String extractEventType(Map<String, Object> payload) {
-        // Moniepoint doesn't have event field, derive from paymentStatus
-        String status = getString(payload, "paymentStatus");
-        String method = getString(payload, "paymentMethod");
-        
-        if ("PAID".equalsIgnoreCase(status)) {
-            return "payment.successful";
-        }
-        return "payment." + (status != null ? status.toLowerCase() : "unknown");
+        return getString(payload, "eventType");
     }
     
     @Override
     public boolean isSuccessEvent(String eventType, Map<String, Object> payload) {
-        String status = getString(payload, "paymentStatus");
-        return "PAID".equalsIgnoreCase(status);
+        String paymentStatus = getString(payload, "paymentStatus");
+        return paymentStatus != null && SUCCESS_STATUSES.contains(paymentStatus.toUpperCase());
     }
     
     private String normalizeReference(String reference) {
         if (reference == null) return null;
-        // Moniepoint refs often have MNFY| prefix
         return reference.toUpperCase().replaceAll("[^A-Z0-9]", "_");
     }
 }

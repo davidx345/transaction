@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,11 +28,7 @@ public class KoraWebhookHandler extends AbstractWebhookHandler {
             "transfer.success", "charge.success", "refund.success"
     );
     
-    private static final Set<String> FAILURE_EVENTS = Set.of(
-            "transfer.failed", "charge.failed", "refund.failed"
-    );
-    
-    @Value("${webhook.kora.secret-key:sk_test_kora_secret}")
+    @Value("${webhook.korapay-secret-key:sk_test_kora_secret}")
     private String secretKey;
     
     private final ObjectMapper objectMapper;
@@ -64,7 +60,7 @@ public class KoraWebhookHandler extends AbstractWebhookHandler {
         }
         
         try {
-            // Kora signs only the data object
+            @SuppressWarnings("unchecked")
             Map<String, Object> payloadMap = objectMapper.readValue(payload, Map.class);
             Object dataObject = payloadMap.get("data");
             String dataJson = objectMapper.writeValueAsString(dataObject);
@@ -88,28 +84,21 @@ public class KoraWebhookHandler extends AbstractWebhookHandler {
         String eventType = extractEventType(payload);
         boolean isSuccess = isSuccessEvent(eventType, payload);
         
+        Map<String, Object> rawData = new HashMap<>(data);
+        rawData.put("event_type", eventType);
+        rawData.put("fee", getBigDecimal(data, "fee"));
+        rawData.put("description", getString(data, "description"));
+        
         Transaction transaction = new Transaction();
         transaction.setSource(PROVIDER_NAME);
         transaction.setExternalReference(extractReference(payload));
         transaction.setNormalizedReference(normalizeReference(extractReference(payload)));
         transaction.setAmount(getBigDecimal(data, "amount"));
-        transaction.setFee(getBigDecimal(data, "fee"));
-        transaction.setCurrency(getString(data, "currency"));
+        transaction.setCurrency(getString(data, "currency") != null ? getString(data, "currency") : "NGN");
         transaction.setStatus(mapStatus(getString(data, "status"), isSuccess));
-        transaction.setDescription(getString(data, "description"));
         transaction.setTimestamp(parseDateTime(getString(data, "completed_at")));
-        transaction.setCreatedAt(LocalDateTime.now());
-        
-        // Set transaction type based on event
-        if (eventType != null) {
-            if (eventType.startsWith("charge")) {
-                transaction.setType(Transaction.TransactionType.CREDIT);
-            } else if (eventType.startsWith("transfer")) {
-                transaction.setType(Transaction.TransactionType.DEBIT);
-            } else if (eventType.startsWith("refund")) {
-                transaction.setType(Transaction.TransactionType.REFUND);
-            }
-        }
+        transaction.setIngestedAt(LocalDateTime.now());
+        transaction.setRawData(rawData);
         
         return transaction;
     }
@@ -139,7 +128,6 @@ public class KoraWebhookHandler extends AbstractWebhookHandler {
     
     private String normalizeReference(String reference) {
         if (reference == null) return null;
-        // Kora references typically start with KPY_ or similar
         return reference.toUpperCase().replaceAll("[^A-Z0-9]", "_");
     }
 }
