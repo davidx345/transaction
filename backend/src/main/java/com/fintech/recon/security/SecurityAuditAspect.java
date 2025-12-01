@@ -71,8 +71,8 @@ public class SecurityAuditAspect {
     /**
      * Log dispute approval/rejection actions
      */
-    @Before("execution(* com.fintech.recon.api.DisputeController.approve*(..)) || " +
-            "execution(* com.fintech.recon.api.DisputeController.reject*(..))")
+    @Before("execution(* com.fintech.recon.web.DisputeController.approve*(..)) || " +
+            "execution(* com.fintech.recon.web.DisputeController.reject*(..))")
     public void logDisputeAction(JoinPoint joinPoint) {
         String user = getCurrentUser();
         HttpServletRequest request = getCurrentRequest();
@@ -90,7 +90,7 @@ public class SecurityAuditAspect {
     /**
      * Log file upload actions
      */
-    @Before("execution(* com.fintech.recon.api.IngestionController.upload*(..))")
+    @Before("execution(* com.fintech.recon.web.IngestionController.upload*(..))")
     public void logFileUpload(JoinPoint joinPoint) {
         String user = getCurrentUser();
         HttpServletRequest request = getCurrentRequest();
@@ -121,7 +121,7 @@ public class SecurityAuditAspect {
     /**
      * Log admin actions
      */
-    @Before("execution(* com.fintech.recon.api..*Controller.*(..)) && @annotation(org.springframework.security.access.prepost.PreAuthorize)")
+    @Before("(execution(* com.fintech.recon.api..*Controller.*(..)) || execution(* com.fintech.recon.web..*Controller.*(..))) && @annotation(org.springframework.security.access.prepost.PreAuthorize)")
     public void logAdminAction(JoinPoint joinPoint) {
         String user = getCurrentUser();
         HttpServletRequest request = getCurrentRequest();
@@ -138,7 +138,7 @@ public class SecurityAuditAspect {
     /**
      * Log security exceptions
      */
-    @AfterThrowing(pointcut = "execution(* com.fintech.recon.api..*(..))", throwing = "ex")
+    @AfterThrowing(pointcut = "execution(* com.fintech.recon.api..*(..)) || execution(* com.fintech.recon.web..*(..))", throwing = "ex")
     public void logSecurityException(JoinPoint joinPoint, Throwable ex) {
         if (ex instanceof SecurityException || 
             ex.getClass().getName().contains("Security") ||
