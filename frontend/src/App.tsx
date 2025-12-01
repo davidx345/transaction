@@ -154,12 +154,16 @@ function DashboardLayout() {
         <div style={{ padding: '0.75rem', borderTop: '1px solid #27272A' }}>
           {sidebarOpen && (
             <div style={{ marginBottom: '0.75rem', padding: '0 0.875rem' }}>
-              <div style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#FAFAFA' }}>{user?.email}</div>
-              <div style={{ fontSize: '0.6875rem', color: '#71717A', marginTop: '0.125rem' }}>{user?.role}</div>
+              <div style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#FAFAFA' }}>
+                {user?.fullName || user?.username || user?.email}
+              </div>
+              <div style={{ fontSize: '0.6875rem', color: '#71717A', marginTop: '0.125rem' }}>
+                {user?.roles?.[0] || 'User'}
+              </div>
             </div>
           )}
           <button
-            onClick={logout}
+            onClick={() => logout()}
             style={{
               width: '100%',
               display: 'flex',

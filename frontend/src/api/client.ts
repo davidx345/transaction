@@ -45,6 +45,13 @@ export interface AuthUser {
   roles: string[];
 }
 
+export interface UserProfile extends AuthUser {
+  companyName?: string;
+  emailVerified?: boolean;
+  lastLogin?: string;
+  createdAt?: string;
+}
+
 export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
@@ -205,8 +212,10 @@ export const authApi = {
   },
 
   getCurrentUser: async (): Promise<AuthUser> => {
-    const response = await api.get('/api/auth/me');
-    return response.data;
+    const response = await api.get<UserProfile>('/api/auth/me');
+    // Convert UserProfile to AuthUser format for storage
+    const { id, username, email, fullName, roles } = response.data;
+    return { id, username, email, fullName, roles };
   },
 
   changePassword: async (currentPassword: string, newPassword: string): Promise<void> => {
