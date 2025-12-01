@@ -2,7 +2,7 @@ spring:
   application:
     name: recon-engine
   datasource:
-    url: jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:5432/postgres
+    url: jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require
     username: postgres.vckpmvwuzblmempwdlnv
     password: ayodele3579
     driver-class-name: org.postgresql.Driver
@@ -10,6 +10,14 @@ spring:
       maximum-pool-size: 5
       minimum-idle: 2
       connection-timeout: 30000
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration
+    url: jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require
+    user: postgres.vckpmvwuzblmempwdlnv
+    password: ayodele3579
   jpa:
     hibernate:
       ddl-auto: none
@@ -18,11 +26,6 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
     show-sql: false
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    baseline-version: 0
-    locations: classpath:db/migration
   rabbitmq:
     addresses: ${CLOUDAMQP_URL:amqp://guest:guest@localhost:5672}
 
