@@ -93,10 +93,15 @@ public class TransactionIngestionService {
             
             log.info("Detected bank format: {}", detectedBank);
             
+            UUID userId = securityUtils.getCurrentUserId();
+            
             // Convert parsed transactions to domain entities and save
             List<Transaction> transactions = parseResult.getTransactions().stream()
                 .map(this::convertToTransaction)
                 .toList();
+            
+            // Set userId for each transaction
+            transactions.forEach(txn -> txn.setUserId(userId));
             
             List<Transaction> savedTransactions = transactionRepository.saveAll(transactions);
             
