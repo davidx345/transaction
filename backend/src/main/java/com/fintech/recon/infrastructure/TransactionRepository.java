@@ -88,4 +88,14 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
     @Query("SELECT t FROM Transaction t WHERE t.source = :source AND " +
            "t.normalizedReference NOT IN (SELECT r.transactionRef FROM Reconciliation r)")
     List<Transaction> findUnreconciledBySource(@Param("source") String source);
+
+    /**
+     * Find all transactions by userId
+     */
+    List<Transaction> findByUserId(UUID userId);
+
+    /**
+     * Find transactions by userId and source
+     */
+    List<Transaction> findByUserIdAndSource(UUID userId, String source);
 }

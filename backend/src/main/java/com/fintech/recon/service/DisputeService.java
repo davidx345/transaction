@@ -2,6 +2,7 @@ package com.fintech.recon.service;
 
 import com.fintech.recon.domain.Reconciliation;
 import com.fintech.recon.infrastructure.ReconciliationRepository;
+import com.fintech.recon.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,19 +19,33 @@ public class DisputeService {
 
     private final ReconciliationRepository reconciliationRepository;
     private final RefundService refundService;
+    private final SecurityUtils securityUtils;
 
     public List<Reconciliation> getDisputes(String status) {
-        // In a real app, we'd use a Specification or custom query
-        // For MVP, we filter in memory or assume findAll returns relevant ones
-        // TODO: Add findByState to Repository
-        return reconciliationRepository.findAll().stream()
+        UUID userId = securityUtils.getCurrentUserId();
+        if (userId == null) {
+            log.warn("No authenticated user found, returning empty list");
+            return List.of();
+        }
+        
+        List<Reconciliation> userReconciliations = reconciliationRepository.findByUserIdOrderByCreatedAtDesc(userId);
+        
+        return userReconciliations.stream()
                 .filter(r -> status == null || r.getState().equalsIgnoreCase(status))
                 .toList();
     }
 
     public Reconciliation getDispute(UUID id) {
-        return reconciliationRepository.findById(id)
+        Reconciliation reconciliation = reconciliationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Dispute not found"));
+        
+        // Verify user owns this reconciliation
+        UUID userId = securityUtils.getCurrentUserId();
+        if (userId != null && !userId.equals(reconciliation.getUserId())) {
+            throw new RuntimeException("Access denied to this dispute");
+        }
+        
+        return reconciliation;
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import com.fintech.recon.domain.Reconciliation;
 import com.fintech.recon.domain.WebhookLog;
 import com.fintech.recon.infrastructure.ReconciliationRepository;
 import com.fintech.recon.infrastructure.WebhookLogRepository;
+import com.fintech.recon.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +22,24 @@ public class MetricsController {
 
     private final ReconciliationRepository reconciliationRepository;
     private final WebhookLogRepository webhookLogRepository;
+    private final SecurityUtils securityUtils;
 
     @GetMapping
     public ResponseEntity<?> getMetrics(@RequestParam(required = false, defaultValue = "7d") String range) {
         try {
             LocalDateTime startDate = calculateStartDate(range);
+            UUID userId = securityUtils.getCurrentUserId();
             
-            // Fetch data within time range
-            List<Reconciliation> reconciliations = reconciliationRepository.findAll().stream()
-                .filter(r -> r.getCreatedAt().isAfter(startDate))
+            // Fetch reconciliations for current user within time range
+            List<Reconciliation> allReconciliations;
+            if (userId != null) {
+                allReconciliations = reconciliationRepository.findByUserId(userId);
+            } else {
+                allReconciliations = reconciliationRepository.findAll();
+            }
+            
+            List<Reconciliation> reconciliations = allReconciliations.stream()
+                .filter(r -> r.getCreatedAt() != null && r.getCreatedAt().isAfter(startDate))
                 .collect(Collectors.toList());
             
             List<WebhookLog> webhookLogs = webhookLogRepository.findAll().stream()

@@ -26,7 +26,10 @@ public class Reconciliation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "transaction_ref", unique = true)
+    @Column(name = "user_id")
+    private UUID userId;
+
+    @Column(name = "transaction_ref")
     private String transactionRef;
 
     @Column(name = "run_id")

@@ -5,6 +5,7 @@ import com.fintech.recon.domain.Transaction;
 import com.fintech.recon.dto.ReportDtos.*;
 import com.fintech.recon.infrastructure.ReconciliationRepository;
 import com.fintech.recon.infrastructure.TransactionRepository;
+import com.fintech.recon.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,29 @@ public class ReportService {
 
     private final TransactionRepository transactionRepository;
     private final ReconciliationRepository reconciliationRepository;
+    private final SecurityUtils securityUtils;
+
+    /**
+     * Get transactions for current user
+     */
+    private List<Transaction> getCurrentUserTransactions() {
+        UUID userId = securityUtils.getCurrentUserId();
+        if (userId != null) {
+            return transactionRepository.findByUserId(userId);
+        }
+        return transactionRepository.findAll();
+    }
+
+    /**
+     * Get reconciliations for current user
+     */
+    private List<Reconciliation> getCurrentUserReconciliations() {
+        UUID userId = securityUtils.getCurrentUserId();
+        if (userId != null) {
+            return reconciliationRepository.findByUserId(userId);
+        }
+        return reconciliationRepository.findAll();
+    }
 
     /**
      * Generate daily summary report
@@ -37,14 +61,14 @@ public class ReportService {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
         
-        // Get all transactions for the day
-        List<Transaction> allTransactions = transactionRepository.findAll().stream()
+        // Get all transactions for the day - filtered by current user
+        List<Transaction> allTransactions = getCurrentUserTransactions().stream()
             .filter(t -> t.getTimestamp() != null)
             .filter(t -> !t.getTimestamp().isBefore(startOfDay) && !t.getTimestamp().isAfter(endOfDay))
             .toList();
         
-        // Get all reconciliations
-        List<Reconciliation> reconciliations = reconciliationRepository.findAll();
+        // Get all reconciliations - filtered by current user
+        List<Reconciliation> reconciliations = getCurrentUserReconciliations();
         Set<String> matchedRefs = reconciliations.stream()
             .filter(r -> "MATCHED".equals(r.getState()) || "AUTO_MATCHED".equals(r.getState()))
             .map(Reconciliation::getTransactionRef)
@@ -134,14 +158,14 @@ public class ReportService {
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = endDate.atTime(LocalTime.MAX);
         
-        // Get transactions in range
-        List<Transaction> transactions = transactionRepository.findAll().stream()
+        // Get transactions in range - filtered by current user
+        List<Transaction> transactions = getCurrentUserTransactions().stream()
             .filter(t -> t.getTimestamp() != null)
             .filter(t -> !t.getTimestamp().isBefore(start) && !t.getTimestamp().isAfter(end))
             .toList();
         
-        // Get reconciliations
-        List<Reconciliation> reconciliations = reconciliationRepository.findAll();
+        // Get reconciliations - filtered by current user
+        List<Reconciliation> reconciliations = getCurrentUserReconciliations();
         Set<String> matchedRefs = reconciliations.stream()
             .filter(r -> "MATCHED".equals(r.getState()) || "AUTO_MATCHED".equals(r.getState()))
             .map(Reconciliation::getTransactionRef)
@@ -213,15 +237,18 @@ public class ReportService {
         LocalDateTime start = settlementDate.atStartOfDay();
         LocalDateTime end = settlementDate.atTime(LocalTime.MAX);
         
+        // Get all transactions for current user
+        List<Transaction> allUserTransactions = getCurrentUserTransactions();
+        
         // Get bank transactions
-        List<Transaction> bankTxns = transactionRepository.findAll().stream()
+        List<Transaction> bankTxns = allUserTransactions.stream()
             .filter(t -> "bank".equals(t.getSource()))
             .filter(t -> t.getTimestamp() != null)
             .filter(t -> !t.getTimestamp().isBefore(start) && !t.getTimestamp().isAfter(end))
             .toList();
         
         // Get system transactions (paystack/ledger)
-        List<Transaction> systemTxns = transactionRepository.findAll().stream()
+        List<Transaction> systemTxns = allUserTransactions.stream()
             .filter(t -> !"bank".equals(t.getSource()))
             .filter(t -> t.getTimestamp() != null)
             .filter(t -> !t.getTimestamp().isBefore(start) && !t.getTimestamp().isAfter(end))
@@ -338,7 +365,7 @@ public class ReportService {
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = endDate.atTime(LocalTime.MAX);
         
-        List<Reconciliation> reconciliations = reconciliationRepository.findAll().stream()
+        List<Reconciliation> reconciliations = getCurrentUserReconciliations().stream()
             .filter(r -> r.getCreatedAt() != null)
             .filter(r -> !r.getCreatedAt().isBefore(start) && !r.getCreatedAt().isAfter(end))
             .toList();

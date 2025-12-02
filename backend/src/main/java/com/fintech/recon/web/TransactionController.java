@@ -2,6 +2,7 @@ package com.fintech.recon.web;
 
 import com.fintech.recon.domain.Reconciliation;
 import com.fintech.recon.infrastructure.ReconciliationRepository;
+import com.fintech.recon.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +16,21 @@ import java.util.*;
 public class TransactionController {
 
     private final ReconciliationRepository reconciliationRepository;
+    private final SecurityUtils securityUtils;
 
     @GetMapping("/compare")
     public ResponseEntity<?> compareTransactions(@RequestParam String ref) {
         try {
-            // Find reconciliations matching the transaction reference
-            List<Reconciliation> reconciliations = reconciliationRepository
-                .findByTransactionRef(ref);
+            UUID userId = securityUtils.getCurrentUserId();
+            
+            // Find reconciliations matching the transaction reference for current user
+            List<Reconciliation> reconciliations;
+            if (userId != null) {
+                Optional<Reconciliation> recon = reconciliationRepository.findByTransactionRefAndUserId(ref, userId);
+                reconciliations = recon.map(List::of).orElse(Collections.emptyList());
+            } else {
+                reconciliations = reconciliationRepository.findByTransactionRef(ref);
+            }
 
             if (reconciliations.isEmpty()) {
                 return ResponseEntity.ok(Map.of(

@@ -5,6 +5,7 @@ import com.fintech.recon.domain.Transaction;
 import com.fintech.recon.dto.CsvParseResult;
 import com.fintech.recon.dto.IngestionResult;
 import com.fintech.recon.infrastructure.TransactionRepository;
+import com.fintech.recon.security.SecurityUtils;
 import com.fintech.recon.service.ingestion.CsvParserImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class TransactionIngestionService {
     private final TransactionRepository transactionRepository;
     private final CsvParserImpl csvParser;
     private final RabbitTemplate rabbitTemplate;
+    private final SecurityUtils securityUtils;
 
     /**
      * Ingest CSV file with specified bank name
@@ -32,9 +35,14 @@ public class TransactionIngestionService {
         try {
             log.info("Ingesting CSV file: {}, bank: {}", file.getOriginalFilename(), bankName);
             
+            UUID userId = securityUtils.getCurrentUserId();
             List<Transaction> transactions = csvParser.parse(file.getInputStream(), bankName);
+            
+            // Set userId for each transaction
+            transactions.forEach(txn -> txn.setUserId(userId));
+            
             List<Transaction> savedTransactions = transactionRepository.saveAll(transactions);
-            log.info("Ingested {} transactions from {} CSV", savedTransactions.size(), bankName);
+            log.info("Ingested {} transactions from {} CSV for user {}", savedTransactions.size(), bankName, userId);
             
             // Publish event to RabbitMQ for async reconciliation
             savedTransactions.forEach(txn -> 

@@ -94,6 +94,7 @@ public class ReconciliationEngine {
                 .confidenceScore(totalScore)
                 .rulesFired(rulesFired)
                 .state(state)
+                .userId(transaction.getUserId()) // Set userId from transaction
                 .build();
 
         // Add initial audit entry

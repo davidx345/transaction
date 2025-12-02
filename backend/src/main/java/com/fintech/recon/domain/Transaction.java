@@ -26,6 +26,9 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @Column(name = "user_id")
+    private UUID userId;
+
     @Column(nullable = false, length = 50)
     private String source; // 'paystack' | 'bank' | 'ledger'
 
