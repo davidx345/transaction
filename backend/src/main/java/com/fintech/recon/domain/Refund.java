@@ -1,5 +1,6 @@
 package com.fintech.recon.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,9 +46,11 @@ public class Refund {
     private String providerReference;
 
     @Column(name = "executed_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime executedAt;
 
     @Column(name = "created_at")
     @Builder.Default
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt = LocalDateTime.now();
 }

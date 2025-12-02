@@ -1,5 +1,6 @@
 package com.fintech.recon.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -65,6 +66,7 @@ public class ReportDtos {
     @AllArgsConstructor
     public static class DailySummaryReport {
         private LocalDate reportDate;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime generatedAt;
         
         // Transaction counts
@@ -129,6 +131,7 @@ public class ReportDtos {
         private BigDecimal actualAmount;
         private BigDecimal difference;
         private String discrepancyType; // AMOUNT_MISMATCH, MISSING, DUPLICATE
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime transactionDate;
         private String status;
         private int priority; // 1=HIGH, 2=MEDIUM, 3=LOW
@@ -144,6 +147,7 @@ public class ReportDtos {
     public static class DiscrepancyReport {
         private LocalDate startDate;
         private LocalDate endDate;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime generatedAt;
         
         // Summary
@@ -177,6 +181,7 @@ public class ReportDtos {
     public static class AuditTrailReport {
         private LocalDate startDate;
         private LocalDate endDate;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime generatedAt;
         
         @Builder.Default
@@ -191,6 +196,7 @@ public class ReportDtos {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AuditEntry {
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime timestamp;
         private String action; // INGESTED, MATCHED, DISPUTED, RESOLVED, EXPORTED
         private String entityType; // TRANSACTION, DISPUTE, RECONCILIATION
@@ -211,6 +217,7 @@ public class ReportDtos {
     public static class DisputeReport {
         private LocalDate startDate;
         private LocalDate endDate;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime generatedAt;
         
         // Summary
@@ -244,7 +251,9 @@ public class ReportDtos {
         private String reason;
         private String status;
         private String priority;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime createdAt;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime resolvedAt;
         private String resolution;
         private String assignedTo;
@@ -259,6 +268,7 @@ public class ReportDtos {
     @AllArgsConstructor
     public static class SettlementReport {
         private LocalDate settlementDate;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime generatedAt;
         private String bankName;
         
@@ -298,7 +308,9 @@ public class ReportDtos {
         private BigDecimal fee;
         private BigDecimal netAmount;
         private String status; // MATCHED, MISSING_FROM_BANK, MISSING_FROM_SYSTEM, AMOUNT_VARIANCE
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime transactionDate;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime settlementDate;
     }
 }

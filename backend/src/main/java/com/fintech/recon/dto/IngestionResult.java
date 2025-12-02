@@ -1,5 +1,6 @@
 package com.fintech.recon.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,6 +44,7 @@ public class IngestionResult {
     private List<String> parseErrors = new ArrayList<>();
     
     @Builder.Default
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp = LocalDateTime.now();
     
     /**

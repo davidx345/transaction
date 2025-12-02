@@ -1,5 +1,6 @@
 package com.fintech.recon.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,10 +49,12 @@ public class Reconciliation {
 
     @Column(name = "created_at")
     @Builder.Default
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at")
     @Builder.Default
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @Data
@@ -59,6 +62,7 @@ public class Reconciliation {
     @AllArgsConstructor
     @Builder
     public static class AuditEntry {
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime timestamp;
         private String action;
         private String actor;

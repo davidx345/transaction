@@ -1,5 +1,6 @@
 package com.fintech.recon.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,9 +35,11 @@ public class WebhookLog {
     private String eventType;
 
     @Column(name = "expected_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime expectedAt;
 
     @Column(name = "received_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime receivedAt;
 
     @Column(length = 50)
@@ -47,6 +50,7 @@ public class WebhookLog {
     private Integer retryCount = 0;
 
     @Column(name = "last_retry_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime lastRetryAt;
 
     @Column(columnDefinition = "jsonb")

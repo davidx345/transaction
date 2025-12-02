@@ -1,5 +1,6 @@
 package com.fintech.recon.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,6 +48,7 @@ public class Transaction {
     @Column(name = "customer_identifier")
     private String customerIdentifier;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp;
 
     @Column(name = "raw_data", columnDefinition = "jsonb")
@@ -55,5 +57,6 @@ public class Transaction {
 
     @Column(name = "ingested_at")
     @Builder.Default
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime ingestedAt = LocalDateTime.now();
 }

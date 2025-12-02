@@ -1,5 +1,6 @@
 package com.fintech.recon.domain.valueobject;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -68,6 +69,7 @@ public class MatchResult {
      * Timestamp of the match attempt
      */
     @Builder.Default
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime evaluatedAt = LocalDateTime.now();
 
     public enum MatchStatus {
@@ -89,6 +91,7 @@ public class MatchResult {
         private String source;
         private BigDecimal amount;
         private String status;
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime timestamp;
     }
 

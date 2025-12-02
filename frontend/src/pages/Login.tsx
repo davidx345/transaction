@@ -10,6 +10,21 @@ interface ApiError {
   error?: string;
 }
 
+// Eye icon for password visibility toggle
+const EyeIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  </svg>
+);
+
+const EyeOffIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+    <line x1="1" y1="1" x2="23" y2="23"></line>
+  </svg>
+);
+
 export const Login: React.FC = () => {
   const [mode, setMode] = useState<AuthMode>('login');
   const [email, setEmail] = useState('');
@@ -19,8 +34,18 @@ export const Login: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { login, register } = useAuth();
   const navigate = useNavigate();
+
+  // Password validation helpers
+  const hasMinLength = password.length >= 8;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasLowercase = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  const isPasswordValid = hasMinLength && hasUppercase && hasLowercase && hasNumber && hasSpecialChar;
 
   const resetForm = () => {
     setEmail('');
@@ -29,6 +54,8 @@ export const Login: React.FC = () => {
     setFullName('');
     setConfirmPassword('');
     setError('');
+    setShowPassword(false);
+    setShowConfirmPassword(false);
   };
 
   const switchMode = (newMode: AuthMode) => {
@@ -65,8 +92,8 @@ export const Login: React.FC = () => {
       return;
     }
 
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters');
+    if (!isPasswordValid) {
+      setError('Password does not meet all requirements');
       return;
     }
 
@@ -225,25 +252,47 @@ export const Login: React.FC = () => {
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, color: '#A1A1AA', fontSize: '0.8125rem' }}>
                 Password
               </label>
-              <input 
-                type="password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                autoComplete="current-password"
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  background: '#18181B',
-                  border: '1px solid #27272A',
-                  borderRadius: '6px',
-                  color: '#FAFAFA',
-                  fontSize: '0.875rem',
-                  outline: 'none',
-                  boxSizing: 'border-box'
-                }}
-              />
+              <div style={{ position: 'relative' }}>
+                <input 
+                  type={showPassword ? 'text' : 'password'} 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  autoComplete="current-password"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    paddingRight: '2.5rem',
+                    background: '#18181B',
+                    border: '1px solid #27272A',
+                    borderRadius: '6px',
+                    color: '#FAFAFA',
+                    fontSize: '0.875rem',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '0.75rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#71717A',
+                    cursor: 'pointer',
+                    padding: '0',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </button>
+              </div>
             </div>
 
             <button 
@@ -349,51 +398,125 @@ export const Login: React.FC = () => {
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, color: '#A1A1AA', fontSize: '0.8125rem' }}>
                 Password *
               </label>
-              <input 
-                type="password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Min. 8 characters"
-                required
-                minLength={8}
-                autoComplete="new-password"
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  background: '#18181B',
-                  border: '1px solid #27272A',
-                  borderRadius: '6px',
-                  color: '#FAFAFA',
-                  fontSize: '0.875rem',
-                  outline: 'none',
-                  boxSizing: 'border-box'
-                }}
-              />
+              <div style={{ position: 'relative' }}>
+                <input 
+                  type={showPassword ? 'text' : 'password'} 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Create a strong password"
+                  required
+                  minLength={8}
+                  autoComplete="new-password"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    paddingRight: '2.5rem',
+                    background: '#18181B',
+                    border: `1px solid ${password && !isPasswordValid ? '#EF4444' : '#27272A'}`,
+                    borderRadius: '6px',
+                    color: '#FAFAFA',
+                    fontSize: '0.875rem',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '0.75rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#71717A',
+                    cursor: 'pointer',
+                    padding: '0',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </button>
+              </div>
+              {/* Password Requirements */}
+              {password && (
+                <div style={{ marginTop: '0.5rem', fontSize: '0.75rem' }}>
+                  <div style={{ color: hasMinLength ? '#22C55E' : '#71717A', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.125rem' }}>
+                    {hasMinLength ? '✓' : '○'} At least 8 characters
+                  </div>
+                  <div style={{ color: hasUppercase ? '#22C55E' : '#71717A', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.125rem' }}>
+                    {hasUppercase ? '✓' : '○'} One uppercase letter (A-Z)
+                  </div>
+                  <div style={{ color: hasLowercase ? '#22C55E' : '#71717A', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.125rem' }}>
+                    {hasLowercase ? '✓' : '○'} One lowercase letter (a-z)
+                  </div>
+                  <div style={{ color: hasNumber ? '#22C55E' : '#71717A', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.125rem' }}>
+                    {hasNumber ? '✓' : '○'} One number (0-9)
+                  </div>
+                  <div style={{ color: hasSpecialChar ? '#22C55E' : '#71717A', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    {hasSpecialChar ? '✓' : '○'} One special character (!@#$%^&*)
+                  </div>
+                </div>
+              )}
+              {!password && (
+                <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: '#71717A' }}>
+                  Password must contain uppercase, lowercase, number, and special character
+                </div>
+              )}
             </div>
 
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, color: '#A1A1AA', fontSize: '0.8125rem' }}>
                 Confirm Password *
               </label>
-              <input 
-                type="password" 
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                autoComplete="new-password"
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  background: '#18181B',
-                  border: '1px solid #27272A',
-                  borderRadius: '6px',
-                  color: '#FAFAFA',
-                  fontSize: '0.875rem',
-                  outline: 'none',
-                  boxSizing: 'border-box'
-                }}
-              />
+              <div style={{ position: 'relative' }}>
+                <input 
+                  type={showConfirmPassword ? 'text' : 'password'} 
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  autoComplete="new-password"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    paddingRight: '2.5rem',
+                    background: '#18181B',
+                    border: `1px solid ${confirmPassword && password !== confirmPassword ? '#EF4444' : '#27272A'}`,
+                    borderRadius: '6px',
+                    color: '#FAFAFA',
+                    fontSize: '0.875rem',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '0.75rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#71717A',
+                    cursor: 'pointer',
+                    padding: '0',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  {showConfirmPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </button>
+              </div>
+              {confirmPassword && password !== confirmPassword && (
+                <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: '#EF4444' }}>
+                  Passwords do not match
+                </div>
+              )}
             </div>
 
             <button 

@@ -1,5 +1,7 @@
 package com.fintech.recon.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,6 +43,7 @@ public class User implements UserDetails {
     private String email;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(name = "full_name", length = 100)
@@ -76,6 +79,7 @@ public class User implements UserDetails {
     private boolean emailVerified = false;
 
     @Column(name = "last_login")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime lastLogin;
 
     @Column(name = "failed_login_attempts")
@@ -83,23 +87,29 @@ public class User implements UserDetails {
     private int failedLoginAttempts = 0;
 
     @Column(name = "locked_until")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime lockedUntil;
 
     @Column(name = "password_changed_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime passwordChangedAt;
 
     @Column(name = "refresh_token")
+    @JsonIgnore
     private String refreshToken;
 
     @Column(name = "refresh_token_expiry")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime refreshTokenExpiry;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
 
     @Override
