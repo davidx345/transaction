@@ -29,8 +29,8 @@ public class SecurityUtils {
         }
         
         String username = auth.getName();
-        return userRepository.findByUsername(username)
-                .or(() -> userRepository.findByEmail(username))
+        return userRepository.findByUsernameIgnoreCase(username)
+                .or(() -> userRepository.findByEmailIgnoreCase(username))
                 .map(User::getId)
                 .orElse(null);
     }
@@ -45,8 +45,8 @@ public class SecurityUtils {
         }
         
         String username = auth.getName();
-        return userRepository.findByUsername(username)
-                .or(() -> userRepository.findByEmail(username));
+        return userRepository.findByUsernameIgnoreCase(username)
+                .or(() -> userRepository.findByEmailIgnoreCase(username));
     }
 
     /**
