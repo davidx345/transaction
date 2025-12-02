@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -123,7 +124,7 @@ public class UserService implements UserDetailsService {
                 .password(passwordEncoder.encode(request.password()))
                 .fullName(request.fullName())
                 .companyName(request.companyName())
-                .roles(Set.of("USER"))
+                .roles(new HashSet<>(Set.of("USER")))
                 .enabled(true)
                 .emailVerified(false)
                 .passwordChangedAt(LocalDateTime.now())
