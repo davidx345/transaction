@@ -5,12 +5,16 @@ import {
   ArrowRight, 
   CheckCircle2, 
   Shield, 
-  Zap, 
   BarChart3, 
   Globe, 
   Lock, 
   ChevronRight,
-  PlayCircle
+  PlayCircle,
+  RefreshCw,
+  Database,
+  Building,
+  CreditCard,
+  FileText
 } from 'lucide-react';
 
 // Inline styles to ensure they work regardless of Tailwind config
@@ -634,26 +638,44 @@ export const LandingPage: React.FC = () => {
               <div style={{position: 'absolute', top: 0, right: 0, width: '16rem', height: '16rem', background: 'radial-gradient(ellipse, rgba(59, 130, 246, 0.15), transparent 70%)'}} />
               <div style={{position: 'relative', zIndex: 10}}>
                 <div style={{...styles.featureIcon, backgroundColor: 'rgba(59, 130, 246, 0.2)'}}>
-                  <Zap size={24} color="#60A5FA" />
+                  <RefreshCw size={24} color="#60A5FA" />
                 </div>
                 <h3 style={styles.featureTitle}>Real-time Reconciliation</h3>
                 <p style={{...styles.featureDesc, maxWidth: '28rem', marginBottom: '2rem'}}>
                   Process millions of transactions in seconds. Our engine automatically matches entries across multiple sources with 99.9% accuracy.
                 </p>
-                <div style={{height: '12rem', borderRadius: '0.75rem', backgroundColor: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)', padding: '1rem'}}>
-                  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem'}}>
-                    <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-                      <div style={{width: '0.5rem', height: '0.5rem', borderRadius: '50%', backgroundColor: '#22C55E'}} />
-                      <span style={{fontSize: '0.75rem', color: '#22C55E'}}>Matched</span>
+                <div style={{height: '12rem', borderRadius: '0.75rem', backgroundColor: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.05)', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '2rem'}}>
+                    {/* Sources */}
+                    <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+                      <div style={{padding: '0.75rem', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.5rem', border: '1px solid rgba(255,255,255,0.1)'}}>
+                        <Building size={20} color="#9CA3AF" />
+                      </div>
+                      <div style={{padding: '0.75rem', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.5rem', border: '1px solid rgba(255,255,255,0.1)'}}>
+                        <CreditCard size={20} color="#9CA3AF" />
+                      </div>
+                      <div style={{padding: '0.75rem', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.5rem', border: '1px solid rgba(255,255,255,0.1)'}}>
+                        <FileText size={20} color="#9CA3AF" />
+                      </div>
                     </div>
-                    <span style={{fontSize: '0.75rem', color: '#6B7280'}}>Just now</span>
+
+                    {/* Arrows */}
+                    <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', opacity: 0.5}}>
+                      <ArrowRight size={20} color="#60A5FA" />
+                      <ArrowRight size={20} color="#60A5FA" />
+                      <ArrowRight size={20} color="#60A5FA" />
+                    </div>
+
+                    {/* Result */}
+                    <div style={{position: 'relative'}}>
+                      <div style={{padding: '1.5rem', backgroundColor: 'rgba(34, 197, 94, 0.1)', borderRadius: '1rem', border: '1px solid rgba(34, 197, 94, 0.2)'}}>
+                        <CheckCircle2 size={48} color="#22C55E" />
+                      </div>
+                      <div style={{position: 'absolute', bottom: '-1.5rem', left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap'}}>
+                        <span style={{fontSize: '0.75rem', color: '#22C55E', fontWeight: 600}}>Matched</span>
+                      </div>
+                    </div>
                   </div>
-                  {[1,2,3].map(i => (
-                    <div key={i} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem', borderRadius: '0.25rem', backgroundColor: 'rgba(255,255,255,0.05)', marginBottom: '0.5rem'}}>
-                      <div style={{height: '0.5rem', width: '6rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem'}} />
-                      <div style={{height: '0.5rem', width: '3rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem'}} />
-                    </div>
-                  ))}
                 </div>
               </div>
             </div>
@@ -715,7 +737,7 @@ export const LandingPage: React.FC = () => {
             
             {[
               { title: 'Connect Sources', desc: 'Link your bank accounts, payment gateways, and ERP in one click.', Icon: Lock },
-              { title: 'Auto-Match', desc: 'Our AI engine matches 99% of transactions automatically.', Icon: Zap },
+              { title: 'Auto-Match', desc: 'Our AI engine matches 99% of transactions automatically.', Icon: RefreshCw },
               { title: 'Resolve Exceptions', desc: 'Handle the remaining 1% with guided workflows and team collaboration.', Icon: CheckCircle2 }
             ].map((step, idx) => (
               <motion.div 
