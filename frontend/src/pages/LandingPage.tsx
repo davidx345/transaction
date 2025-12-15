@@ -211,7 +211,6 @@ const styles = {
     border: '1px solid rgba(255,255,255,0.1)',
     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
     overflow: 'hidden',
-    aspectRatio: '16/9',
   },
   dashboardHeader: {
     padding: '1rem 1.5rem',
@@ -574,51 +573,18 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <div style={{height: '0.5rem', width: '8rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '9999px'}} />
               </div>
-              <div style={styles.dashboardBody}>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-                  <div style={{height: '8rem', borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)', padding: '1rem'}}>
-                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '1rem'}}>
-                      <div style={{height: '1rem', width: '6rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem'}} />
-                      <div style={{padding: '0.25rem 0.75rem', backgroundColor: 'rgba(34, 197, 94, 0.2)', borderRadius: '0.25rem', color: '#4ADE80', fontSize: '0.75rem'}}>Live</div>
-                    </div>
-                    <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
-                      <div style={{height: '0.5rem', width: '100%', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.25rem'}} />
-                      <div style={{height: '0.5rem', width: '75%', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.25rem'}} />
-                      <div style={{height: '0.5rem', width: '50%', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.25rem'}} />
-                    </div>
-                  </div>
-                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem'}}>
-                    <div style={{height: '6rem', borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)'}} />
-                    <div style={{height: '6rem', borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)'}} />
-                  </div>
-                </div>
-                <div style={{borderRadius: '0.5rem', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)', padding: '1rem'}}>
-                  <div style={{height: '1rem', width: '5rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem', marginBottom: '1rem'}} />
-                  {[1,2,3,4].map(i => (
-                    <div key={i} style={{display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem'}}>
-                      <div style={{width: '2rem', height: '2rem', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.05)'}} />
-                      <div style={{flex: 1}}>
-                        <div style={{height: '0.5rem', width: '4rem', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem', marginBottom: '0.25rem'}} />
-                        <div style={{height: '0.5rem', width: '2.5rem', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '0.25rem'}} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <img 
+                src="/dashboard-preview.png" 
+                alt="ReconPlatform Dashboard" 
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                  borderTop: '1px solid rgba(255,255,255,0.05)'
+                }} 
+              />
             </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section style={styles.socialProof}>
-        <div style={styles.socialProofInner}>
-          <p style={styles.socialProofLabel}>TRUSTED BY FINANCE TEAMS AT</p>
-          <div style={styles.socialProofLogos}>
-            {['Acme Corp', 'GlobalBank', 'FinTech Inc', 'SecurePay', 'CloudScale'].map((brand) => (
-              <span key={brand} style={styles.socialProofLogo}>{brand}</span>
-            ))}
-          </div>
         </div>
       </section>
 
