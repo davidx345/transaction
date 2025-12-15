@@ -166,53 +166,53 @@ function DashboardLayout() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  {isMobile && (
-                    <>
-                      {/* overlay */}
-                      {sidebarOpen && (
-                        <div
-                          onClick={() => setSidebarOpen(false)}
-                          style={{
-                            position: 'fixed',
-                            inset: 0,
-                            background: 'rgba(0,0,0,0.45)',
-                            zIndex: 60
-                          }}
-                        />
-                      )}
+                  gap: '0.75rem',
+                  padding: '0.625rem 0.875rem',
+                  marginBottom: '0.25rem',
+                  borderRadius: '6px',
+                  textDecoration: 'none',
+                  color: isActive ? '#FAFAFA' : '#A1A1AA',
+                  background: isActive ? '#27272A' : 'transparent',
+                  fontWeight: isActive ? 500 : 400,
+                  fontSize: '0.875rem',
+                  transition: 'all 0.15s ease'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = '#18181B';
+                    e.currentTarget.style.color = '#FAFAFA';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = '#A1A1AA';
+                  }
+                }}
+              >
+                <span style={{ fontSize: '1rem', opacity: 0.8 }}>{item.icon}</span>
+                {sidebarOpen && <span>{item.label}</span>}
+              </Link>
+            );
+          })}
+        </nav>
 
-                      {/* hamburger */}
-                      <button
-                        onClick={() => setSidebarOpen(s => {
-                          const next = !s;
-                          try { localStorage.setItem('sidebarOpen', String(next)); } catch (e) {}
-                          return next;
-                        })}
-                        aria-label="Toggle menu"
-                        style={{
-                          position: 'fixed',
-                          top: 12,
-                          left: 12,
-                          zIndex: 80,
-                          background: '#0B0B0C',
-                          border: '1px solid #27272A',
-                          color: '#FAFAFA',
-                          padding: '0.45rem 0.5rem',
-                          borderRadius: 10,
-                          boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}
-                      >
-                        <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                          <rect width="20" height="2" rx="1" fill="#E5E7EB" />
-                          <rect y="6" width="20" height="2" rx="1" fill="#E5E7EB" />
-                          <rect y="12" width="20" height="2" rx="1" fill="#E5E7EB" />
-                        </svg>
-                      </button>
-                    </>
-                  )}
+        <div style={{ padding: '0.75rem', borderTop: '1px solid #27272A' }}>
+          {sidebarOpen && (
+            <div style={{ marginBottom: '0.75rem', padding: '0 0.875rem' }}>
+              <div style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#FAFAFA' }}>
+                {user?.fullName || user?.username || user?.email}
+              </div>
+              <div style={{ fontSize: '0.6875rem', color: '#71717A', marginTop: '0.125rem' }}>
+                {user?.roles?.[0] || 'User'}
+              </div>
+            </div>
+          )}
+          <button
+            onClick={() => logout()}
+            style={{
+              width: '100%',
+              display: 'flex',
               alignItems: 'center',
               gap: '0.75rem',
               padding: '0.625rem 0.875rem',
@@ -231,26 +231,52 @@ function DashboardLayout() {
         </div>
       </aside>
 
-      {/* Mobile toggle button (when sidebar is retracted on small screens) */}
       {isMobile && (
-        <button
-          onClick={() => setSidebarOpen(s => !s)}
-          aria-label="Toggle menu"
-          style={{
-            position: 'fixed',
-            top: 12,
-            left: 12,
-            zIndex: 60,
-            background: '#111113',
-            border: '1px solid #27272A',
-            color: '#FAFAFA',
-            padding: '0.5rem 0.6rem',
-            borderRadius: 8,
-            boxShadow: '0 6px 20px rgba(0,0,0,0.4)'
-          }}
-        >
-          ☰
-        </button>
+        <>
+          {/* overlay */}
+          {sidebarOpen && (
+            <div
+              onClick={() => setSidebarOpen(false)}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(0,0,0,0.45)',
+                zIndex: 60
+              }}
+            />
+          )}
+
+          {/* hamburger */}
+          <button
+            onClick={() => setSidebarOpen(s => {
+              const next = !s;
+              try { localStorage.setItem('sidebarOpen', String(next)); } catch (e) {}
+              return next;
+            })}
+            aria-label="Toggle menu"
+            style={{
+              position: 'fixed',
+              top: 12,
+              left: 12,
+              zIndex: 80,
+              background: '#0B0B0C',
+              border: '1px solid #27272A',
+              color: '#FAFAFA',
+              padding: '0.45rem 0.5rem',
+              borderRadius: 10,
+              boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+              <rect width="20" height="2" rx="1" fill="#E5E7EB" />
+              <rect y="6" width="20" height="2" rx="1" fill="#E5E7EB" />
+              <rect y="12" width="20" height="2" rx="1" fill="#E5E7EB" />
+            </svg>
+          </button>
+        </>
       )}
 
       {/* Main Content */}
