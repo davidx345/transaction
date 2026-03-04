@@ -105,12 +105,11 @@ const StatCounter: React.FC<{
 /* ─────────────────────────── Live ticker strip ─────────────────── */
 const LiveTicker: React.FC = () => {
   const items = [
-    '₦124,500,000  MATCHED',
-    '$88,200  RECONCILED',
-    '€43,000  CLEARED',
-    '₦2,100,000  EXCEPTION RESOLVED',
-    '$310,000  MATCHED',
-    '₦55,000,000  RECONCILED',
+    '₦4,200,000  MATCHED',
+    '$18,500  RECONCILED',
+    '₦780,000  EXCEPTION RESOLVED',
+    '$4,000  MATCHED',
+    '₦6,300,000  RECONCILED',
   ];
   return (
     <div
@@ -339,32 +338,6 @@ export const LandingPage: React.FC = () => {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             style={{ textAlign: 'center' }}
           >
-            {/* Badge */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.3rem 1rem',
-                borderRadius: '9999px',
-                border: '1px solid rgba(96,165,250,0.25)',
-                backgroundColor: 'rgba(96,165,250,0.08)',
-                marginBottom: '2rem',
-              }}
-            >
-              <Zap size={12} color="#60A5FA" fill="#60A5FA" />
-              <span
-                style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  color: '#93C5FD',
-                  letterSpacing: '0.04em',
-                }}
-              >
-                AI-Powered · Built for Scale
-              </span>
-            </div>
-
             <h1
               style={{
                 fontSize: 'clamp(2.8rem, 7vw, 5.5rem)',
@@ -377,17 +350,7 @@ export const LandingPage: React.FC = () => {
             >
               Reconcile every
               <br />
-              <span
-                style={{
-                  background:
-                    'linear-gradient(135deg, #60A5FA 10%, #A78BFA 55%, #F472B6 90%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                naira &amp; dollar
-              </span>{' '}
+              <span style={{ color: '#60A5FA' }}>naira &amp; dollar</span>{' '}
               instantly.
             </h1>
 
@@ -526,9 +489,9 @@ export const LandingPage: React.FC = () => {
                     }}
                   >
                     {[
-                      { label: 'Matched', value: '₦2.4B', color: '#22C55E', icon: CheckCircle2 },
-                      { label: 'Pending', value: '143', color: '#F59E0B', icon: Activity },
-                      { label: 'Exceptions', value: '7', color: '#EF4444', icon: AlertTriangle },
+                      { label: 'Matched', value: '₦845M', color: '#22C55E', icon: CheckCircle2 },
+                      { label: 'Pending', value: '23', color: '#F59E0B', icon: Activity },
+                      { label: 'Exceptions', value: '3', color: '#EF4444', icon: AlertTriangle },
                     ].map(({ label, value, color, icon: Icon }) => (
                       <div
                         key={label}
@@ -623,7 +586,7 @@ export const LandingPage: React.FC = () => {
                     >
                       <TrendingUp size={12} color="#22C55E" />
                       <span style={{ fontSize: '0.7rem', color: '#22C55E', fontWeight: 600 }}>
-                        +12.4% this week
+                        +3.1% this week
                       </span>
                     </div>
                   </div>
@@ -642,11 +605,11 @@ export const LandingPage: React.FC = () => {
                     RECENT MATCHES
                   </div>
                   {[
-                    { ref: 'TXN-0041', amount: '₦840,000', bank: 'GTBank', status: 'matched' },
-                    { ref: 'TXN-0042', amount: '$12,400', bank: 'Paystack', status: 'matched' },
-                    { ref: 'TXN-0043', amount: '₦5,200,000', bank: 'Access', status: 'exception' },
-                    { ref: 'TXN-0044', amount: '€8,750', bank: 'Flutterwave', status: 'matched' },
-                    { ref: 'TXN-0045', amount: '₦320,000', bank: 'Zenith', status: 'pending' },
+                    { ref: 'TXN-0041', amount: '₦250,000', bank: 'GTBank', status: 'matched' },
+                    { ref: 'TXN-0042', amount: '$4,800', bank: 'Paystack', status: 'matched' },
+                    { ref: 'TXN-0043', amount: '₦1,100,000', bank: 'Access', status: 'exception' },
+                    { ref: 'TXN-0044', amount: '€2,300', bank: 'Flutterwave', status: 'matched' },
+                    { ref: 'TXN-0045', amount: '₦95,000', bank: 'Zenith', status: 'pending' },
                   ].map(({ ref, amount, bank, status }) => (
                     <div
                       key={ref}
@@ -707,10 +670,10 @@ export const LandingPage: React.FC = () => {
               gap: '3rem 2rem',
             }}
           >
-            <StatCounter target={99} suffix="%" label="Auto-match accuracy" />
-            <StatCounter target={4200} prefix="₦" suffix="B+" label="Volume reconciled monthly" />
-            <StatCounter target={8} label="Nigerian banks integrated" />
-            <StatCounter target={3} suffix="s" label="Average match latency" />
+            <StatCounter target={94} suffix="%" label="Auto-match accuracy" />
+            <StatCounter target={8} prefix="₦" suffix="B+" label="Volume reconciled monthly" />
+            <StatCounter target={6} label="Nigerian banks integrated" />
+            <StatCounter target={4} suffix="s" label="Average match latency" />
           </div>
         </div>
       </section>
@@ -874,8 +837,7 @@ export const LandingPage: React.FC = () => {
                         style={{
                           flex: 1,
                           height: '1px',
-                          background:
-                            'linear-gradient(90deg, rgba(96,165,250,0.4), rgba(167,139,250,0.4))',
+                          backgroundColor: 'rgba(255,255,255,0.1)',
                         }}
                       />
                     )}
@@ -923,17 +885,7 @@ export const LandingPage: React.FC = () => {
                 overflow: 'hidden',
               }}
             >
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '60%',
-                  background: 'linear-gradient(to top, rgba(124,58,237,0.1), transparent)',
-                  pointerEvents: 'none',
-                }}
-              />
+
               <div
                 style={{
                   width: '3rem',
@@ -999,15 +951,15 @@ export const LandingPage: React.FC = () => {
                   width: '2.75rem',
                   height: '2.75rem',
                   borderRadius: '0.875rem',
-                  backgroundColor: 'rgba(251,146,60,0.15)',
+                  backgroundColor: 'rgba(255,255,255,0.06)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: '1.25rem',
-                  border: '1px solid rgba(251,146,60,0.25)',
+                  border: '1px solid rgba(255,255,255,0.1)',
                 }}
               >
-                <BarChart3 size={20} color="#FB923C" />
+                <BarChart3 size={20} color="#9CA3AF" />
               </div>
               <h3
                 style={{
@@ -1027,17 +979,17 @@ export const LandingPage: React.FC = () => {
                 style={{
                   marginTop: '1.5rem',
                   padding: '0.75rem 1rem',
-                  backgroundColor: 'rgba(251,146,60,0.08)',
+                  backgroundColor: 'rgba(255,255,255,0.04)',
                   borderRadius: '0.75rem',
-                  border: '1px solid rgba(251,146,60,0.15)',
+                  border: '1px solid rgba(255,255,255,0.08)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem',
                 }}
               >
-                <TrendingUp size={16} color="#FB923C" />
-                <span style={{ fontSize: '0.8rem', color: '#FB923C', fontWeight: 600 }}>
-                  99.3% accuracy this month
+                <TrendingUp size={16} color="#6B7280" />
+                <span style={{ fontSize: '0.8rem', color: '#9CA3AF', fontWeight: 600 }}>
+                  94.2% accuracy this month
                 </span>
               </div>
             </motion.div>
@@ -1063,15 +1015,15 @@ export const LandingPage: React.FC = () => {
                   width: '2.75rem',
                   height: '2.75rem',
                   borderRadius: '0.875rem',
-                  backgroundColor: 'rgba(244,114,182,0.15)',
+                  backgroundColor: 'rgba(255,255,255,0.06)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: '1.25rem',
-                  border: '1px solid rgba(244,114,182,0.25)',
+                  border: '1px solid rgba(255,255,255,0.1)',
                 }}
               >
-                <Globe size={20} color="#F472B6" />
+                <Globe size={20} color="#9CA3AF" />
               </div>
               <h3
                 style={{
@@ -1131,15 +1083,15 @@ export const LandingPage: React.FC = () => {
                   width: '2.75rem',
                   height: '2.75rem',
                   borderRadius: '0.875rem',
-                  backgroundColor: 'rgba(34,197,94,0.15)',
+                  backgroundColor: 'rgba(255,255,255,0.06)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: '1.25rem',
-                  border: '1px solid rgba(34,197,94,0.25)',
+                  border: '1px solid rgba(255,255,255,0.1)',
                 }}
               >
-                <Layers size={20} color="#22C55E" />
+                <Layers size={20} color="#9CA3AF" />
               </div>
               <h3
                 style={{
@@ -1167,14 +1119,14 @@ export const LandingPage: React.FC = () => {
                 <div
                   style={{
                     height: '100%',
-                    width: '91%',
-                    background: 'linear-gradient(90deg, #22C55E, #16A34A)',
+                    width: '78%',
+                    backgroundColor: '#22C55E',
                     borderRadius: '9999px',
                   }}
                 />
               </div>
               <div style={{ marginTop: '0.5rem', fontSize: '0.7rem', color: '#22C55E', fontWeight: 600 }}>
-                91% auto-resolved
+                78% auto-resolved
               </div>
             </motion.div>
           </div>
@@ -1376,16 +1328,7 @@ export const LandingPage: React.FC = () => {
               >
                 Close your books.
                 <br />
-                <span
-                  style={{
-                    background: 'linear-gradient(90deg, #60A5FA, #A78BFA)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  Not the weekend.
-                </span>
+                <span style={{ color: '#60A5FA' }}>Not the weekend.</span>
               </h2>
               <p
                 style={{
